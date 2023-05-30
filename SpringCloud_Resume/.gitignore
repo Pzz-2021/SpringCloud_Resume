@@ -1,0 +1,69 @@
+*.class
+*.log
+*.lock
+
+# Package Files #
+*.jar
+*.war
+*.ear
+target/
+
+# idea
+.idea/
+*.iml/
+
+*velocity.log*
+
+### STS ###
+.apt_generated
+.factorypath
+.springBeans
+
+### IntelliJ IDEA ###
+*.iml
+*.ipr
+*.iws
+.idea
+.classpath
+.project
+.settings/
+bin/
+
+*.log
+tem/
+
+#rebel
+*rebel.xml*
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+logs/
+
+### VS Code ###
+.vscode/
