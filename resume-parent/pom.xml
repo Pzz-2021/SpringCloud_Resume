@@ -12,7 +12,9 @@
     <packaging>pom</packaging>
     <!--  聚合  -->
     <modules>
-<!--        <module>../resume-base</module>-->
+        <module>../resume-base</module>
+        <module>../resume-auth</module>
+        <module>../resume-gateway</module>
     </modules>
 
     <properties>

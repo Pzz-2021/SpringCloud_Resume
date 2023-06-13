@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: auth-service
+  cloud:
+    nacos:
+      server-addr: 47.115.217.108:8848
+      discovery:
+        namespace: resume_analysis
+        group: resume-project
+      config:
+        namespace: resume_analysis
+        group: resume-project
+        file-extension: yaml
+        refresh-enabled: true
+        shared-configs:
+          - data-id: swagger-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
+          - data-id: logging-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
+          - data-id: mysql-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
+          - data-id: redis-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
+  profiles:
+    active: dev
