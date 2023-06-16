@@ -15,6 +15,7 @@
         <module>../resume-base</module>
         <module>../resume-auth</module>
         <module>../resume-gateway</module>
+        <module>../resume-parse</module>
     </modules>
 
     <properties>

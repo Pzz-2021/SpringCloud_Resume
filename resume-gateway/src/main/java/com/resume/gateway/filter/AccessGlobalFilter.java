@@ -42,6 +42,8 @@ public class AccessGlobalFilter extends TokenGlobalFilter {
         String key=Constant.USER_KEY + exchange.getRequest().getHeaders().get("userId");
         //-1表示最后一个元素
         List<String> permissionList=stringRedisTemplate.opsForList().range(key, 0, -1);
+        //断言
+        assert permissionList != null;
         long count=permissionList.stream().filter(resource-> resource.startsWith(permission)).count();
         //4.当前用户没有权限
         if(count<=0)buildReturnMono(Constant.INSUFFICIENT_PERMISSIONS,exchange);
@@ -49,7 +51,6 @@ public class AccessGlobalFilter extends TokenGlobalFilter {
         //  放行
         return chain.filter(exchange);
     }
-
     @Override
     public int getOrder() {
         return 10;
