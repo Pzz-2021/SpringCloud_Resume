@@ -51,12 +51,16 @@ public class AuthManagerController {
         User result = userService.login(user);
         if (result == null) return RestResponse.error("请检查邮箱或密码");
         else{
+            long start = System.currentTimeMillis();
             if(!result.getPassword().equals(SM3Util.pwdEncrypt(user.getPassword())))return RestResponse.error("请检查邮箱或密码");
             LoginDTO loginDTO=userService.getPermissions(result.getPkUserId());
             loginDTO.setUserInfoDTO(UserMapstruct.INSTANCT.conver(user));
+            log.info("获取权限 耗时：" + (System.currentTimeMillis() - start));
+            long start1 = System.currentTimeMillis();
             // 获取  Access_token 和  Refresh_token
             loginDTO.setAccess_token(JwtUtil.createAccessToken(result.getPkUserId(),result.getCompanyId()));
             loginDTO.setRefresh_token(JwtUtil.createRefreshToken(result.getPkUserId(),result.getCompanyId()));
+            log.info("生成Token 耗时：" + (System.currentTimeMillis() - start1));
             return RestResponse.success(loginDTO);
         }
     }
@@ -101,8 +105,8 @@ public class AuthManagerController {
     @PostMapping("/refresh-token")
     private RestResponse<TokenDTO>refreshToken(HttpServletRequest httpServletRequest){
         TokenDTO tokenDTO=new TokenDTO();
-        Long userId= Long.valueOf(JwtUtil.getUserId(httpServletRequest));
-        Long companyId= Long.valueOf(JwtUtil.getCompanyId(httpServletRequest));
+        Long userId= JwtUtil.getUserId(httpServletRequest);
+        Long companyId= JwtUtil.getCompanyId(httpServletRequest);
         tokenDTO.setAccess_token(JwtUtil.createAccessToken(userId,companyId));
         tokenDTO.setRefresh_token(JwtUtil.createRefreshToken(userId,companyId));
         return RestResponse.success(tokenDTO);

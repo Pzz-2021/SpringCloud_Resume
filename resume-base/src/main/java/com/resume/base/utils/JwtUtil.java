@@ -56,7 +56,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String getUserId(HttpServletRequest httpServletRequest) {
+    public static Long getUserId(HttpServletRequest httpServletRequest) {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7); // 从第8个字符开始截取，去掉"Bearer "前缀
@@ -64,10 +64,11 @@ public class JwtUtil {
             JwtParser jwtParser = Jwts.parser();
             Jws<Claims> claimsJws = jwtParser.setSigningKey(secret).parseClaimsJws(token);
             Claims claims = claimsJws.getBody();
-            return (String) claims.get("userId");
+            return Long.valueOf((String) claims.get("userId"));
         }
         else throw new RuntimeException("Token获取失败");
     }
+    //网关用的
     public static String getUserId(String token) {
             JwtParser jwtParser = Jwts.parser();
             Jws<Claims> claimsJws = jwtParser.setSigningKey(secret).parseClaimsJws(token);
@@ -76,15 +77,14 @@ public class JwtUtil {
     }
 
 
-
-    public static String getCompanyId(HttpServletRequest httpServletRequest) {
+    public static Long getCompanyId(HttpServletRequest httpServletRequest) {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7); // 从第8个字符开始截取，去掉"Bearer "前缀
             JwtParser jwtParser = Jwts.parser();
             Jws<Claims> claimsJws = jwtParser.setSigningKey(secret).parseClaimsJws(token);
             Claims claims = claimsJws.getBody();
-            return (String) claims.get("companyId");
+            return Long.valueOf((String) claims.get("companyId"));
         }
         else throw new RuntimeException("Token获取失败");
     }
