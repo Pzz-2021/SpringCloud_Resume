@@ -1,5 +1,36 @@
-# 应用服务 WEB 访问端口
-server:
-  port: 8088
+#微服务配置
+spring:
+  application:
+    name: position-service
+  cloud:
+    nacos:
+      server-addr: 47.115.217.108:8848
+      # 注册
+      discovery:
+        namespace: resume_analysis
+        group: resume-project
+        # 配置
+      config:
+        namespace: resume_analysis
+        group: resume-project
+        file-extension: yaml
+        refresh-enabled: true
+        shared-configs:
+          - data-id: swagger-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
+          - data-id: logging-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
+          - data-id: redis-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
+          - data-id: mysql-${spring.profiles.active}.yaml
+            group: resume-common
+            refresh: true
 
-
+  profiles:
+    active: dev
+logging:
+  level:
+    cn: trace

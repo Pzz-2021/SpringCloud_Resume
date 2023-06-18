@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPositionService extends IService<Position> {
 
+    Position getOne(Long companyId, Long positionId);
 }
