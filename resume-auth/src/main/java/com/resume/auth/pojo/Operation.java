@@ -34,12 +34,17 @@ public class Operation implements Serializable {
     private Long menuId;
 
     /**
-     * 编码规则，对象:操作名
+     * 菜单path
+     */
+    private String menuPath;
+
+    /**
+     * 编码规则，操作对象:操作名
      */
     private String operationCode;
 
     /**
-     * 操作名(添加、删除、查询等)
+     * 请求方式(GET、POST、PUT、DELETE等)
      */
     private String method;
 
@@ -57,7 +62,7 @@ public class Operation implements Serializable {
      * 删除状态：1-已删除、0-未删除
      */
     @TableLogic
-    private Boolean isDeleted;
+    private Integer isDeleted;
 
 
 }

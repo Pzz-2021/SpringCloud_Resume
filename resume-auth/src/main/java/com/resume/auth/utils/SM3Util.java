@@ -1,4 +1,4 @@
-package com.resume.base.utils;
+package com.resume.auth.utils;
 
 /*
  *@filename: SM3Util
@@ -28,11 +28,6 @@ import java.util.Arrays;
  */
 @Slf4j
 public class SM3Util {
-//    public static void main(String[] args) {
-//        String password="yiheng";
-//        System.out.println("加密前："+password);
-//        System.out.println("加密后："+encrypt(password));
-//    }
     private static final String ENCODING = "UTF-8";
 
     static {
@@ -110,56 +105,6 @@ public class SM3Util {
             log.info("返回byte数组失败：",e);
             throw new IllegalStateException("返回byte数组异常");
         }
-    }
-
-    /**
-     * 通过密钥进行加密
-     *
-     * @param key     密钥
-     * @param srcData 被加密的byte数组
-     * @return
-     * @explain 指定密钥进行加密
-     */
-    public static byte[] hmac(byte[] key, byte[] srcData) {
-
-        try {
-            KeyParameter keyParameter = new KeyParameter(key);
-            SM3Digest digest = new SM3Digest();
-            HMac mac = new HMac(digest);
-            mac.init(keyParameter);
-            mac.update(srcData, 0, srcData.length);
-            byte[] result = new byte[mac.getMacSize()];
-            mac.doFinal(result, 0);
-            return result;
-        }catch (Exception e){
-            log.info("通过秘钥加密失败：",e);
-            throw new IllegalStateException("通过秘钥加密异常");
-        }
-    }
-
-    /**
-     * 判断源数据与加密数据是否一致
-     *
-     * @param srcStr       原字符串
-     * @param sm3HexString 16进制字符串
-     * @return 校验结果
-     * @explain 通过验证原数组和生成的hash数组是否为同一数组，验证2者是否为同一数据
-     */
-    public static boolean verify(String srcStr, String sm3HexString) {
-        boolean flag = false;
-        try {
-            byte[] srcData = srcStr.getBytes(ENCODING);
-            byte[] sm3Hash = ByteUtils.fromHexString(sm3HexString);
-            byte[] newHash = hash(srcData);
-            if (Arrays.equals(newHash, sm3Hash)) {
-                flag = true;
-            }
-            return flag;
-        } catch (UnsupportedEncodingException e) {
-            log.info("判断源数据与加密数据错误：",e);
-            throw new IllegalStateException("判断源数据与加密数据异常");
-        }
-
     }
 
 }

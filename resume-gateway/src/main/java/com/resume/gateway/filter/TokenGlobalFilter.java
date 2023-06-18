@@ -39,12 +39,13 @@ import java.util.function.Consumer;
 @Component
 public class TokenGlobalFilter implements GlobalFilter, Ordered {
 
+
     //白名单
     protected static List<String> whitelist = null;
     static {
         //加载白名单
         try (
-                InputStream resourceAsStream = TokenGlobalFilter.class.getResourceAsStream("/security-whitelist.properties")
+             InputStream resourceAsStream = TokenGlobalFilter.class.getResourceAsStream("/whitelist.properties")
         ) {
             Properties properties = new Properties();
             properties.load(resourceAsStream);
@@ -71,24 +72,16 @@ public class TokenGlobalFilter implements GlobalFilter, Ordered {
         //检查token是否存在
         String token = getToken(exchange);
         if (StringUtils.isBlank(token)) {
-            return buildReturnMono(Constant.UNAUTHORIZED_EXCEPTION,exchange);
+            return buildReturnMono(Constant.UNAUTHORIZED_EXCEPTION_CODE,Constant.UNAUTHORIZED_EXCEPTION,exchange);
         }
          //判断token是否有效
         String result = JwtUtil.checkToken(token);
         switch (result){
             case Constant.EXPIRED_JWT_EXCEPTION:
-                // TODO:
-                return buildReturnMono(Constant.EXPIRED_JWT_EXCEPTION,exchange);
-            case Constant.UNSUPPORTED_JWT_EXCEPTION:
-                return buildReturnMono(Constant.UNSUPPORTED_JWT_EXCEPTION,exchange);
-            case Constant.MALFORMED_JWT_EXCEPTION:
-                return buildReturnMono(Constant.MALFORMED_JWT_EXCEPTION,exchange);
-            case Constant.SIGNATURE_EXCEPTION:
-                return buildReturnMono(Constant.SIGNATURE_EXCEPTION,exchange);
-            case Constant.ILLEGAL_ARGUMENT_EXCEPTION:
-                return buildReturnMono(Constant.ILLEGAL_ARGUMENT_EXCEPTION,exchange);
+                // TODO:返回给前端，前端需要加上响应拦截器，发现code是555即需重新发请求刷新token
+                return buildReturnMono(Constant.EXPIRED_JWT_EXCEPTION_CODE,Constant.EXPIRED_JWT_EXCEPTION,exchange);
             case Constant.EXCEPTION:
-                return buildReturnMono(Constant.EXCEPTION,exchange);
+                return buildReturnMono(Constant.UNAUTHORIZED_EXCEPTION_CODE,Constant.EXCEPTION,exchange);
         }
         //从token里面拿用户id并存到request header中，方便鉴权过滤器拿
         Consumer<HttpHeaders> httpHeaders = httpHeader -> httpHeader.set("userId", JwtUtil.getUserId(token));
@@ -98,23 +91,26 @@ public class TokenGlobalFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
     //出现异常，不再路由，直接返回给前端
-    public Mono<Void> buildReturnMono(String error, ServerWebExchange exchange) {
+    public Mono<Void> buildReturnMono(int errorCode,String error, ServerWebExchange exchange) {
         ServerHttpResponse response = exchange.getResponse();
-        String jsonString = JSON.toJSONString(new RestErrorResponse(error));
+        String jsonString = JSON.toJSONString(new RestErrorResponse(errorCode,error));
         byte[] bits = jsonString.getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bits);
-        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        //设置响应状态码
+        response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         return response.writeWith(Mono.just(buffer));
     }
     /**
-     * 获取token
+     * 获取token，以"Bearer "为前缀
      */
     public String getToken(ServerWebExchange exchange) {
         String tokenStr = exchange.getRequest().getHeaders().getFirst("Authorization");
         if (StringUtils.isBlank(tokenStr)) {
             return null;
         }
+        //使用空格（" "）作为分隔符将tokenStr字符串分割成一个字符串数组
+        //并从该数组中获取第二个元素（即索引为1的元素）
         String token = tokenStr.split(" ")[1];
         if (StringUtils.isBlank(token)) {
             return null;

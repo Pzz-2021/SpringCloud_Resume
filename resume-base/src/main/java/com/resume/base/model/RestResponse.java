@@ -1,9 +1,6 @@
 package com.resume.base.model;
-
 import lombok.Data;
-
 import java.io.Serializable;
-
 /*
  *@filename: RestResponse
  *@author: lyh

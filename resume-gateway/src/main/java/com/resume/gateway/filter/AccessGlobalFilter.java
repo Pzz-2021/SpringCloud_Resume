@@ -1,6 +1,6 @@
 package com.resume.gateway.filter;
 
-import com.alibaba.fastjson.JSON;
+
 import com.resume.base.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -35,6 +35,8 @@ public class AccessGlobalFilter extends TokenGlobalFilter {
                 return chain.filter(exchange);
             }
         }
+        //如果是需要刷新refresh_token的请求那么不需要鉴权
+        if(pathMatcher.match("/auth/refresh-token",requestUrl))return chain.filter(exchange);
         //2.获取请求方式和URL并拼接
         String method = exchange.getRequest().getMethodValue();
         String permission=method+requestUrl;
@@ -46,7 +48,7 @@ public class AccessGlobalFilter extends TokenGlobalFilter {
         assert permissionList != null;
         long count=permissionList.stream().filter(resource-> resource.startsWith(permission)).count();
         //4.当前用户没有权限
-        if(count<=0)buildReturnMono(Constant.INSUFFICIENT_PERMISSIONS,exchange);
+        if(count<=0)buildReturnMono(Constant.INSUFFICIENT_PERMISSIONS_CODE,Constant.INSUFFICIENT_PERMISSIONS,exchange);
         //5.当前用户拥有权限
         //  放行
         return chain.filter(exchange);

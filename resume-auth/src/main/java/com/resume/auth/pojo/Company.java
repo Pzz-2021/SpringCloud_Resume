@@ -15,48 +15,39 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author lyh
- * @since 2023-06-11
+ * @since 2023-06-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class User implements Serializable {
+public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户ID
-     */
-    @TableId(value = "pk_user_id", type = IdType.AUTO)
-    private Long pkUserId;
-
-    /**
      * 公司ID
      */
-    private Long companyId;
+    @TableId(value = "pk_company_id", type = IdType.AUTO)
+    private Long pkCompanyId;
 
     /**
-     * 密码
+     * 公司名
      */
-    private String password;
+    private String companyName;
 
     /**
-     * 用户头像
+     * 公司logo
      */
-    private String accountPicture;
+    private String companyLogo;
 
     /**
-     * 用户邮箱
+     * 公司介绍
      */
-    private String userEmail;
-    /**
-     * 用户名
-     */
-    private String userName;
+    private String companyIntroduce;
 
     /**
-     * 用户签名
+     * 创建用户ID
      */
-    private String personalSignature;
+    private Long createUser;
 
     /**
      * 创建时间
@@ -64,9 +55,19 @@ public class User implements Serializable {
     private LocalDateTime createTime;
 
     /**
+     * 更改用户ID
+     */
+    private Long updateUser;
+
+    /**
      * 更新时间
      */
     private LocalDateTime updateTime;
+
+    /**
+     * 审核状态：2-通过、1-审核中、0-未通过
+     */
+    private Integer state;
 
     /**
      * 删除状态：1-已删除、0-未删除

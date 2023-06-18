@@ -16,10 +16,12 @@
         <module>../resume-auth</module>
         <module>../resume-gateway</module>
         <module>../resume-parse</module>
+        <module>../dubbo-api</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -33,6 +35,7 @@
         <mysql-connector-java.version>8.0.30</mysql-connector-java.version>
         <mybatis-plus-boot-starter.version>3.4.1</mybatis-plus-boot-starter.version>
         <swagger-annotations.version>1.5.20</swagger-annotations.version>
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <swagger-spring-boot-starter.version>1.9.0.RELEASE</swagger-spring-boot-starter.version>
     </properties>
     <!--    dependencyManagement只是管理依赖，不能自动下载，
@@ -41,12 +44,36 @@
     <!--    子工程将会从父工程中继承管理的依赖版本，而不是直接继承依赖关系-->
     <dependencyManagement>
         <dependencies>
+
+            <!-- mapstruct 代码生成器，简化java bean之间的映射 -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-jdk8</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- Servlet 容器管理 -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet-api.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

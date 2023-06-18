@@ -40,7 +40,6 @@ public class Role implements Serializable {
     /**
      * 1表示启用，0表示未启用
      */
-    private Boolean isEnable;
-
+    private Integer isEnable;
 
 }

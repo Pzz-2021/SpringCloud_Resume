@@ -1,4 +1,4 @@
-package com.resume.base.utils;
+package com.resume.auth.utils;
 
 /*
  *@filename: SM3Rule

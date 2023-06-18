@@ -1,5 +1,6 @@
 package com.resume.auth.mapstruct;
 
+import com.resume.auth.dto.EnrollDTO;
 import com.resume.auth.dto.UserInfoDTO;
 import com.resume.auth.pojo.User;
 import org.mapstruct.Mapper;
@@ -13,9 +14,11 @@ import org.mapstruct.factory.Mappers;
  *@description TODO
  */
 @Mapper
-public interface UserMapper {
-    UserMapper INSTANCT = Mappers.getMapper(UserMapper.class);
+public interface UserMapstruct {
+    UserMapstruct INSTANCT = Mappers.getMapper(UserMapstruct.class);
 
     //返回的是目标对象
     UserInfoDTO conver(User user);
+
+    User conver(EnrollDTO enrollDTO);
 }

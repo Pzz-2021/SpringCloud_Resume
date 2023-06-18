@@ -2,37 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>resume-base</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>resume-base</name>
-    <description>resume-base</description>
-
     <parent>
         <groupId>com.resume</groupId>
         <artifactId>resume-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../resume-parent</relativePath>
     </parent>
+    <artifactId>dubbo-api</artifactId>
 
     <dependencies>
-        <!--    JWT    -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency>
+        <!--   lombok     -->
+        <!--    不能放在base工程    -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <!-- servlet Api 依赖 -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -50,7 +46,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.resume.auth.AuthApplication</mainClass>
+                    <mainClass>com.resume.dubbo.DubboApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>
@@ -64,4 +60,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

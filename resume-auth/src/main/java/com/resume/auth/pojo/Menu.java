@@ -19,6 +19,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 public class Menu implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -28,14 +29,24 @@ public class Menu implements Serializable {
     private Long pkMenuId;
 
     /**
-     * 菜单名
+     * 父级菜单ID，若为0则无
      */
-    private String menuName;
+    private Long fatherId;
 
     /**
-     * 路由的URL
+     * 菜单名
      */
-    private String url;
+    private String name;
+
+    /**
+     * 路由的path
+     */
+    private String path;
+
+    /**
+     * 父级菜单path
+     */
+    private String fatherPath;
 
     /**
      * 图标
@@ -55,7 +66,6 @@ public class Menu implements Serializable {
     /**
      * 状态：1-启用、0-未启用
      */
-    private Boolean isEnable;
-
+    private Integer isEnable;
 
 }

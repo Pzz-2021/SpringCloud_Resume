@@ -20,7 +20,6 @@ public class UserInfoDTO implements Serializable {
     /**
      * 用户ID
      */
-    @TableId(value = "pk_user_id", type = IdType.AUTO)
     private Long pkUserId;
 
     /**
@@ -37,6 +36,10 @@ public class UserInfoDTO implements Serializable {
      * 用户邮箱
      */
     private String userEmail;
+    /**
+     * 用户名
+     */
+    private String userName;
 
     /**
      * 用户签名
