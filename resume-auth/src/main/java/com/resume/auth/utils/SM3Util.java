@@ -54,7 +54,9 @@ public class SM3Util {
     public static String pwdEncryptAssembly(String pwd) {
         StringBuilder stringPwd = new StringBuilder();
         for (char key : pwd.toCharArray()) {
-            String s = SM3Rule.valueOfCode(String.valueOf(key));
+            String s;
+            if(key>='0'&&key<='9') s = SM3Rule.valueOfCode(String.valueOf(key));
+            else s=String.valueOf(key);
             String encrypt = encrypt(s);
             stringPwd.append(encrypt);
         }
