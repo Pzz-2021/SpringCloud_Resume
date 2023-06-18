@@ -35,9 +35,4 @@ public class EnrollDTO implements Serializable {
      */
     private String companyName;
 
-    /**
-     *  验证码
-     */
-    private String code;
-
 }
