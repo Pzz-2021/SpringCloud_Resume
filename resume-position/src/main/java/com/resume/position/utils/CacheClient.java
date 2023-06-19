@@ -1,10 +1,13 @@
 package com.resume.position.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.api.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -45,7 +48,7 @@ public class CacheClient {
         // 设置逻辑过期
         RedisData redisData = new RedisData();
         redisData.setData(value);
-        redisData.setExpireTime(LocalDateTime.now().plusSeconds(time));
+        redisData.setExpireTime(Instant.now().getEpochSecond() + time);
         // 写入Redis
         redisUtil.set(key, redisData);
     }
@@ -69,7 +72,7 @@ public class CacheClient {
 
         // 1.从 redis 查询缓存
         Object o = redisUtil.get(key);
-        // 2.判断是否存在
+        //判断是否存在
         if (o != null && !"".equals(o)) {
             // 3.存在，直接返回
             return type.cast(o);
@@ -106,50 +109,50 @@ public class CacheClient {
      * @param <ID>       id的数据类型
      * @return
      */
-//    public <R, ID> R queryWithLogicalExpire(
-//            String keyPrefix, ID id, Class<R> type, Function<ID, R> dbFallback, Long time) {
-//        String key = keyPrefix + id;
-//        // 1.从redis查询商铺缓存
-//        Object o = redisUtil.get(key);
-//        // 2.判断是否存在
-//        if (o == null || "".equals(o)) {
-//            // 3.不存在，直接返回
-//            return null;
-//        }
-//        // 4.命中，需要先把json反序列化为对象
-//        RedisData redisData = (RedisData) o;
-//        R r = type.cast(redisData.getData());
-//        LocalDateTime expireTime = redisData.getExpireTime();
-//        // 5.判断是否过期
-//        if (expireTime.isAfter(LocalDateTime.now())) {
-//            // 5.1.未过期，直接返回信息
-//            return r;
-//        }
-//        // 5.2.已过期，需要缓存重建
-//        // 6.缓存重建
-//        // 6.1.获取互斥锁
-//        String lockKey = LOCK_KEY + key;
-//        boolean isLock = tryLock(lockKey);
-//        // 6.2.判断是否获取锁成功
-//        if (isLock) {
-//            // 6.3.成功，开启独立线程，实现缓存重建
-//            CACHE_REBUILD_EXECUTOR.submit(() -> {
-//                try {
-//                    // 查询数据库
-//                    R newR = dbFallback.apply(id);
-//                    // 重建缓存
-//                    this.setWithLogicalExpire(key, newR, time);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                } finally {
-//                    // 释放锁
-//                    unlock(lockKey);
-//                }
-//            });
-//        }
-//        // 6.4.返回过期的商铺信息
-//        return r;
-//    }
+    public <R, ID> R queryWithLogicalExpire(
+            String keyPrefix, ID id, Class<R> type, Function<ID, R> dbFallback, Long time) {
+        String key = keyPrefix + id;
+        // 1.从redis查询商铺缓存
+        Object o = redisUtil.get(key);
+        // 2.判断是否存在
+        if (o == null || "".equals(o)) {
+            // 3.不存在，直接返回
+            return null;
+        }
+        // 4.命中，需要先把json反序列化为对象
+        RedisData redisData = (RedisData) o;
+        R r = type.cast(redisData.getData());
+        long expireTime = redisData.getExpireTime();
+        // 5.判断是否过期
+        if (expireTime > Instant.now().getEpochSecond()) {
+            // 5.1.未过期，直接返回信息
+            return r;
+        }
+        // 5.2.已过期，需要缓存重建
+        // 6.缓存重建
+        // 6.1.获取互斥锁
+        String lockKey = LOCK_KEY + key;
+        boolean isLock = tryLock(lockKey);
+        // 6.2.判断是否获取锁成功
+        if (isLock) {
+            // 6.3.成功，开启独立线程，实现缓存重建
+            CACHE_REBUILD_EXECUTOR.submit(() -> {
+                try {
+                    // 查询数据库
+                    R newR = dbFallback.apply(id);
+                    // 重建缓存
+                    this.setWithLogicalExpire(key, newR, time);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    // 释放锁
+                    unlock(lockKey);
+                }
+            });
+        }
+        // 6.4.返回过期的商铺信息
+        return r;
+    }
 
 
     /**

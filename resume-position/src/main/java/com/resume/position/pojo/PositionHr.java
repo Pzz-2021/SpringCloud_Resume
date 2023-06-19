@@ -30,11 +30,6 @@ public class PositionHr implements Serializable {
     private Long pkId;
 
     /**
-     * 公司ID
-     */
-    private Long companyId;
-
-    /**
      * 职位ID
      */
     private Long positionId;

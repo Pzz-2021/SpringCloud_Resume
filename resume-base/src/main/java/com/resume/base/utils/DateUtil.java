@@ -30,7 +30,7 @@ public class DateUtil {
     }
 
     /**
-     * 返回现在加dayCount的年月日 yyyy-MM-dd
+     * 返回现在 之后dayCount天 的年月日 yyyy-MM-dd
      * @ pp
      */
     public static String getDate1(int dayCount){

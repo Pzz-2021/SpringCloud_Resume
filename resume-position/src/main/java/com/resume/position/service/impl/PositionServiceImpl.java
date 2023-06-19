@@ -34,7 +34,7 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
         // 利用互斥锁解决缓存击穿
         Position position = cacheClient.queryWithMutex(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
 
-        // 利用逻辑过期解决缓存击穿
+        // 利用逻辑过期解决缓存击穿（需要提前放入缓存中）
 //        Position position = cacheClient.queryWithLogicalExpire(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
 
 
