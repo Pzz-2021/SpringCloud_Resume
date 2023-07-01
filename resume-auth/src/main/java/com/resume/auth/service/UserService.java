@@ -32,7 +32,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     private StringRedisTemplate stringRedisTemplate;
     public User login(User user) {
         LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserEmail,user.getUserEmail());
+        queryWrapper.eq(User::getUserEmail,user.getUserEmail()).eq(User::getIsDeleted,0);
         return getOne(queryWrapper);
     }
     public boolean checkUserEmailIsExist(String userEmail) {

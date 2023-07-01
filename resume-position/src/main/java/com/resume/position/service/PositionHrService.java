@@ -1,8 +1,8 @@
-package com.resume.position.service.impl;
+package com.resume.position.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.resume.position.pojo.PositionHr;
 import com.resume.position.mapper.PositionHrMapper;
-import com.resume.position.service.IPositionHrService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-06-18
  */
 @Service
-public class PositionHrServiceImpl extends ServiceImpl<PositionHrMapper, PositionHr> implements IPositionHrService {
+public class PositionHrService extends ServiceImpl<PositionHrMapper, PositionHr> {
 
 }

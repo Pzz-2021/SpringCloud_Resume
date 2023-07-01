@@ -15,4 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface RoleMapper extends BaseMapper<Role> {
       void addCompanyAdmin(Long userId);
+
+      String selectUserRole(Long userId);
 }

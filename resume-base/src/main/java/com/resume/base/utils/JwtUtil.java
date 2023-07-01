@@ -1,6 +1,7 @@
 package com.resume.base.utils;
 
 
+import com.resume.base.model.TokenInfo;
 import io.jsonwebtoken.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,7 @@ public class JwtUtil {
     private static final String secret = "pp_tyy_lyh_zjz";
 
     //加密
-    public static String createAccessToken(Long userId, Long companyId) {
+    public static String createAccessToken(Long userId, Long companyId,String role) {
         JwtBuilder jwtBuilder = Jwts.builder();
         return jwtBuilder
                 //头信息header
@@ -23,6 +24,7 @@ public class JwtUtil {
                 //载荷payload,信息
                 .claim("userId", "" + userId)
                 .claim("companyId", "" + companyId)
+                .claim("role",role)
                 //主题
                 .setSubject("access_token")
                 //有效时间
@@ -35,7 +37,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String createRefreshToken(Long userId, Long companyId) {
+    public static String createRefreshToken(Long userId, Long companyId,String role) {
         JwtBuilder jwtBuilder = Jwts.builder();
         return jwtBuilder
                 //头信息header
@@ -44,6 +46,7 @@ public class JwtUtil {
                 //载荷payload,信息
                 .claim("userId", "" + userId)
                 .claim("companyId", "" + companyId)
+                .claim("role",role)
                 //主题
                 .setSubject("refresh_token")
                 //有效时间
@@ -55,8 +58,7 @@ public class JwtUtil {
                 //用.拼接
                 .compact();
     }
-
-    public static Long getUserId(HttpServletRequest httpServletRequest) {
+    public static TokenInfo getTokenInfo(HttpServletRequest httpServletRequest) {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7); // 从第8个字符开始截取，去掉"Bearer "前缀
@@ -64,7 +66,10 @@ public class JwtUtil {
             JwtParser jwtParser = Jwts.parser();
             Jws<Claims> claimsJws = jwtParser.setSigningKey(secret).parseClaimsJws(token);
             Claims claims = claimsJws.getBody();
-            return Long.valueOf((String) claims.get("userId"));
+            Long userId=Long.valueOf((String) claims.get("userId"));
+            Long companyId=Long.valueOf((String) claims.get("companyId"));
+            String role=(String) claims.get("role");
+            return new TokenInfo(userId,companyId,role);
         }
         else throw new RuntimeException("Token获取失败");
     }
@@ -74,19 +79,6 @@ public class JwtUtil {
             Jws<Claims> claimsJws = jwtParser.setSigningKey(secret).parseClaimsJws(token);
             Claims claims = claimsJws.getBody();
             return (String) claims.get("userId");
-    }
-
-
-    public static Long getCompanyId(HttpServletRequest httpServletRequest) {
-        String authorizationHeader = httpServletRequest.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7); // 从第8个字符开始截取，去掉"Bearer "前缀
-            JwtParser jwtParser = Jwts.parser();
-            Jws<Claims> claimsJws = jwtParser.setSigningKey(secret).parseClaimsJws(token);
-            Claims claims = claimsJws.getBody();
-            return Long.valueOf((String) claims.get("companyId"));
-        }
-        else throw new RuntimeException("Token获取失败");
     }
 
     public static String checkToken(String token) {

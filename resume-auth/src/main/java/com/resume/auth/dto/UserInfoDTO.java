@@ -45,4 +45,5 @@ public class UserInfoDTO implements Serializable {
      * 用户签名
      */
     private String personalSignature;
+
 }

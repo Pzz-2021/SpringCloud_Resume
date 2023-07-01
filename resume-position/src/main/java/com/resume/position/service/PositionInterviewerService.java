@@ -1,8 +1,8 @@
-package com.resume.position.service.impl;
+package com.resume.position.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.resume.position.pojo.PositionInterviewer;
 import com.resume.position.mapper.PositionInterviewerMapper;
-import com.resume.position.service.IPositionInterviewerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-06-18
  */
 @Service
-public class PositionInterviewerServiceImpl extends ServiceImpl<PositionInterviewerMapper, PositionInterviewer> implements IPositionInterviewerService {
+public class PositionInterviewerService extends ServiceImpl<PositionInterviewerMapper, PositionInterviewer> {
 
 }

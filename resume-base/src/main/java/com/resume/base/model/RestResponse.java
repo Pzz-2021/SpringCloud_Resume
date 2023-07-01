@@ -62,7 +62,7 @@ public class RestResponse<T> implements Serializable {
         return response;
     }
 
-    public static RestResponse judge(boolean save) {
+    public static RestResponse<String> judge(boolean save) {
         return save ? success() : error();
     }
 }

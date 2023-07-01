@@ -1,8 +1,6 @@
 package com.resume.position;
 
 import com.resume.position.pojo.Position;
-import com.resume.position.pojo.Remark;
-import com.resume.position.service.IPositionService;
 import com.resume.position.utils.RedisData;
 import com.resume.position.utils.RedisUtil;
 import org.junit.jupiter.api.Test;

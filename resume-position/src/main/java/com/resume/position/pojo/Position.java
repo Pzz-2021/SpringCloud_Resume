@@ -99,11 +99,11 @@ public class Position implements Serializable {
      */
     private String updateTime;
 
+
     /**
-     * 删除状态：1-已删除、0-未删除
+     * 删除状态：1-在招、0-已结束
      */
-    @TableLogic
-    private Integer isDeleted;
+    private Integer state;
 
 
 }

@@ -9,6 +9,13 @@ package com.resume.base.utils;
  */
 public class Constant {
     /**
+     角色
+     */
+    public static final String SUPER_ADMIN="超级管理员";
+    public static final String COMPANY_ADMIN="公司管理员";
+    public static final String HR="HR";
+    public static final String INTERVIEWER="面试官";
+    /**
     认证、鉴权
     */
     public static final String UNAUTHORIZED_EXCEPTION="用户未认证";
@@ -22,6 +29,11 @@ public class Constant {
 
     public static final String INSUFFICIENT_PERMISSIONS="权限不足";
     public static final int INSUFFICIENT_PERMISSIONS_CODE=403;
+
+    /**
+     分页条数
+     */
+    public static final int PAGE_SIZE=10;
 
     /**
     redis

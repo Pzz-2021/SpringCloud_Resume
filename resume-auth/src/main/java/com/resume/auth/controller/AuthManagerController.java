@@ -12,6 +12,7 @@ import com.resume.auth.service.CompanyService;
 import com.resume.auth.service.UserService;
 import com.resume.auth.utils.SM3Util;
 import com.resume.base.model.RestResponse;
+import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
 import com.resume.base.utils.JwtUtil;
 import io.swagger.annotations.Api;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -39,52 +41,57 @@ public class AuthManagerController {
     @Autowired
     private CompanyService companyService;
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-    @Autowired
     private RoleMapper roleMapper;
+
     @ApiOperation("登录认证")
     @PostMapping("/login")
-    public RestResponse<LoginDTO>login(@RequestBody User user){
+    public RestResponse<LoginDTO> login(@RequestBody User user) {
         User result = userService.login(user);
         if (result == null) return RestResponse.error("请检查邮箱或密码");
-        else{
+        else {
             long start = System.currentTimeMillis();
-            if(!result.getPassword().equals(SM3Util.pwdEncrypt(user.getPassword())))return RestResponse.error("请检查邮箱或密码");
-            LoginDTO loginDTO=userService.getPermissions(result.getPkUserId());
+            if (!result.getPassword().equals(SM3Util.pwdEncrypt(user.getPassword())))
+                return RestResponse.error("请检查邮箱或密码");
+            LoginDTO loginDTO = userService.getPermissions(result.getPkUserId());
             loginDTO.setUserInfoDTO(UserMapstruct.INSTANCT.conver(user));
             log.info("获取权限 耗时：" + (System.currentTimeMillis() - start));
             long start1 = System.currentTimeMillis();
             // 获取  Access_token 和  Refresh_token
-            loginDTO.setAccess_token(JwtUtil.createAccessToken(result.getPkUserId(),result.getCompanyId()));
-            loginDTO.setRefresh_token(JwtUtil.createRefreshToken(result.getPkUserId(),result.getCompanyId()));
+            //查询用户角色
+            String role = roleMapper.selectUserRole(user.getPkUserId());
+            loginDTO.setAccess_token(JwtUtil.createAccessToken(result.getPkUserId(), result.getCompanyId(),role));
+            loginDTO.setRefresh_token(JwtUtil.createRefreshToken(result.getPkUserId(), result.getCompanyId(),role));
             log.info("生成Token 耗时：" + (System.currentTimeMillis() - start1));
             return RestResponse.success(loginDTO);
         }
     }
+
     @PostMapping("/register")
     @ApiOperation("注册接口")
-    public RestResponse<String>register(@RequestBody EnrollDTO enrollDTO){
+    public RestResponse<String> register(@RequestBody EnrollDTO enrollDTO) {
         if (userService.checkUserEmailIsExist(enrollDTO.getUserEmail())) {
             enrollDTO.setPassword(SM3Util.pwdEncrypt(enrollDTO.getPassword()));
-            Company company= CompanyMapstruct.INSTANCT.conver(enrollDTO);
+            Company company = CompanyMapstruct.INSTANCT.conver(enrollDTO);
             companyService.save(company);
-            User user=UserMapstruct.INSTANCT.conver(enrollDTO);
+            User user = UserMapstruct.INSTANCT.conver(enrollDTO);
             user.setCompanyId(company.getPkCompanyId());
             userService.save(user);
             //赋予角色
             roleMapper.addCompanyAdmin(user.getPkUserId());
             return RestResponse.success();
-        }
-        else return RestResponse.error("邮箱已注册");
+        } else return RestResponse.error("邮箱已注册");
     }
+
     @ApiOperation("刷新Token")
     @PostMapping("/refresh-token")
-    private RestResponse<TokenDTO>refreshToken(HttpServletRequest httpServletRequest){
-        TokenDTO tokenDTO=new TokenDTO();
-        Long userId= JwtUtil.getUserId(httpServletRequest);
-        Long companyId= JwtUtil.getCompanyId(httpServletRequest);
-        tokenDTO.setAccess_token(JwtUtil.createAccessToken(userId,companyId));
-        tokenDTO.setRefresh_token(JwtUtil.createRefreshToken(userId,companyId));
+    private RestResponse<TokenDTO> refreshToken(HttpServletRequest httpServletRequest) {
+        TokenDTO tokenDTO = new TokenDTO();
+        TokenInfo tokenInfo=JwtUtil.getTokenInfo(httpServletRequest);
+        Long userId = tokenInfo.getPkUserId();
+        Long companyId = tokenInfo.getCompanyId();
+        String role = tokenInfo.getRole();
+        tokenDTO.setAccess_token(JwtUtil.createAccessToken(userId, companyId,role));
+        tokenDTO.setRefresh_token(JwtUtil.createRefreshToken(userId, companyId,role));
         return RestResponse.success(tokenDTO);
     }
 
