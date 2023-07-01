@@ -1,9 +1,7 @@
 package com.resume.position;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.resume.position.pojo.Position;
-import com.resume.position.pojo.Remark;
-import com.resume.position.service.IPositionService;
+import com.resume.position.service.PositionService;
 import com.resume.position.utils.CacheClient;
 import com.resume.position.utils.RedisData;
 import com.resume.position.utils.RedisUtil;
@@ -25,7 +23,7 @@ class ResumePositionApplicationTests {
     private CacheClient cacheClient;
 
     @Autowired
-    private IPositionService positionService;
+    private PositionService positionService;
 
     @Test
     void test() {

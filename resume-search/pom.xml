@@ -10,14 +10,35 @@
         <relativePath>../resume-parent</relativePath>
     </parent>
 
-    <artifactId>resume-position</artifactId>
+    <artifactId>resume-search</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- 统一 es 版本 -->
+        <elasticsearch.version>7.6.1</elasticsearch.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.resume</groupId>
             <artifactId>resume-base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.resume</groupId>
+            <artifactId>dubbo-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
         <dependency>
@@ -31,7 +52,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- dubbo -->
+        <!--Dubbo集成SpringBoot起步依赖-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-dubbo</artifactId>
@@ -81,6 +102,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+            <version>1.2.70</version>
         </dependency>
 
         <!--    redis    -->
@@ -101,7 +123,19 @@
             <version>5.7.17</version>
         </dependency>
 
+
     </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -120,7 +154,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.resume.parse.ResumeParseApplication</mainClass>
+                    <mainClass>com.resume.search.ResumeSearchApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>

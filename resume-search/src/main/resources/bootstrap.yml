@@ -1,7 +1,7 @@
 #微服务配置
 spring:
   application:
-    name: position-service
+    name: search-service
   cloud:
     nacos:
       server-addr: 47.115.217.108:8848
@@ -34,7 +34,7 @@ spring:
 dubbo:
   protocol:
     name: dubbo
-    port: 20881
+    port: 20880
   registry:
     address: spring-cloud://localhost  #使用springcloud中注册中心的地址
   scan:
@@ -44,16 +44,16 @@ logging:
   level:
     cn: trace
 mybatis-plus:
-    configuration:
-        #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
-        map-underscore-to-camel-case: true
-    #    #开启mybatis-plus的日志
-    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    global-config:
-        db-config:
-            #设置统一的全局id生成策略:有当用户未输入时，采用雪花算法生成一个适用于分布式环境的全局唯一主键，类型可以是String和number
-            id-type: AUTO
-    #告知映射文件的位置
-    mapper-locations: classpath*:/mapper/**/*.xml
-    #给POJO类起别名
-    type-aliases-package: com/resume/auth/pojo
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+  #    #开启mybatis-plus的日志
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      #设置统一的全局id生成策略:有当用户未输入时，采用雪花算法生成一个适用于分布式环境的全局唯一主键，类型可以是String和number
+      id-type: AUTO
+  #告知映射文件的位置
+  mapper-locations: classpath*:/mapper/**/*.xml
+  #给POJO类起别名
+  type-aliases-package: com/resume/auth/pojo

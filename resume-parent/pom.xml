@@ -17,6 +17,8 @@
         <module>../resume-gateway</module>
         <module>../resume-parse</module>
         <module>../dubbo-api</module>
+        <module>../resume-search</module>
+        <module>../dubbo-api</module>
     </modules>
 
     <properties>
