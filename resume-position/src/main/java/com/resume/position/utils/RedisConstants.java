@@ -7,7 +7,8 @@ public class RedisConstants {
     public static final Long SIXTY = 60L;
 
     public static final Long CACHE_NULL_TTL = 30L;
-    public static final Long CACHE_POSITION_TTL = 30L * SIXTY;
+//    public static final Long CACHE_POSITION_TTL = 30L * SIXTY;
+    public static final Long CACHE_POSITION_TTL = 6L;
 
 
 
