@@ -156,7 +156,7 @@ public class CacheClient {
 
 
     /**
-     * 利用互斥锁解决缓存击穿问题
+     * 方法5：利用互斥锁解决缓存击穿问题
      *
      * @param keyPrefix  key值前缀名
      * @param id         商品id
