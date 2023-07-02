@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
+import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.Position;
+import com.resume.dubbo.domian.SearchCondition;
 import com.resume.position.mapper.PositionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.position.utils.CacheClient;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -27,18 +30,12 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
     @Autowired
     private CacheClient cacheClient;
 
+    @Autowired
+    private SearchService searchService;
+
     @Resource
     private PositionMapper positionMapper;
 
-//    public Position getOne(Long companyId, Long positionId) {
-//        // 解决缓存穿透
-////        Position position = cacheClient.queryWithPassThrough(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
-//        // 利用互斥锁解决缓存击穿
-//        Position position = cacheClient.queryWithMutex(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
-//        // 利用逻辑过期解决缓存击穿
-////        Position position = cacheClient.queryWithLogicalExpire(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
-//        return position;
-//    }
 
     public PageBean<Position> selectPositionByPage(TokenInfo tokenInfo, int nowPage) {
         PageBean<Position> pageBean = new PageBean<>();
@@ -83,4 +80,26 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
         lambdaUpdateWrapper.set(Position::getState,1);
         return update(lambdaUpdateWrapper);
     }
+
+
+    public PageBean<Position> selectPositionByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
+        PageBean<Position> positions = searchService.searchPosition(searchCondition, tokenInfo);
+
+
+
+        return null;
+    }
+
+
+
+
+//    public Position getOne(Long companyId, Long positionId) {
+//        // 解决缓存穿透
+////        Position position = cacheClient.queryWithPassThrough(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
+//        // 利用互斥锁解决缓存击穿
+//        Position position = cacheClient.queryWithMutex(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
+//        // 利用逻辑过期解决缓存击穿
+////        Position position = cacheClient.queryWithLogicalExpire(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
+//        return position;
+//    }
 }

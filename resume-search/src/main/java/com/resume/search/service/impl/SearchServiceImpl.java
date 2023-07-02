@@ -2,6 +2,7 @@ package com.resume.search.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
+import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.Position;
@@ -33,7 +34,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
-import springfox.documentation.swagger2.mappers.ModelMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class SearchServiceImpl implements SearchService {
 // MatchAllQueryBuilder
 // xxxQueryBuilder ...
     @Override
-    public List<Position> searchPosition(SearchCondition searchCondition, TokenInfo tokenInfo) {
+    public PageBean<Position> searchPosition(SearchCondition searchCondition, TokenInfo tokenInfo) {
         // 1.创建查询请求对象
         SearchRequest searchRequest = new SearchRequest(POSITION_INDEX);
         // 2.构建搜索条件
@@ -151,9 +151,12 @@ public class SearchServiceImpl implements SearchService {
         // 多条件查询
         // 搜索限定 公司、设置关键词
         BoolQueryBuilder termQueryBuilder = QueryBuilders.boolQuery()
-                .must(QueryBuilders.termQuery(COMPANY_ID, tokenInfo.getCompanyId()))
                 .should(QueryBuilders.matchQuery(DESCRIPTION, searchCondition.getQuery()))
                 .should(QueryBuilders.matchQuery(POSITION_NAME, searchCondition.getQuery()));
+
+        // 限制除了 超级管理员 其他角色都只能看到本公司的
+        if (!SUPER_ADMIN.equals(tokenInfo.getRole()))
+            termQueryBuilder.must(QueryBuilders.termQuery(COMPANY_ID, tokenInfo.getCompanyId()));
 
         switch (tokenInfo.getRole()) {
             case HR:
@@ -224,8 +227,13 @@ public class SearchServiceImpl implements SearchService {
             Position position = BeanUtil.fillBeanWithMap(sourceAsMap, new Position(), false);
             resultArr.add(position);
         }
+        // 完整分页数据
         System.out.println(resultArr);
 
-        return resultArr;
+        int totalCount = Math.toIntExact(hits.getTotalHits().value);
+
+        return new PageBean<>(searchCondition.getQuery(), totalCount, totalCount / searchCondition.getPageSize(),
+                searchCondition.getPage(), resultArr);
     }
+
 }

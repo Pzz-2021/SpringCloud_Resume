@@ -1,10 +1,14 @@
 package com.resume.base.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageBean<T>{
      private String searchWord;
      private int totalCount;//总记录数

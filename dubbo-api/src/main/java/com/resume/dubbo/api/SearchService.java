@@ -1,5 +1,6 @@
 package com.resume.dubbo.api;
 
+import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.PositionDto;
@@ -17,5 +18,6 @@ public interface SearchService {
 
     Position getPositionById(Long id);
 
-    List<Position> searchPosition(SearchCondition searchCondition, TokenInfo tokenInfo);
+    PageBean<Position> searchPosition(SearchCondition searchCondition, TokenInfo tokenInfo);
+
 }
