@@ -58,7 +58,7 @@ public class AuthManagerController {
             long start1 = System.currentTimeMillis();
             // 获取  Access_token 和  Refresh_token
             //查询用户角色
-            String role = roleMapper.selectUserRole(user.getPkUserId());
+            String role = roleMapper.selectUserRole(result.getPkUserId());
             loginDTO.setAccess_token(JwtUtil.createAccessToken(result.getPkUserId(), result.getCompanyId(),role));
             loginDTO.setRefresh_token(JwtUtil.createRefreshToken(result.getPkUserId(), result.getCompanyId(),role));
             log.info("生成Token 耗时：" + (System.currentTimeMillis() - start1));

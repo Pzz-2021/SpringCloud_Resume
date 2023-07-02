@@ -12,6 +12,7 @@ import com.resume.position.utils.CacheClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 import static com.resume.position.utils.RedisConstants.*;
@@ -30,7 +31,7 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
     @Autowired
     private CacheClient cacheClient;
 
-    @Autowired
+    @Resource
     private PositionMapper positionMapper;
 
 //    public Position getOne(Long companyId, Long positionId) {
@@ -47,18 +48,20 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
         PageBean<Position> pageBean = new PageBean<>();
         Long userId = tokenInfo.getPkUserId();
         Long companyId = tokenInfo.getCompanyId();
-        int offset = 0;
-        if (nowPage > 0) offset = (nowPage - 1) * Constant.PAGE_SIZE;
+        int offset = (nowPage - 1) * Constant.PAGE_SIZE;
         switch (tokenInfo.getRole()) {
             case Constant.COMPANY_ADMIN:
                 pageBean.setData(positionMapper.selectPositionByAdmin(companyId, offset, Constant.PAGE_SIZE));
                 pageBean.setTotalCount(positionMapper.totalCountPositionByAdmin(companyId));
+                break;
             case Constant.HR:
                 pageBean.setData(positionMapper.selectPositionByHr(userId, offset, Constant.PAGE_SIZE));
                 pageBean.setTotalCount(positionMapper.totalCountPositionByHr(userId));
+                break;
             case Constant.INTERVIEWER:
                 pageBean.setData(positionMapper.selectPositionByInterviewer(userId, offset, Constant.PAGE_SIZE));
                 pageBean.setTotalCount(positionMapper.totalCountPositionByInterviewer(userId));
+                break;
         }
         if (pageBean.getTotalCount() % Constant.PAGE_SIZE == 0)
             pageBean.setTotalPage(pageBean.getTotalCount() / Constant.PAGE_SIZE);

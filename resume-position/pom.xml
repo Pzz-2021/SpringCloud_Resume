@@ -31,12 +31,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- dubbo -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-dubbo</artifactId>
-        </dependency>
-
         <!-- druid 连接池管理 -->
         <dependency>
             <groupId>com.alibaba</groupId>

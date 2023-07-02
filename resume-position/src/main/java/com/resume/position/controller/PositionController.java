@@ -34,7 +34,6 @@ public class PositionController {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         position.setCreateUserId(tokenInfo.getPkUserId());
         position.setCompanyId(tokenInfo.getCompanyId());
-        position.setState(1);//在招
         position.setCreateTime(DateUtil.getDate2());
         boolean save = positionService.save(position);
         return RestResponse.judge(save);
