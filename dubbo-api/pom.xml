@@ -18,6 +18,26 @@
     </properties>
 
 
+    <dependencies>
+        <!-- mybatis plus的依赖 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
 
+        <!--   lombok     -->
+        <!--    不能放在base工程    -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- fastjson ，json解析工具 -->
+        <!--    不能放在base工程    -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

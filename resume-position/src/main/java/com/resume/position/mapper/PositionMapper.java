@@ -1,6 +1,6 @@
 package com.resume.position.mapper;
 
-import com.resume.position.pojo.Position;
+import com.resume.dubbo.domian.Position;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 

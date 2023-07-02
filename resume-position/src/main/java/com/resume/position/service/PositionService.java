@@ -1,11 +1,10 @@
 package com.resume.position.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
-import com.resume.position.pojo.Position;
+import com.resume.dubbo.domian.Position;
 import com.resume.position.mapper.PositionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.position.utils.CacheClient;
@@ -13,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
-
-import static com.resume.position.utils.RedisConstants.*;
 
 /**
  * <p>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.position.mapper.PositionMapper">
 
-    <select id="selectPositionByAdmin" resultType="com.resume.position.pojo.Position">
+    <select id="selectPositionByAdmin" resultType="com.resume.dubbo.domian.Position">
         select pk_position_id,
                position_name,
                create_user_id,
@@ -36,7 +36,7 @@
           and company_id = #{companyId}
     </select>
 
-    <select id="selectPositionByHr" resultType="com.resume.position.pojo.Position">
+    <select id="selectPositionByHr" resultType="com.resume.dubbo.domian.Position">
         select pk_position_id,
                position_name,
                create_user_id,
@@ -70,7 +70,7 @@
           and company_id = (select position_id from position_hr where hr_id = #{userId})
     </select>
 
-    <select id="selectPositionByInterviewer" resultType="com.resume.position.pojo.Position">
+    <select id="selectPositionByInterviewer" resultType="com.resume.dubbo.domian.Position">
         select pk_position_id,
                position_name,
                create_user_id,

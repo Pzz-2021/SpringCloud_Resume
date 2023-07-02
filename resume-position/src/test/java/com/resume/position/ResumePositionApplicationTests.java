@@ -1,9 +1,8 @@
 package com.resume.position;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.resume.position.pojo.Position;
+import com.resume.dubbo.domian.Position;
 import com.resume.position.service.PositionService;
-import com.resume.position.utils.CacheClient;
 import com.resume.position.utils.RedisData;
 import com.resume.position.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
