@@ -10,8 +10,8 @@ import lombok.Data;
  *@version 1.0
  *@description TODO
  */
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 public class TokenInfo {
 
     /**

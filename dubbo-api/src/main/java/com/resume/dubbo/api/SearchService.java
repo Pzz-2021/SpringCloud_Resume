@@ -1,14 +1,21 @@
 package com.resume.dubbo.api;
 
+import com.resume.base.model.TokenInfo;
 import com.resume.dubbo.domian.Position;
+import com.resume.dubbo.domian.PositionDto;
+import com.resume.dubbo.domian.SearchCondition;
+
+import java.util.List;
 
 public interface SearchService {
 
-    Boolean savePosition(Position... positions);
+    Boolean savePositionDto(PositionDto... positionDtos);
 
-    Boolean deletePositionById(Long id);
+    Boolean deletePositionDtoById(Long id);
 
-    Boolean updatePositionById(Position position);
+    Boolean updatePositionDtoById(PositionDto positionDto);
 
     Position getPositionById(Long id);
+
+    List<Position> searchPosition(SearchCondition searchCondition, TokenInfo tokenInfo);
 }

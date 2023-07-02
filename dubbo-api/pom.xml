@@ -19,6 +19,13 @@
 
 
     <dependencies>
+        <!-- 依赖 base 模块 -->
+        <dependency>
+            <groupId>com.resume</groupId>
+            <artifactId>resume-base</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- mybatis plus的依赖 -->
         <dependency>
             <groupId>com.baomidou</groupId>
