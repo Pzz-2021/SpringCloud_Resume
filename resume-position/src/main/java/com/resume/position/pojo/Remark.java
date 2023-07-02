@@ -48,6 +48,10 @@ public class Remark implements Serializable {
      * 备注人昵称
      */
     private String userName;
+    /**
+     * 备注人头像
+     */
+    private String userPicture;
 
     /**
      * 备注内容

@@ -1,5 +1,6 @@
 package com.resume.position.controller;
 
+import com.resume.base.model.PageBean;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.DateUtil;
@@ -27,10 +28,10 @@ public class PositionController {
     @Autowired
     private PositionService positionService;
 
-    @ApiOperation("添加职位")
+    @ApiOperation(value = "添加职位",notes = "前端将创建人的名字和头像传过来")
     @PostMapping("/add-position")
     public RestResponse<String> addPosition(HttpServletRequest httpServletRequest, @RequestBody Position position) {
-        TokenInfo tokenInfo=JwtUtil.getTokenInfo(httpServletRequest);
+        TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         position.setCreateUserId(tokenInfo.getPkUserId());
         position.setCompanyId(tokenInfo.getCompanyId());
         position.setState(1);//在招
@@ -38,13 +39,33 @@ public class PositionController {
         boolean save = positionService.save(position);
         return RestResponse.judge(save);
     }
-
-    public RestResponse<String> selectPositionByPage(HttpServletRequest httpServletRequest,@RequestParam(defaultValue = "1")int nowPage) {
-         TokenInfo tokenInfo=JwtUtil.getTokenInfo(httpServletRequest);
-         positionService.selectPositionByPage(tokenInfo);
-         return null;
+    @ApiOperation(value = "分页查询职位",notes = "不同角色查询的岗位不同")
+    @GetMapping("/select-positionByPage")
+    public RestResponse<PageBean<Position>> selectPositionByPage(HttpServletRequest httpServletRequest, @RequestParam(defaultValue = "1") int nowPage) {
+        TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
+        PageBean<Position> positionPageBean = positionService.selectPositionByPage(tokenInfo, nowPage);
+        return RestResponse.success(positionPageBean);
     }
 
+    @ApiOperation(value = "编辑职位",notes = "传positionId")
+    @PutMapping("/edit-position")
+    public RestResponse<String> selectPositionByPage(@RequestBody Position position) {
+        boolean save=positionService.editPosition(position);
+        return RestResponse.judge(save);
+    }
+
+    @ApiOperation(value = "关闭职位",notes = "传positionId")
+    @PutMapping("/close-position")
+    public RestResponse<String> closePosition(@RequestBody Position position) {
+        boolean save=positionService.closePosition(position);
+        return RestResponse.judge(save);
+    }
+    @ApiOperation(value = "开启职位",notes = "传positionId")
+    @PutMapping("/open-position")
+    public RestResponse<String> openPosition(@RequestBody Position position) {
+        boolean save=positionService.openPosition(position);
+        return RestResponse.judge(save);
+    }
 
 //    @GetMapping("/{positionId}")
 //    public RestResponse getOne(HttpServletRequest httpServletRequest, @PathVariable Long positionId) {

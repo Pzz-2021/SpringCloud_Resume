@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-06-18
  */
 @RestController
-@RequestMapping("/positionInterviewer")
 public class PositionInterviewerController {
 
 }

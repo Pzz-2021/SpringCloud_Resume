@@ -2,4 +2,105 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.position.mapper.PositionMapper">
 
+    <select id="selectPositionByAdmin" resultType="com.resume.position.pojo.Position">
+        select pk_position_id,
+               position_name,
+               create_user_id,
+               create_user_name,
+               create_user_picture,
+               create_user_picture,
+               description,
+               hc,
+               working_city,
+               working_years,
+               education_background,
+               type,
+               salary_min,
+               salary_max,
+               salary_month,
+               first_screener_count,
+               interview_count,
+               communicate_offer_count,
+               pend_employ,
+               employed_employ,
+               create_time
+        from position
+        where state = 1
+          and company_id = #{companyId}
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="totalCountPositionByAdmin" resultType="java.lang.Integer">
+        select count(*)
+        from position
+        where state = 1
+          and company_id = #{companyId}
+    </select>
+
+    <select id="selectPositionByHr" resultType="com.resume.position.pojo.Position">
+        select pk_position_id,
+               position_name,
+               create_user_id,
+               create_user_name,
+               create_user_picture,
+               create_user_picture,
+               description,
+               hc,
+               working_city,
+               working_years,
+               education_background,
+               type,
+               salary_min,
+               salary_max,
+               salary_month,
+               first_screener_count,
+               interview_count,
+               communicate_offer_count,
+               pend_employ,
+               employed_employ,
+               create_time
+        from position
+        where state = 1
+          and pk_position_id = (select position_id from position_hr where hr_id = #{userId})
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="totalCountPositionByHr" resultType="java.lang.Integer">
+        select count(*)
+        from position
+        where state = 1
+          and company_id = (select position_id from position_hr where hr_id = #{userId})
+    </select>
+
+    <select id="selectPositionByInterviewer" resultType="com.resume.position.pojo.Position">
+        select pk_position_id,
+               position_name,
+               create_user_id,
+               create_user_name,
+               create_user_picture,
+               create_user_picture,
+               description,
+               hc,
+               working_city,
+               working_years,
+               education_background,
+               type,
+               salary_min,
+               salary_max,
+               salary_month,
+               first_screener_count,
+               interview_count,
+               communicate_offer_count,
+               pend_employ,
+               employed_employ,
+               create_time
+        from position
+        where state = 1
+          and pk_position_id = (select position_id from position_interviewer where interviewer_id = #{userId})
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="totalCountPositionByInterviewer" resultType="java.lang.Integer">
+        select count(*)
+        from position
+        where state = 1
+          and pk_position_id = (select position_id from position_interviewer where interviewer_id = #{userId})
+    </select>
 </mapper>

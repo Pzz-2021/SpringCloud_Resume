@@ -42,6 +42,4 @@ public class Constant {
     public static final String USER_KEY="resume:user:";
     public static final Long USER_TTL=24L;
 
-    public static final String VERIFY_CODE_KEY="resume:verifyCode:";
-    public static final Long VERIFY_CODE_TTL=10L;
 }

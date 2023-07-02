@@ -1,9 +1,8 @@
 package com.resume.position;
 
-import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.position.pojo.Position;
-import com.resume.position.pojo.Remark;
-import com.resume.position.service.IPositionService;
+import com.resume.position.service.PositionService;
 import com.resume.position.utils.CacheClient;
 import com.resume.position.utils.RedisData;
 import com.resume.position.utils.RedisUtil;
@@ -22,10 +21,7 @@ class ResumePositionApplicationTests {
     private RedisUtil redisUtil;
 
     @Autowired
-    private CacheClient cacheClient;
-
-    @Autowired
-    private IPositionService positionService;
+    private PositionService positionService;
 
     @Test
     void test() {
@@ -54,11 +50,8 @@ class ResumePositionApplicationTests {
 
     @Test
     void test1() {
-
-
         long seconds = Instant.now().getEpochSecond(); // 获取当前秒数
         System.out.println(seconds);
-
         System.out.println(Instant.now().getEpochSecond());
 
         // 将秒数转换为LocalDateTime对象
@@ -66,6 +59,13 @@ class ResumePositionApplicationTests {
         System.out.println(dateTime);
 
     }
-
-
+    @Test
+    void test2(){
+        Position position=new Position();
+        position.setWorkingCity("上海");
+        position.setPkPositionId(1L);
+        LambdaUpdateWrapper<Position> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(Position::getPkPositionId,2L);
+        positionService.update(position,lambdaUpdateWrapper);
+    }
 }

@@ -40,9 +40,19 @@ public class Position implements Serializable {
     private String positionName;
 
     /**
-     * 创建人ID
+     * 发布人ID
      */
     private Long createUserId;
+
+    /**
+     * 发布人用户名
+     */
+    private String createUserName;
+
+    /**
+     * 发布人头像
+     */
+    private String createUserPicture;
 
     /**
      * 岗位描述
@@ -90,6 +100,31 @@ public class Position implements Serializable {
     private Integer salaryMonth;
 
     /**
+     * 初筛人数
+     */
+    private Integer firstScreenerCount;
+
+    /**
+     * 面试人数
+     */
+    private Integer interviewCount;
+
+    /**
+     * 沟通offer人数
+     */
+    private Integer communicateOfferCount;
+
+    /**
+     * 待入职人数
+     */
+    private Integer pendEmploy;
+
+    /**
+     * 已入职人数
+     */
+    private Integer employedEmploy;
+
+    /**
      * 创建时间
      */
     private String createTime;
@@ -98,7 +133,6 @@ public class Position implements Serializable {
      * 更新时间
      */
     private String updateTime;
-
 
     /**
      * 删除状态：1-在招、0-已结束
