@@ -85,9 +85,7 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
     public PageBean<Position> selectPositionByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
         PageBean<Position> positions = searchService.searchPosition(searchCondition, tokenInfo);
 
-
-
-        return null;
+        return positions;
     }
 
 
