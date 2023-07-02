@@ -7,6 +7,8 @@ import org.apache.dubbo.config.annotation.DubboService;
 public class SearchServiceImpl implements SearchService {
 
 
-
-
+    @Override
+    public String getOne() {
+        return "pp";
+    }
 }

@@ -29,6 +29,7 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- 依赖 Dubbo 模块 -->
         <dependency>
             <groupId>com.resume</groupId>
             <artifactId>dubbo-api</artifactId>

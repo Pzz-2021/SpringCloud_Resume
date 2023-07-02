@@ -1,6 +1,9 @@
 package com.resume.position.controller;
 
 
+import com.resume.dubbo.api.SearchService;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class RemarkController {
+
+    @DubboReference
+    private SearchService searchService;
+
+    @GetMapping
+    public String getOne() {
+        return searchService.getOne();
+    }
 
 }
 
