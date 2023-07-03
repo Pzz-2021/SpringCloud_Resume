@@ -110,7 +110,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         teamMembers.addAll(otherMembers);
         return teamMembers;
     }
-//    public List<MemberDTO>deleteTeamMembers(MemberDTO memberDTO){
-//
-//    }
+    public void deleteTeamMembers(Long userId){
+        roleMapper.deleteTeamMembers(userId);
+    }
 }

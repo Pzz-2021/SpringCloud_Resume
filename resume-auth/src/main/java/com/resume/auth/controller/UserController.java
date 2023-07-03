@@ -73,8 +73,7 @@ public class UserController {
     @ApiOperation(value = "删除团队成员",notes = "传要删除的成员(公司管理员不能互删)：userId")
     @DeleteMapping("/delete-team-members/{userId}")
     public RestResponse<String> deleteTeamMembers(@PathVariable("userId") Long targetUserId,HttpServletRequest httpServletRequest) {
-        TokenInfo tokenInfo=JwtUtil.getTokenInfo(httpServletRequest);
-
+        userService.deleteTeamMembers(targetUserId);
         return RestResponse.success();
     }
 }
