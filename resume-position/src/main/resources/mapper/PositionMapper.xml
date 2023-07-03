@@ -129,10 +129,7 @@
         from position
         where state = 1
     </select>
-    <select id="selectPositionHrId" resultType="java.lang.Long">
-         select user_id from position_team where role_id=3 and position_id=#{positionId}
-    </select>
-    <select id="selectPositionInterviewerId" resultType="java.lang.Long">
-        select user_id from position_team where role_id=4 and position_id=#{positionId}
+    <select id="selectPositionTeam" resultType="java.lang.Long">
+         select user_id from position_team where role_id in(3,4) and position_id=#{positionId}
     </select>
 </mapper>

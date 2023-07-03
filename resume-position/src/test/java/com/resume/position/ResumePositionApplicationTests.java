@@ -68,8 +68,7 @@ class ResumePositionApplicationTests {
             @Override
             public void accept(Position position) {
                 PositionDTO positionDTO= PosistionMapstruct.INSTANCT.conver(position);
-                positionDTO.setHrIdList(positionService.getPositionMapper().selectPositionHrId(position.getPkPositionId()));
-                positionDTO.setInterviewerIdList(positionService.getPositionMapper().selectPositionInterviewerId(position.getPkPositionId()));
+                positionDTO.setPositionTeamIdList(positionService.getPositionMapper().selectPositionTeam(position.getPkPositionId()));
                 list.add(positionDTO);
             }
         });

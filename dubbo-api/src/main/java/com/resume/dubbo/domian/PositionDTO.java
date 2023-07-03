@@ -138,6 +138,5 @@ public class PositionDTO implements Serializable {
      */
     private Integer state;
 
-    private List<Long> hrIdList;
-    private List<Long> interviewerIdList;
+    private List<Long> positionTeamIdList;
 }

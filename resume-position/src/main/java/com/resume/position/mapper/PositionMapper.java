@@ -26,6 +26,6 @@ public interface PositionMapper extends BaseMapper<Position> {
 
       //ES数据同步测试用
       List<Position>selectAllPosition();
-      List<Long>selectPositionHrId(@Param("positionId")Long positionId);
-      List<Long>selectPositionInterviewerId(@Param("positionId")Long positionId);
+      List<Long>selectPositionTeam(@Param("positionId")Long positionId);
+
 }
