@@ -23,6 +23,9 @@
         insert into user_role(user_id, role_id)
         values (#{userId}, 4)
     </insert>
+    <update id="deleteTeamMembers">
+        update user set is_deleted=1 where pk_user_id=#{userId}
+    </update>
 
     <select id="selectUserRole" resultType="java.lang.String">
         select role_name
@@ -36,6 +39,7 @@
                  inner join role on user_role.role_id = role.pk_role_id
         where company_id = #{companyId}
           and role_id = 2
+          and user.is_deleted=0
     </select>
     <select id="selectTeamOtherMember" resultType="com.resume.auth.dto.MemberDTO">
         select pk_user_id, user_email, user_name, account_picture,role_name
@@ -44,5 +48,6 @@
                  inner join role on user_role.role_id = role.pk_role_id
         where company_id = #{companyId}
           and role_id in (3, 4)
+          and user.is_deleted=0
     </select>
 </mapper>
