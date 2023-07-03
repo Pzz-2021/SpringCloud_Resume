@@ -10,6 +10,7 @@ import com.resume.dubbo.domian.PositionDTO;
 import com.resume.dubbo.domian.SearchCondition;
 import com.resume.search.mapstruct.PositionMapper;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -17,8 +18,10 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -52,21 +55,22 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
-
     @Override
-    public Boolean savePositionDto(PositionDTO... positions) {
+    public Boolean savePositionDTOs(PositionDTO... positionDTOS) {
+        deleteIndex(POSITION_INDEX);
+
         BulkRequest bulkRequest = new BulkRequest();
         bulkRequest.timeout("10s");
 
-        ArrayList<PositionDTO> positionArr = new ArrayList<PositionDTO>(Arrays.asList(positions));
+        ArrayList<PositionDTO> positionArr = new ArrayList<PositionDTO>(Arrays.asList(positionDTOS));
 
         // 批量请求处理
-        for (PositionDTO position : positionArr) {
+        for (PositionDTO positionDTO : positionArr) {
             bulkRequest.add(
                     // 这里是数据信息
                     new IndexRequest(POSITION_INDEX)
-                            .id("" + position.getPkPositionId()) // 没有设置id 会自定生成一个随机id
-                            .source(JSON.toJSONString(position), XContentType.JSON)
+                            .id("" + positionDTO.getPkPositionId()) // 没有设置id 会自定生成一个随机id
+                            .source(JSON.toJSONString(positionDTO), XContentType.JSON)
             );
         }
 
@@ -83,7 +87,31 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Boolean deletePositionDtoById(Long id) {
+    public Boolean savePositionDTO(PositionDTO positionDTO) {
+        // 创建请求
+        IndexRequest request = new IndexRequest(POSITION_INDEX);
+        // 制定规则 PUT /pp_index/_doc/1
+        request.id("" + positionDTO.getPkPositionId());// 设置文档ID
+        request.timeout(TimeValue.timeValueMillis(1000));// request.timeout("1s")
+        // 将我们的数据放入请求中
+        request.source(JSON.toJSONString(positionDTO), XContentType.JSON);
+        // 客户端发送请求，获取响应的结果
+        IndexResponse response = null;
+        try {
+            response = restHighLevelClient.index(request, RequestOptions.DEFAULT);
+            // 获取建立索引的状态信息 CREATED
+            System.out.println(response.status());
+            // 查看返回内容 IndexResponse[index=pp_index,type=_doc,id=1,version=1,result=created,seqNo=0,primaryTerm=1,shards={"total":2,"successful":1,"failed":0}]
+            System.out.println(response);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean deletePositionDTOById(Long id) {
         DeleteRequest request = new DeleteRequest(POSITION_INDEX, "" + id);
         request.timeout("1s");
 
@@ -99,10 +127,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Boolean updatePositionDtoById(PositionDTO position) {
-        UpdateRequest updateRequest = new UpdateRequest(POSITION_INDEX, "" + position.getPkPositionId());
+    public Boolean updatePositionDTOById(PositionDTO positionDTO) {
+        UpdateRequest updateRequest = new UpdateRequest(POSITION_INDEX, "" + positionDTO.getPkPositionId());
 
-        updateRequest.doc(JSON.toJSONString(position), XContentType.JSON);
+        updateRequest.doc(JSON.toJSONString(positionDTO), XContentType.JSON);
 
         try {
             UpdateResponse response = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
@@ -122,10 +150,10 @@ public class SearchServiceImpl implements SearchService {
             GetResponse response = restHighLevelClient.get(request, RequestOptions.DEFAULT);
 
             String sourceAsString = response.getSourceAsString();
-            PositionDTO positionDto = JSON.parseObject(sourceAsString, PositionDTO.class);
+            PositionDTO positionDTO = JSON.parseObject(sourceAsString, PositionDTO.class);
 
             // 将 Dto 转换成 pojo
-            return PositionMapper.INSTANCE.convertToPosition(positionDto);
+            return PositionMapper.INSTANCE.convertToPosition(positionDTO);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,4 +264,19 @@ public class SearchServiceImpl implements SearchService {
                 searchCondition.getPage(), resultArr);
     }
 
+
+    // 根据索引名称删除索引
+    private boolean deleteIndex(String indexName) {
+        DeleteIndexRequest request = new DeleteIndexRequest(indexName);
+        AcknowledgedResponse response = null;
+        try {
+            response = restHighLevelClient.indices().delete(request, RequestOptions.DEFAULT);
+//            System.out.println(response.isAcknowledged());// 是否删除成功
+            return response.isAcknowledged();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 }

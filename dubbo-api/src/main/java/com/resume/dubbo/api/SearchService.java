@@ -8,14 +8,22 @@ import com.resume.dubbo.domian.SearchCondition;
 
 public interface SearchService {
 
-    Boolean savePositionDto(PositionDTO... positionDtos);
+    // 全量保存
+    Boolean savePositionDTOs(PositionDTO... positionDTOS);
 
-    Boolean deletePositionDtoById(Long id);
+    // 增量保存
+    Boolean savePositionDTO(PositionDTO positionDTO);
 
-    Boolean updatePositionDtoById(PositionDTO positionDto);
+    // 根据 id 删除一个职位信息
+    Boolean deletePositionDTOById(Long id);
 
+    // 根据 id 更新一个职位信息
+    Boolean updatePositionDTOById(PositionDTO positionDTO);
+
+    // 根据 id 查找一个职位信息
     Position getPositionById(Long id);
 
+    // 分页搜索职位信息
     PageBean<Position> searchPosition(SearchCondition searchCondition, TokenInfo tokenInfo);
 
 }
