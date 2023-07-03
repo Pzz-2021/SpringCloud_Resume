@@ -1,6 +1,7 @@
 package com.resume.auth.mapstruct;
 
 import com.resume.auth.dto.EnrollDTO;
+import com.resume.auth.dto.MemberDTO;
 import com.resume.auth.dto.UserInfoDTO;
 import com.resume.auth.pojo.User;
 import org.mapstruct.Mapper;
@@ -20,5 +21,10 @@ public interface UserMapstruct {
     //返回的是目标对象
     UserInfoDTO conver(User user);
 
+    User conver(UserInfoDTO userInfoDTO);
+
     User conver(EnrollDTO enrollDTO);
+
+    User conver(MemberDTO memberDTO);
+
 }

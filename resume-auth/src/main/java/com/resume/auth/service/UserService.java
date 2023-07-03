@@ -1,9 +1,13 @@
 package com.resume.auth.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.auth.dto.LoginDTO;
+import com.resume.auth.dto.MemberDTO;
+import com.resume.auth.mapper.RoleMapper;
 import com.resume.auth.mapper.UserMapper;
+import com.resume.auth.pojo.Company;
 import com.resume.auth.pojo.Operation;
 import com.resume.auth.pojo.User;
 import com.resume.base.utils.Constant;
@@ -12,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -30,6 +37,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     private UserMapper userMapper;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private CompanyService companyService;
+    @Autowired
+    private RoleMapper roleMapper;
+
     public User login(User user) {
         LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUserEmail,user.getUserEmail()).eq(User::getIsDeleted,0);
@@ -47,9 +59,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         List<Operation> userPermissions = userMapper.getUserPermissions(userId);
         if(userPermissions!=null&&userPermissions.size()>0){
             //将用户对应的权限传给前端，控制具体按钮是否存在
-            loginDTO.setPermissionsList(userPermissions.stream().map(Operation::getOperationCode).collect(Collectors.toList()));
+            loginDTO.setPermissionsList(userPermissions.parallelStream().collect(Collectors.toMap(Operation::getInterfaceUrl,operation -> true)));
             //将用户对应的权限缓存，给后端网关使用的:Method+InterfaceUrl
-            List<String>operation=userPermissions.stream().map((resource-> resource.getMethod()+resource.getInterfaceUrl())).collect(Collectors.toList());
+            List<String>operation=userPermissions.parallelStream().map((resource-> resource.getMethod()+resource.getInterfaceUrl())).collect(Collectors.toList());
             //权限存储时间跟access_token一样长
             stringRedisTemplate.opsForList().leftPushAll(Constant.USER_KEY+userId, operation.toArray(new String[0]));
             stringRedisTemplate.expire(Constant.USER_KEY+userId, Constant.USER_TTL, TimeUnit.HOURS);
@@ -58,4 +70,47 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         loginDTO.setMenusList(userMapper.getMenus(userId));
         return loginDTO;
     }
+    public boolean editPersonalMessage(User user) {
+        LambdaUpdateWrapper<User> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(User::getPkUserId,user.getPkUserId());
+        return update(user,lambdaUpdateWrapper);
+    }
+    public Company getCompanyMessage(Long companyId) {
+        return companyService.getCompanyMapper().getCompanyMessage(companyId);
+    }
+    public boolean editCompanyMessage(Company company) {
+        LambdaUpdateWrapper<Company> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(Company::getPkCompanyId,company.getPkCompanyId());
+        return companyService.update(company,lambdaUpdateWrapper);
+    }
+    public void addTeamRole(Long userId,String role){
+        switch (role){
+            case Constant.COMPANY_ADMIN:
+                roleMapper.addCompanyAdmin(userId);
+                break;
+            case Constant.HR:
+                roleMapper.addCompanyHr(userId);
+                break;
+            case Constant.INTERVIEWER:
+                roleMapper.addCompanyInterviewer(userId);
+                break;
+        }
+    }
+    public List<MemberDTO>selectTeamMembers(Long companyId){
+        List<MemberDTO> teamMembers = roleMapper.selectTeamAdmin(companyId);//admin
+        List<MemberDTO> otherMembers = roleMapper.selectTeamOtherMember(companyId);
+        otherMembers.sort(new Comparator<MemberDTO>() {
+            @Override
+            public int compare(MemberDTO o1, MemberDTO o2) {
+                String role1 = o1.getRoleName();
+                String role2 = o2.getRoleName();
+                return role1.compareTo(role2);
+            }
+        });
+        teamMembers.addAll(otherMembers);
+        return teamMembers;
+    }
+//    public List<MemberDTO>deleteTeamMembers(MemberDTO memberDTO){
+//
+//    }
 }

@@ -13,9 +13,6 @@ spring:
         file-extension: yaml
         refresh-enabled: true
         shared-configs:
-          - data-id: swagger-${spring.profiles.active}.yaml
-            group: resume-common
-            refresh: true
           - data-id: logging-${spring.profiles.active}.yaml
             group: resume-common
             refresh: true
@@ -27,9 +24,7 @@ spring:
             refresh: true
   profiles:
     active: dev
-logging:
-    level:
-        cn: trace
+
 mybatis-plus:
   configuration:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
@@ -43,4 +38,4 @@ mybatis-plus:
   #告知映射文件的位置
   mapper-locations: classpath*:/mapper/**/*.xml
   #给POJO类起别名
-  type-aliases-package: com/resume/position/pojo
+  type-aliases-package: com/resume/position/pojo,;com/resume/auth/dto

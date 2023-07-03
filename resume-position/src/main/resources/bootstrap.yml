@@ -16,9 +16,6 @@ spring:
         file-extension: yaml
         refresh-enabled: true
         shared-configs:
-          - data-id: swagger-${spring.profiles.active}.yaml
-            group: resume-common
-            refresh: true
           - data-id: logging-${spring.profiles.active}.yaml
             group: resume-common
             refresh: true
@@ -39,12 +36,13 @@ dubbo:
     port: 20881
   registry:
     address: spring-cloud://localhost  #使用springcloud中注册中心的地址
+#    关闭启动检查
+  consumer:
+    check: false
+    retries: 0
   scan:
     base-packages: cn.resume.search.service
 
-logging:
-  level:
-    cn: trace
 mybatis-plus:
     configuration:
         #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射

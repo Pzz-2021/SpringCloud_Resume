@@ -31,7 +31,8 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
         <!--       Nacos     -->
         <spring-cloud-alibaba.version>2.2.6.RELEASE</spring-cloud-alibaba.version>
-        <org.projectlombok.version>1.18.16</org.projectlombok.version>
+        <!--    1.18.24不会和mapstruct冲突    -->
+        <org.projectlombok.version>1.18.24</org.projectlombok.version>
         <fastjson.version>1.2.83</fastjson.version>
         <druid-spring-boot-starter.version>1.2.15</druid-spring-boot-starter.version>
         <mysql-connector-java.version>8.0.30</mysql-connector-java.version>

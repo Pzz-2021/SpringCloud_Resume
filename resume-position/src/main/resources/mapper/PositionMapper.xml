@@ -60,14 +60,14 @@
                create_time
         from position
         where state = 1
-          and pk_position_id = (select position_id from position_hr where hr_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id=3 and user_id = #{userId})
         limit #{offset},#{pageSize}
     </select>
     <select id="totalCountPositionByHr" resultType="java.lang.Integer">
         select count(*)
         from position
         where state = 1
-          and company_id = (select position_id from position_hr where hr_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id=3 and user_id = #{userId})
     </select>
 
     <select id="selectPositionByInterviewer" resultType="com.resume.dubbo.domian.Position">
@@ -94,13 +94,45 @@
                create_time
         from position
         where state = 1
-          and pk_position_id = (select position_id from position_interviewer where interviewer_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id=4 and user_id = #{userId})
         limit #{offset},#{pageSize}
     </select>
     <select id="totalCountPositionByInterviewer" resultType="java.lang.Integer">
         select count(*)
         from position
         where state = 1
-          and pk_position_id = (select position_id from position_interviewer where interviewer_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id=4 and user_id = #{userId})
+    </select>
+
+    <select id="selectAllPosition" resultType="com.resume.dubbo.domian.Position">
+        select pk_position_id,
+               position_name,
+               create_user_id,
+               create_user_name,
+               create_user_picture,
+               create_user_picture,
+               description,
+               hc,
+               working_city,
+               working_years,
+               education_background,
+               type,
+               salary_min,
+               salary_max,
+               salary_month,
+               first_screener_count,
+               interview_count,
+               communicate_offer_count,
+               pend_employ,
+               employed_employ,
+               create_time
+        from position
+        where state = 1
+    </select>
+    <select id="selectPositionHrId" resultType="java.lang.Long">
+         select user_id from position_team where role_id=3 and position_id=#{positionId}
+    </select>
+    <select id="selectPositionInterviewerId" resultType="java.lang.Long">
+        select user_id from position_team where role_id=4 and position_id=#{positionId}
     </select>
 </mapper>

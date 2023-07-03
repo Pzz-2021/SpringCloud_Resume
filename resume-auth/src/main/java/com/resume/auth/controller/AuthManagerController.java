@@ -13,13 +13,11 @@ import com.resume.auth.service.UserService;
 import com.resume.auth.utils.SM3Util;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
-import com.resume.base.utils.Constant;
 import com.resume.base.utils.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,8 +48,7 @@ public class AuthManagerController {
         if (result == null) return RestResponse.error("请检查邮箱或密码");
         else {
             long start = System.currentTimeMillis();
-            if (!result.getPassword().equals(SM3Util.pwdEncrypt(user.getPassword())))
-                return RestResponse.error("请检查邮箱或密码");
+            if (!result.getPassword().equals(SM3Util.pwdEncrypt(user.getPassword()))) return RestResponse.error("请检查邮箱或密码");
             LoginDTO loginDTO = userService.getPermissions(result.getPkUserId());
             loginDTO.setUserInfoDTO(UserMapstruct.INSTANCT.conver(user));
             log.info("获取权限 耗时：" + (System.currentTimeMillis() - start));
@@ -79,7 +76,8 @@ public class AuthManagerController {
             //赋予角色
             roleMapper.addCompanyAdmin(user.getPkUserId());
             return RestResponse.success();
-        } else return RestResponse.error("邮箱已注册");
+        }
+        else return RestResponse.error("邮箱已注册");
     }
 
     @ApiOperation("刷新Token")
@@ -94,5 +92,6 @@ public class AuthManagerController {
         tokenDTO.setRefresh_token(JwtUtil.createRefreshToken(userId, companyId,role));
         return RestResponse.success(tokenDTO);
     }
+
 
 }

@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.auth.mapper.CompanyMapper">
 
+    <select id="getCompanyMessage" resultType="com.resume.auth.pojo.Company">
+        select pk_company_id, company_name, company_logo, company_introduce
+        from company
+        where pk_company_id = #{companyId}
+    </select>
 </mapper>

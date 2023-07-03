@@ -23,4 +23,9 @@ public interface PositionMapper extends BaseMapper<Position> {
 
       List<Position> selectPositionByInterviewer(@Param("userId")Long userId,@Param("offset")int offset,@Param("pageSize")int pageSize);
       int totalCountPositionByInterviewer(@Param("userId")Long userId);
+
+      //ES数据同步测试用
+      List<Position>selectAllPosition();
+      List<Long>selectPositionHrId(@Param("positionId")Long positionId);
+      List<Long>selectPositionInterviewerId(@Param("positionId")Long positionId);
 }

@@ -26,22 +26,18 @@ public class Operation implements Serializable {
      * 操作ID
      */
     @TableId(value = "pk_operation_id", type = IdType.AUTO)
-    private Long pkOperationId;
+    private Integer pkOperationId;
 
     /**
      * 菜单ID
      */
-    private Long menuId;
+    private Integer menuId;
 
     /**
      * 菜单path
      */
     private String menuPath;
 
-    /**
-     * 编码规则，操作对象:操作名
-     */
-    private String operationCode;
 
     /**
      * 请求方式(GET、POST、PUT、DELETE等)

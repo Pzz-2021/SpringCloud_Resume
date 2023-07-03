@@ -10,6 +10,9 @@ import com.resume.dubbo.domian.SearchCondition;
 import com.resume.position.mapper.PositionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.position.utils.CacheClient;
+import lombok.Getter;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +27,14 @@ import java.util.List;
  * @author 彭政
  * @since 2023-06-18
  */
+@Getter
 @Service
 public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
     @Autowired
     private CacheClient cacheClient;
 
-    @Autowired
+    @DubboReference
     private SearchService searchService;
 
     @Resource
@@ -87,8 +91,6 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
         return positions;
     }
-
-
 
 
 //    public Position getOne(Long companyId, Long positionId) {

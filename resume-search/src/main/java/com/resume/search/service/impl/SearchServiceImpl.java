@@ -6,7 +6,7 @@ import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.Position;
-import com.resume.dubbo.domian.PositionDto;
+import com.resume.dubbo.domian.PositionDTO;
 import com.resume.dubbo.domian.SearchCondition;
 import com.resume.search.mapstruct.PositionMapper;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -54,14 +54,14 @@ public class SearchServiceImpl implements SearchService {
 
 
     @Override
-    public Boolean savePositionDto(PositionDto... positions) {
+    public Boolean savePositionDto(PositionDTO... positions) {
         BulkRequest bulkRequest = new BulkRequest();
         bulkRequest.timeout("10s");
 
-        ArrayList<PositionDto> positionArr = new ArrayList<PositionDto>(Arrays.asList(positions));
+        ArrayList<PositionDTO> positionArr = new ArrayList<PositionDTO>(Arrays.asList(positions));
 
         // 批量请求处理
-        for (PositionDto position : positionArr) {
+        for (PositionDTO position : positionArr) {
             bulkRequest.add(
                     // 这里是数据信息
                     new IndexRequest(POSITION_INDEX)
@@ -99,7 +99,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Boolean updatePositionDtoById(PositionDto position) {
+    public Boolean updatePositionDtoById(PositionDTO position) {
         UpdateRequest updateRequest = new UpdateRequest(POSITION_INDEX, "" + position.getPkPositionId());
 
         updateRequest.doc(JSON.toJSONString(position), XContentType.JSON);
@@ -122,7 +122,7 @@ public class SearchServiceImpl implements SearchService {
             GetResponse response = restHighLevelClient.get(request, RequestOptions.DEFAULT);
 
             String sourceAsString = response.getSourceAsString();
-            PositionDto positionDto = JSON.parseObject(sourceAsString, PositionDto.class);
+            PositionDTO positionDto = JSON.parseObject(sourceAsString, PositionDTO.class);
 
             // 将 Dto 转换成 pojo
             return PositionMapper.INSTANCE.convertToPosition(positionDto);

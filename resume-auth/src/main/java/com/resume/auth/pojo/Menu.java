@@ -26,12 +26,12 @@ public class Menu implements Serializable {
      * 菜单ID
      */
     @TableId(value = "pk_menu_id", type = IdType.AUTO)
-    private Long pkMenuId;
+    private Integer pkMenuId;
 
     /**
      * 父级菜单ID，若为0则无
      */
-    private Long fatherId;
+    private Integer fatherId;
 
     /**
      * 菜单名

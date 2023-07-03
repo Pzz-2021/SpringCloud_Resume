@@ -19,7 +19,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class PositionDto implements Serializable {
+public class PositionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -137,7 +137,6 @@ public class PositionDto implements Serializable {
      * 删除状态：1-在招、0-已结束
      */
     private Integer state;
-
 
     private List<Long> hrIdList;
     private List<Long> interviewerIdList;

@@ -2,6 +2,7 @@ package com.resume.auth.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.resume.auth.pojo.Company;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,5 +16,5 @@ import org.springframework.stereotype.Component;
 //防止注入爆红
 @Component
 public interface CompanyMapper extends BaseMapper<Company> {
-
+     Company getCompanyMessage(@Param("companyId") Long companyId);
 }

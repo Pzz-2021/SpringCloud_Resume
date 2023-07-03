@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /*
  *@filename: LoginDTO
@@ -28,7 +29,7 @@ public class LoginDTO implements Serializable {
 
     //给前端的
     @ApiModelProperty(value = "权限列表")
-    private List<String>permissionsList;
+    private Map<String, Boolean> permissionsList;
 
     @ApiModelProperty(value = "菜单列表")
     private List<Menu>menusList;

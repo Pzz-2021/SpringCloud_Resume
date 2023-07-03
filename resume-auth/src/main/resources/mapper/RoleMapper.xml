@@ -2,13 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.auth.mapper.RoleMapper">
 
+    <!--
+         注意：数据库表的字段名   和    实体类的属性名称  不一样，则不能自动封装数据
+          *resultMap:
+          1.定义<resultMap>标签
+          2.在<select>标签中,使用resultMap属性替换resultType属性
+          id：唯一标识
+          type:映射的类型
+      -->
+
     <insert id="addCompanyAdmin">
         insert into user_role(user_id, role_id)
         values (#{userId}, 2)
     </insert>
+    <insert id="addCompanyHr">
+        insert into user_role(user_id, role_id)
+        values (#{userId}, 3)
+    </insert>
+    <insert id="addCompanyInterviewer">
+        insert into user_role(user_id, role_id)
+        values (#{userId}, 4)
+    </insert>
+
     <select id="selectUserRole" resultType="java.lang.String">
         select role_name
         from role
         where pk_role_id = (select role_id from user_role where user_id = #{userId})
+    </select>
+    <select id="selectTeamAdmin" resultType="com.resume.auth.dto.MemberDTO">
+        select pk_user_id, user_email, user_name, account_picture,role_name
+        from user
+                 inner join user_role on user.pk_user_id = user_role.user_id
+                 inner join role on user_role.role_id = role.pk_role_id
+        where company_id = #{companyId}
+          and role_id = 2
+    </select>
+    <select id="selectTeamOtherMember" resultType="com.resume.auth.dto.MemberDTO">
+        select pk_user_id, user_email, user_name, account_picture,role_name
+        from user
+                 inner join user_role on user.pk_user_id = user_role.user_id
+                 inner join role on user_role.role_id = role.pk_role_id
+        where company_id = #{companyId}
+          and role_id in (3, 4)
     </select>
 </mapper>
