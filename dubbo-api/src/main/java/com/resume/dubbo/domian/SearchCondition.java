@@ -10,10 +10,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchCondition implements Serializable {
+    // 状态 1 在招  0 未招  -1不限
     private int state;
 
+    // 搜索的值
     private String query;
 
+    // 分页
     private int page;
     private int pageSize;
 }

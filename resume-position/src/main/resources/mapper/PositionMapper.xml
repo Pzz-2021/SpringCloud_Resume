@@ -125,9 +125,11 @@
                communicate_offer_count,
                pend_employ,
                employed_employ,
-               create_time
+               create_time,
+               update_time,
+               state
         from position
-        where state = 1
+
     </select>
     <select id="selectPositionTeam" resultType="java.lang.Long">
          select user_id from position_team where role_id in(3,4) and position_id=#{positionId}

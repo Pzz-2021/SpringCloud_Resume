@@ -6,10 +6,12 @@ import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.PositionDTO;
 import com.resume.dubbo.domian.SearchCondition;
 
+import java.util.List;
+
 public interface SearchService {
 
     // 全量保存
-    Boolean savePositionDTOs(PositionDTO... positionDTOS);
+    Boolean savePositionDTOs(List<PositionDTO> positionDTOList);
 
     // 增量保存
     Boolean savePositionDTO(PositionDTO positionDTO);

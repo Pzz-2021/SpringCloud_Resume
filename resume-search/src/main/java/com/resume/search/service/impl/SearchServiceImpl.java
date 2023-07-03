@@ -10,6 +10,7 @@ import com.resume.dubbo.domian.PositionDTO;
 import com.resume.dubbo.domian.SearchCondition;
 import com.resume.search.mapstruct.PositionMapper;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.elasticsearch.ElasticsearchStatusException;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -26,6 +27,7 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -40,7 +42,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -56,13 +57,11 @@ public class SearchServiceImpl implements SearchService {
     private RestHighLevelClient restHighLevelClient;
 
     @Override
-    public Boolean savePositionDTOs(PositionDTO... positionDTOS) {
+    public Boolean savePositionDTOs(List<PositionDTO> positionArr) {
         deleteIndex(POSITION_INDEX);
 
         BulkRequest bulkRequest = new BulkRequest();
         bulkRequest.timeout("10s");
-
-        ArrayList<PositionDTO> positionArr = new ArrayList<PositionDTO>(Arrays.asList(positionDTOS));
 
         // 批量请求处理
         for (PositionDTO positionDTO : positionArr) {
@@ -186,6 +185,9 @@ public class SearchServiceImpl implements SearchService {
         if (!SUPER_ADMIN.equals(tokenInfo.getRole()))
             termQueryBuilder.must(QueryBuilders.termQuery(COMPANY_ID, tokenInfo.getCompanyId()));
 
+        if (searchCondition.getState() != -1)
+            termQueryBuilder.must(QueryBuilders.termQuery(STATE, searchCondition.getState()));
+
         switch (tokenInfo.getRole()) {
             case HR:
                 termQueryBuilder.must(QueryBuilders.termQuery(HR_ID_LIST, tokenInfo.getPkUserId()));
@@ -267,16 +269,32 @@ public class SearchServiceImpl implements SearchService {
 
     // 根据索引名称删除索引
     private boolean deleteIndex(String indexName) {
+        boolean isExists = false;
+        try {
+            isExists = indexIsExists(indexName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (!isExists)
+            return false;
+
         DeleteIndexRequest request = new DeleteIndexRequest(indexName);
         AcknowledgedResponse response = null;
         try {
             response = restHighLevelClient.indices().delete(request, RequestOptions.DEFAULT);
 //            System.out.println(response.isAcknowledged());// 是否删除成功
             return response.isAcknowledged();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return false;
         }
+    }
 
+    private boolean indexIsExists(String indexName) throws IOException {
+        GetIndexRequest request = new GetIndexRequest(indexName);
+        boolean exists = restHighLevelClient.indices().exists(request, RequestOptions.DEFAULT);
+        System.out.println(exists);// 索引是否存在
+        return exists;
     }
 }

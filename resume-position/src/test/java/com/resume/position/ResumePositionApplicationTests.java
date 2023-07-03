@@ -1,6 +1,7 @@
 package com.resume.position;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.PositionDTO;
 import com.resume.position.mapstruct.PosistionMapstruct;
@@ -26,6 +27,9 @@ class ResumePositionApplicationTests {
 
     @Autowired
     private PositionService positionService;
+
+    @Autowired
+    private SearchService searchService;
 
 
     @Test
@@ -60,23 +64,26 @@ class ResumePositionApplicationTests {
         System.out.println(dateTime);
 
     }
+
     @Test
-    void test2(){
+    void test2() {
         List<Position> positions = positionService.getPositionMapper().selectAllPosition();
-        List<PositionDTO>list=new ArrayList<>();
-        positions.parallelStream().forEach(new Consumer<Position>() {
-            @Override
-            public void accept(Position position) {
-                PositionDTO positionDTO= PosistionMapstruct.INSTANCT.conver(position);
-                positionDTO.setPositionTeamIdList(positionService.getPositionMapper().selectPositionTeam(position.getPkPositionId()));
-                list.add(positionDTO);
-            }
+        List<PositionDTO> list = new ArrayList<>();
+
+        positions.parallelStream().forEach(position -> {
+            PositionDTO positionDTO = PosistionMapstruct.INSTANCT.conver(position);
+            positionDTO.setPositionTeamIdList(positionService.getPositionMapper().selectPositionTeam(position.getPkPositionId()));
+            list.add(positionDTO);
         });
-        list.forEach(new Consumer<PositionDTO>() {
-            @Override
-            public void accept(PositionDTO positionDTO) {
-                System.out.println("职位："+positionDTO);
-            }
-        });
+
+       list.forEach(new Consumer<PositionDTO>() {
+           @Override
+           public void accept(PositionDTO positionDTO) {
+               System.out.println(positionDTO);
+               System.out.println();
+           }
+       });
+
+        searchService.savePositionDTOs(list);
     }
 }
