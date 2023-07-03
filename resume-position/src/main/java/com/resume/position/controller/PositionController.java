@@ -3,11 +3,14 @@ package com.resume.position.controller;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
+import com.resume.base.utils.Constant;
 import com.resume.base.utils.DateUtil;
 import com.resume.base.utils.JwtUtil;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.SearchCondition;
+import com.resume.position.pojo.PositionTeam;
 import com.resume.position.service.PositionService;
+import com.resume.position.service.PositionTeamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 public class PositionController {
     @Autowired
     private PositionService positionService;
+    @Autowired
+    private PositionTeamService positionTeamService;
 
     @ApiOperation(value = "添加职位", notes = "前端将创建人的名字和头像传过来")
     @PostMapping("/add-position")
@@ -37,6 +42,15 @@ public class PositionController {
         position.setCompanyId(tokenInfo.getCompanyId());
         position.setCreateTime(DateUtil.getDate2());
         boolean save = positionService.save(position);
+        if(Constant.HR.equals(tokenInfo.getRole())){
+            PositionTeam positionTeam=new PositionTeam();
+            positionTeam.setPositionId(position.getPkPositionId());
+            positionTeam.setRoleId(2);
+            positionTeam.setRoleName(Constant.HR);
+            positionTeam.setUserId(position.getCreateUserId());
+            positionTeam.setCreateTime(DateUtil.getDate2());
+            positionTeamService.save(positionTeam);
+        }
         return RestResponse.judge(save);
     }
 
