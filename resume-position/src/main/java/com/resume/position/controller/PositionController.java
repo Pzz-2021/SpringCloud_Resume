@@ -38,19 +38,7 @@ public class PositionController {
     @PostMapping("/add-position")
     public RestResponse<String> addPosition(HttpServletRequest httpServletRequest, @RequestBody Position position) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
-        position.setCreateUserId(tokenInfo.getPkUserId());
-        position.setCompanyId(tokenInfo.getCompanyId());
-        position.setCreateTime(DateUtil.getDate2());
-        boolean save = positionService.save(position);
-        if (Constant.HR.equals(tokenInfo.getRole())) {
-            PositionTeam positionTeam = new PositionTeam();
-            positionTeam.setPositionId(position.getPkPositionId());
-            positionTeam.setRoleId(2);
-            positionTeam.setRoleName(Constant.HR);
-            positionTeam.setUserId(position.getCreateUserId());
-            positionTeam.setCreateTime(DateUtil.getDate2());
-            positionTeamService.save(positionTeam);
-        }
+        boolean save = positionService.addPosition(tokenInfo, position);
         return RestResponse.judge(save);
     }
 

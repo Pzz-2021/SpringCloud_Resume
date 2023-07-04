@@ -4,11 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
+import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.Position;
+import com.resume.dubbo.domian.PositionDTO;
 import com.resume.dubbo.domian.SearchCondition;
 import com.resume.position.mapper.PositionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.resume.position.mapstruct.PosistionMapstruct;
+import com.resume.position.pojo.PositionTeam;
 import com.resume.position.utils.CacheClient;
 import lombok.Getter;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -40,6 +44,77 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
     @Resource
     private PositionMapper positionMapper;
 
+    @Autowired
+    private PositionTeamService positionTeamService;
+
+
+    public boolean addPosition(TokenInfo tokenInfo, Position position) {
+        position.setCreateUserId(tokenInfo.getPkUserId());
+        position.setCompanyId(tokenInfo.getCompanyId());
+        position.setCreateTime(DateUtil.getDate2());
+        boolean save = this.save(position);
+        if (Constant.HR.equals(tokenInfo.getRole())) {
+            PositionTeam positionTeam = new PositionTeam();
+            positionTeam.setPositionId(position.getPkPositionId());
+            positionTeam.setRoleId(2);
+            positionTeam.setRoleName(Constant.HR);
+            positionTeam.setUserId(position.getCreateUserId());
+            positionTeam.setCreateTime(DateUtil.getDate2());
+            positionTeamService.save(positionTeam);
+        }
+
+        // 添加成功保存至 es
+        if (save) {
+            PositionDTO positionDTO = PosistionMapstruct.INSTANCT.conver(position);
+            positionDTO.setPositionTeamIdList(positionMapper.selectPositionTeam(position.getPkPositionId()));
+
+            searchService.savePositionDTO(positionDTO);
+        }
+
+        return save;
+    }
+
+
+    public boolean editPosition(Position position) {
+        boolean b = updateById(position);
+
+        // 修改成功 同步至es
+        if (b) {
+            PositionDTO positionDTO = PosistionMapstruct.INSTANCT.conver(position);
+            positionDTO.setPositionTeamIdList(positionMapper.selectPositionTeam(position.getPkPositionId()));
+
+            searchService.updatePositionDTOById(positionDTO);
+        }
+
+        return b;
+    }
+
+    // 关闭职位也是一种修改职位，是修改职位的一种特例
+    public boolean closePosition(Long positionId) {
+        Position position = new Position(positionId, 0);
+        return editPosition(position);
+    }
+
+    // 激活职位也是一样
+    public boolean openPosition(Long positionId) {
+        Position position = new Position(positionId, 1);
+        return editPosition(position);
+    }
+
+
+    public PageBean<Position> selectPositionByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
+        if (searchCondition.getState() == null || searchCondition.getState() < -1 || searchCondition.getState() > 1)
+            searchCondition.setState(-1);
+        if (searchCondition.getPage() == null || searchCondition.getPage() < 1)
+            searchCondition.setPage(1);
+        if (searchCondition.getPageSize() == null || searchCondition.getPageSize() < 1)
+            searchCondition.setPageSize(10);
+
+        return searchService.searchPosition(searchCondition, tokenInfo);
+    }
+
+
+
 
     public PageBean<Position> selectPositionByPage(TokenInfo tokenInfo, int nowPage) {
         PageBean<Position> pageBean = new PageBean<>();
@@ -66,33 +141,6 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
         pageBean.setNowPage(nowPage);
         return pageBean;
     }
-
-    public boolean editPosition(Position position) {
-        return updateById(position);
-    }
-
-    public boolean closePosition(Long positionId) {
-        Position position = new Position(positionId, 0);
-        return updateById(position);
-    }
-
-    public boolean openPosition(Long positionId) {
-        Position position = new Position(positionId, 1);
-        return updateById(position);
-    }
-
-
-    public PageBean<Position> selectPositionByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
-        if (searchCondition.getState() == null || searchCondition.getState() < -1 || searchCondition.getState() > 1)
-            searchCondition.setState(-1);
-        if (searchCondition.getPage() == null || searchCondition.getPage() < 1)
-            searchCondition.setPage(1);
-        if (searchCondition.getPageSize() == null || searchCondition.getPageSize() < 1)
-            searchCondition.setPageSize(10);
-
-        return searchService.searchPosition(searchCondition, tokenInfo);
-    }
-
 
 //    public Position getOne(Long companyId, Long positionId) {
 //        // 解决缓存穿透
