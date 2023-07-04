@@ -54,10 +54,15 @@ public class Resume implements Serializable {
      */
     private String fileName;
 
+
     /**
      * 文件路径
      */
     private String url;
+    /**
+     * 简历检验码 md5
+     */
+    private String identifier;
 
     /**
      * 简历文字内容
