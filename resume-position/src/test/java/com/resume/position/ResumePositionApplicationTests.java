@@ -46,6 +46,16 @@ class ResumePositionApplicationTests {
 
 
     @Test
+    void test0() {
+        System.out.println(redisUtil.sSet("cache:check-resume:123", "value1"));
+
+        boolean result = redisUtil.sHasKey("cache:check-resume:123", "value1");
+
+        System.out.println(result);
+    }
+
+
+    @Test
     void contextLoads() {
         Position position = positionService.getById(1L);
         // 建缓存

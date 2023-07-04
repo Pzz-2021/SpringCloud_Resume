@@ -4,6 +4,7 @@ import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.JwtUtil;
 import com.resume.parse.dto.FileChunkDTO;
+import com.resume.parse.service.UploadService;
 import com.resume.parse.utils.RedisConstants;
 import com.resume.parse.utils.RedisUtil;
 import com.resume.parse.utils.UploadUtil;
@@ -29,10 +30,10 @@ import java.util.UUID;
 public class UploadController {
 
     @Autowired
-    private UploadUtil uploadService;
+    private UploadUtil uploadUtil;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private UploadService uploadService;
 
     @ApiOperation(value = "单个简历上传")
     @PostMapping("/upload-single-resume")
@@ -42,7 +43,7 @@ public class UploadController {
         //取文件后缀
         String fileSuffix=originalFilename.substring(originalFilename.lastIndexOf('.'));
         //创建新的文件名称
-        String fileURL=uploadService.uploadByBytes(file.getBytes(), UUID.randomUUID()+fileSuffix);
+        String fileURL= uploadUtil.uploadByBytes(file.getBytes(), UUID.randomUUID()+fileSuffix);
         return RestResponse.success(fileURL);
     }
 
@@ -50,11 +51,10 @@ public class UploadController {
     @GetMapping("/check-chunk")
     public RestResponse<String> checkChunkExist(HttpServletRequest httpServletRequest, @RequestBody FileChunkDTO chunkDTO){
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
-        String key = RedisConstants.CACHE_ChECK_RESUME + tokenInfo.getCompanyId();
 
-        // 返回为 0
-        boolean result = redisUtil.sHasKey(key, chunkDTO.getIdentifier());
+        boolean result = uploadService.checkChunkExist(tokenInfo.getCompanyId(), chunkDTO.getIdentifier());
 
+        // 不存在返回 false 给前端
         return RestResponse.judge(result);
     }
 }
