@@ -77,15 +77,12 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
     public boolean editPosition(Position position) {
         boolean b = updateById(position);
-
         // 修改成功 同步至es
         if (b) {
             PositionDTO positionDTO = PosistionMapstruct.INSTANCT.conver(position);
             positionDTO.setPositionTeamIdList(positionMapper.selectPositionTeam(position.getPkPositionId()));
-
             searchService.updatePositionDTOById(positionDTO);
         }
-
         return b;
     }
 

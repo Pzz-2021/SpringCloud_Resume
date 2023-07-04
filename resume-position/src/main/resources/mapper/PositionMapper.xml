@@ -129,7 +129,6 @@
                update_time,
                state
         from position
-
     </select>
     <select id="selectPositionTeam" resultType="java.lang.Long">
          select user_id from position_team where role_id in(3,4) and position_id=#{positionId}

@@ -31,8 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 public class PositionController {
     @Autowired
     private PositionService positionService;
-    @Autowired
-    private PositionTeamService positionTeamService;
 
     @ApiOperation(value = "添加职位", notes = "前端将创建人的名字和头像传过来")
     @PostMapping("/add-position")
