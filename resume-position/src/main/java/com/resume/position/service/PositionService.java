@@ -47,24 +47,25 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
     @Autowired
     private PositionTeamService positionTeamService;
 
-
+    // 添加职位
     public boolean addPosition(TokenInfo tokenInfo, Position position) {
         position.setCreateUserId(tokenInfo.getPkUserId());
         position.setCompanyId(tokenInfo.getCompanyId());
         position.setCreateTime(DateUtil.getDate2());
-        boolean save = this.save(position);
-        if (Constant.HR.equals(tokenInfo.getRole())) {
-            PositionTeam positionTeam = new PositionTeam();
-            positionTeam.setPositionId(position.getPkPositionId());
-            positionTeam.setRoleId(2);
-            positionTeam.setRoleName(Constant.HR);
-            positionTeam.setUserId(position.getCreateUserId());
-            positionTeam.setCreateTime(DateUtil.getDate2());
-            positionTeamService.save(positionTeam);
-        }
 
-        // 添加成功保存至 es
+        boolean save = this.save(position);
+        // 添加成功保存至 es 并添加职位负责人
         if (save) {
+            if (Constant.HR.equals(tokenInfo.getRole())) {
+                PositionTeam positionTeam = new PositionTeam();
+                positionTeam.setPositionId(position.getPkPositionId());
+                positionTeam.setRoleId(2);
+                positionTeam.setRoleName(Constant.HR);
+                positionTeam.setUserId(position.getCreateUserId());
+                positionTeam.setCreateTime(DateUtil.getDate2());
+                positionTeamService.save(positionTeam);
+            }
+
             PositionDTO positionDTO = PosistionMapstruct.INSTANCT.conver(position);
             positionDTO.setPositionTeamIdList(positionMapper.selectPositionTeam(position.getPkPositionId()));
 
@@ -74,7 +75,7 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
         return save;
     }
 
-
+    // 修改职位
     public boolean editPosition(Position position) {
         boolean b = updateById(position);
         // 修改成功 同步至es
@@ -98,7 +99,7 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
         return editPosition(position);
     }
 
-
+    // 使用 es 分页搜索
     public PageBean<Position> selectPositionByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
         if (searchCondition.getState() == null || searchCondition.getState() < -1 || searchCondition.getState() > 1)
             searchCondition.setState(-1);
@@ -109,7 +110,6 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
         return searchService.searchPosition(searchCondition, tokenInfo);
     }
-
 
 
 
