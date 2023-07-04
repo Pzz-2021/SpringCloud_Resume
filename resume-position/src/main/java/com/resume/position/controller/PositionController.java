@@ -63,8 +63,8 @@ public class PositionController {
 
     @ApiOperation(value = "关闭职位", notes = "传positionId")
     @PutMapping("/close-position")
-    public RestResponse<String> closePosition(@RequestBody Position position) {
-        boolean save = positionService.closePosition(position);
+    public RestResponse<String> closePosition(Long positionId) {
+        boolean save = positionService.closePosition(positionId);
         return RestResponse.judge(save);
     }
 

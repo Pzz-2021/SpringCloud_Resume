@@ -257,12 +257,14 @@ public class SearchServiceImpl implements SearchService {
                 sourceAsMap.put(POSITION_NAME, new_name.toString());
             }
 
+            // 使用工具快速将Map转化为Bean
             Position position = BeanUtil.fillBeanWithMap(sourceAsMap, new Position(), false);
             resultArr.add(position);
         }
         // 完整分页数据
         System.out.println(resultArr);
 
+        // hits.getTotalHits().value  得到符合条件的总数
         int totalCount = Math.toIntExact(hits.getTotalHits().value);
 
         return new PageBean<>(searchCondition.getQuery(), totalCount, totalCount / searchCondition.getPageSize(),
@@ -272,6 +274,7 @@ public class SearchServiceImpl implements SearchService {
 
     // 根据索引名称删除索引
     private boolean deleteIndex(String indexName) {
+        // 先判断是否存在这个索引
         boolean isExists = false;
         try {
             isExists = indexIsExists(indexName);
@@ -283,6 +286,7 @@ public class SearchServiceImpl implements SearchService {
         if (!isExists)
             return false;
 
+        // 发出删除请求
         DeleteIndexRequest request = new DeleteIndexRequest(indexName);
         AcknowledgedResponse response = null;
         try {
@@ -294,6 +298,7 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 
+    // 判断是否存在这个索引
     private boolean indexIsExists(String indexName) throws IOException {
         GetIndexRequest request = new GetIndexRequest(indexName);
         boolean exists = restHighLevelClient.indices().exists(request, RequestOptions.DEFAULT);

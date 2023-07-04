@@ -3,8 +3,10 @@ package com.resume.dubbo.domian;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,6 +21,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Position implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -139,4 +143,8 @@ public class Position implements Serializable {
      */
     private Integer state;
 
+    public Position(Long pkPositionId, Integer state) {
+        this.pkPositionId = pkPositionId;
+        this.state = state;
+    }
 }
