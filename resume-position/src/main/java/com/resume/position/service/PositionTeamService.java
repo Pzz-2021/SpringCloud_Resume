@@ -30,6 +30,7 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
     @Autowired
     private SearchService searchService;
 
+
     // 添加一个职位负责人
     public boolean addPositionTeam(PositionTeam positionTeam) {
         positionTeam.setCreateTime(DateUtil.getDate2());

@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -61,9 +58,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             //将用户对应的权限传给前端，控制具体按钮是否存在
             loginDTO.setPermissionsList(userPermissions.parallelStream().collect(Collectors.toMap(Operation::getInterfaceUrl,operation -> true)));
             //将用户对应的权限缓存，给后端网关使用的:Method+InterfaceUrl
-            List<String>operation=userPermissions.parallelStream().map((resource-> resource.getMethod()+resource.getInterfaceUrl())).collect(Collectors.toList());
+            Set<String> operation=userPermissions.parallelStream().map((resource-> resource.getMethod()+resource.getInterfaceUrl())).collect(Collectors.toSet());
             //权限存储时间跟access_token一样长
-            stringRedisTemplate.opsForList().leftPushAll(Constant.USER_KEY+userId, operation.toArray(new String[0]));
+            stringRedisTemplate.opsForSet().add(Constant.USER_KEY+userId, operation.toArray(new String[0]));
             stringRedisTemplate.expire(Constant.USER_KEY+userId, Constant.USER_TTL, TimeUnit.HOURS);
         }
         //菜单权限

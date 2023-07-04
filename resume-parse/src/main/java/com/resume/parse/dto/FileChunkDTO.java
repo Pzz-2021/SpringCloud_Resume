@@ -1,6 +1,7 @@
 package com.resume.parse.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
@@ -19,4 +20,5 @@ public class FileChunkDTO implements Serializable {
      * 文件md5
      */
     private String identifier;
+
 }

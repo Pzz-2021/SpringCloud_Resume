@@ -37,13 +37,15 @@ public class UploadController {
 
     @ApiOperation(value = "单个简历上传")
     @PostMapping("/upload-single-resume")
-    public RestResponse<String> uploadSingleResume(@RequestParam("file") MultipartFile file) throws IOException {
+    public RestResponse<String> uploadSingleResume(HttpServletRequest httpServletRequest,@RequestParam("file")MultipartFile file,@RequestParam String identifier) throws IOException {
         //获取原始文件名
         String originalFilename = file.getOriginalFilename();
         //取文件后缀
         String fileSuffix=originalFilename.substring(originalFilename.lastIndexOf('.'));
         //创建新的文件名称
         String fileURL= uploadUtil.uploadByBytes(file.getBytes(), UUID.randomUUID()+fileSuffix);
+        TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
+        uploadService.addChunk(tokenInfo.getCompanyId(),identifier);
         return RestResponse.success(fileURL);
     }
 

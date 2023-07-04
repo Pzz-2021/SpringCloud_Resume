@@ -24,7 +24,6 @@ public class UploadService {
 
     public boolean checkChunkExist(Long companyId, String identifier) {
         String key = RedisConstants.CACHE_ChECK_RESUME + companyId;
-
         // 返回为 是否存在  true-存在  false-不存在
         return redisUtil.sHasKey(key, identifier);
     }
@@ -33,7 +32,6 @@ public class UploadService {
     public boolean addChunk(Long companyId, String identifier) {
         String key = RedisConstants.CACHE_ChECK_RESUME + companyId;
         long count = redisUtil.sSet(key, identifier);
-
         return count > 0;
     }
 }

@@ -9,12 +9,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -31,6 +29,13 @@ public class PositionTeamController {
     @Autowired
     private PositionTeamService positionTeamService;
 
+//    @ApiOperation(value = "查询职位Hr负责人")
+//    @GetMapping("/select-position-team-hr")
+//    public RestResponse<> selectPositionTeamHr(@RequestBody PositionTeam positionTeam) {
+//        boolean save = ;
+//        return RestResponse.judge(save);
+//    }
+
     @ApiOperation(value = "添加职位负责人")
     @PostMapping("/add-position-team")
     public RestResponse<String> addPositionTeam(@RequestBody PositionTeam positionTeam) {
@@ -44,7 +49,5 @@ public class PositionTeamController {
         boolean b = positionTeamService.deletePositionTeam(positionId, userId);
         return RestResponse.judge(b);
     }
-
-
 }
 
