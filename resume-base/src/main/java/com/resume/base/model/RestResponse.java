@@ -37,25 +37,26 @@ public class RestResponse<T> implements Serializable {
     public static <T> RestResponse<T> error() {
         RestResponse<T> response = new RestResponse<T>();
         response.code = 0;
+        response.message = "请求失败。";
         return response;
     }
 
     public static <T> RestResponse<T> error(T object) {
-        RestResponse<T> response = new RestResponse<T>();
+        RestResponse<T> response = error();
         response.code = 0;
         response.data = object;
         return response;
     }
 
     public static <T> RestResponse<T> error(String message) {
-        RestResponse<T> response = new RestResponse<T>();
+        RestResponse<T> response = error();
         response.code = 0;
         response.message = message;
         return response;
     }
 
     public static <T> RestResponse<T> error(String message, T object) {
-        RestResponse<T> response = new RestResponse<T>();
+        RestResponse<T> response =  error();
         response.code = 0;
         response.message = message;
         response.data = object;

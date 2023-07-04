@@ -69,27 +69,36 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
     public boolean editPosition(Position position) {
         LambdaUpdateWrapper<Position> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.eq(Position::getPkPositionId,position.getPkPositionId());
-        return update(position,lambdaUpdateWrapper);
+        lambdaUpdateWrapper.eq(Position::getPkPositionId, position.getPkPositionId());
+        return update(position, lambdaUpdateWrapper);
     }
+
     public boolean closePosition(Position position) {
         LambdaUpdateWrapper<Position> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.eq(Position::getPkPositionId,position.getPkPositionId());
-        lambdaUpdateWrapper.set(Position::getState,0);
+        lambdaUpdateWrapper.eq(Position::getPkPositionId, position.getPkPositionId());
+        lambdaUpdateWrapper.set(Position::getState, 0);
         return update(lambdaUpdateWrapper);
     }
-    public boolean openPosition(Position position) {
+
+    public boolean openPosition(Long positionId) {
         LambdaUpdateWrapper<Position> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.eq(Position::getPkPositionId,position.getPkPositionId());
-        lambdaUpdateWrapper.set(Position::getState,1);
+        lambdaUpdateWrapper.eq(Position::getPkPositionId, positionId);
+        lambdaUpdateWrapper.set(Position::getState, 1);
         return update(lambdaUpdateWrapper);
     }
 
 
     public PageBean<Position> selectPositionByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
-        PageBean<Position> positions = searchService.searchPosition(searchCondition, tokenInfo);
+        if (searchCondition.getState() == null || searchCondition.getState() < -1 || searchCondition.getState() > 1) {
+            searchCondition.setState(-1);
+        }
+        if (searchCondition.getPage() == null || searchCondition.getPage() < 1)
+            searchCondition.setPage(1);
+        if (searchCondition.getPageSize() == null || searchCondition.getPageSize() < 1)
+            searchCondition.setPageSize(10);
 
-        return positions;
+
+        return searchService.searchPosition(searchCondition, tokenInfo);
     }
 
 

@@ -36,12 +36,12 @@ dubbo:
     port: 20881
   registry:
     address: spring-cloud://localhost  #使用springcloud中注册中心的地址
-#    关闭启动检查
+  scan:
+    base-packages: cn.resume.search.service
+  #    关闭启动检查
   consumer:
     check: false
     retries: 0
-  scan:
-    base-packages: cn.resume.search.service
 
 mybatis-plus:
     configuration:

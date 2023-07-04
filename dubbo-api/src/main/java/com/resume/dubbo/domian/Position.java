@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author 彭政
@@ -138,6 +138,5 @@ public class Position implements Serializable {
      * 删除状态：1-在招、0-已结束
      */
     private Integer state;
-
 
 }

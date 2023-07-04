@@ -42,8 +42,8 @@ public class PositionController {
         position.setCompanyId(tokenInfo.getCompanyId());
         position.setCreateTime(DateUtil.getDate2());
         boolean save = positionService.save(position);
-        if(Constant.HR.equals(tokenInfo.getRole())){
-            PositionTeam positionTeam=new PositionTeam();
+        if (Constant.HR.equals(tokenInfo.getRole())) {
+            PositionTeam positionTeam = new PositionTeam();
             positionTeam.setPositionId(position.getPkPositionId());
             positionTeam.setRoleId(2);
             positionTeam.setRoleName(Constant.HR);
@@ -70,19 +70,37 @@ public class PositionController {
 
     @ApiOperation(value = "开启职位", notes = "传positionId")
     @PutMapping("/open-position")
-    public RestResponse<String> openPosition(@RequestBody Position position) {
-        boolean save = positionService.openPosition(position);
+    public RestResponse<String> openPosition(Long positionId) {
+        boolean save = positionService.openPosition(positionId);
         return RestResponse.judge(save);
     }
 
     @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
-    @PostMapping("/select-positionByPage")
+    @PostMapping("/select-position/by-page")
     public RestResponse<PageBean<Position>> selectPositionByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
+        tokenInfo = new TokenInfo(1L, 1L, "超级管理员");
         PageBean<Position> positionPageBean = positionService.selectPositionByEs(searchCondition, tokenInfo);
+
+        System.out.println("----------------------------");
+        System.out.println(positionPageBean);
+        System.out.println("----------------------------");
+
         return RestResponse.success(positionPageBean);
     }
 
+    @ApiOperation(value = "分页查询职位（测试）", notes = "不同角色查询的岗位不同")
+    @PostMapping("/select-position/by-page-test")
+    public RestResponse<PageBean<Position>> selectPositionByEs(@RequestBody SearchCondition searchCondition) {
+        TokenInfo tokenInfo = new TokenInfo(1L, 1L, "超级管理员");
+        PageBean<Position> positionPageBean = positionService.selectPositionByEs(searchCondition, tokenInfo);
+
+        System.out.println("----------------------------");
+        System.out.println(positionPageBean);
+        System.out.println("----------------------------");
+
+        return RestResponse.success(positionPageBean);
+    }
 
 //    @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
 //    @GetMapping("/select-positionByPage")

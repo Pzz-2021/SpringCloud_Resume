@@ -177,9 +177,12 @@ public class SearchServiceImpl implements SearchService {
         // (1)查询条件 使用QueryBuilders工具类创建
         // 多条件查询
         // 搜索限定 公司、设置关键词
-        BoolQueryBuilder termQueryBuilder = QueryBuilders.boolQuery()
-                .should(QueryBuilders.matchQuery(DESCRIPTION, searchCondition.getQuery()))
-                .should(QueryBuilders.matchQuery(POSITION_NAME, searchCondition.getQuery()));
+        BoolQueryBuilder termQueryBuilder = QueryBuilders.boolQuery();
+        if (searchCondition.getQuery() != null && !"".equals(searchCondition.getQuery())) {
+            termQueryBuilder.should(QueryBuilders.matchQuery(POSITION_NAME, searchCondition.getQuery()))
+                            .should(QueryBuilders.matchQuery(WORKING_CITY, searchCondition.getQuery()))
+                            .should(QueryBuilders.matchQuery(DESCRIPTION, searchCondition.getQuery()));
+        }
 
         // 限制除了 超级管理员 其他角色都只能看到本公司的
         if (!SUPER_ADMIN.equals(tokenInfo.getRole()))
@@ -198,6 +201,7 @@ public class SearchServiceImpl implements SearchService {
                 break;
 
             case COMPANY_ADMIN:
+            case SUPER_ADMIN:
                 break;
         }
 
@@ -234,7 +238,7 @@ public class SearchServiceImpl implements SearchService {
         SearchHits hits = search.getHits();
         System.out.println(JSON.toJSONString(hits));
         System.out.println("=======================");
-//        List<Map<String, Object>> results = new ArrayList<>();
+
         List<Position> resultArr = new ArrayList<>();
         for (SearchHit documentFields : hits.getHits()) {
             // 使用新的字段值（高亮），覆盖旧的字段值
@@ -252,7 +256,6 @@ public class SearchServiceImpl implements SearchService {
                 }
                 sourceAsMap.put(POSITION_NAME, new_name.toString());
             }
-//            results.add(sourceAsMap);
 
             Position position = BeanUtil.fillBeanWithMap(sourceAsMap, new Position(), false);
             resultArr.add(position);
