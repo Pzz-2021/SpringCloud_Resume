@@ -35,7 +35,6 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
     public boolean addPositionTeam(PositionTeam positionTeam) {
         positionTeam.setCreateTime(DateUtil.getDate2());
         boolean save = this.save(positionTeam);
-
         // 添加成功同步至es
         if (save)
             updateEsByPositionId(positionTeam.getPositionId());

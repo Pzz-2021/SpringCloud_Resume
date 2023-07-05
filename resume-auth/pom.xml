@@ -92,15 +92,8 @@
         <!--  SM3密码加密包-->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.62</version>
-        </dependency>
-        <!--   工具类   -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
-            <optional>true</optional>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.68</version>
         </dependency>
         <!--  mapstruct -->
         <dependency>

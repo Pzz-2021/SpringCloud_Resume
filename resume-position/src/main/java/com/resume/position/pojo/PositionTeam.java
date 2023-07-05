@@ -48,6 +48,15 @@ public class PositionTeam implements Serializable {
      * 角色名
      */
     private String roleName;
+    /**
+     * 用户名
+     */
+    private String userName;
+
+    /**
+     * 用户头像
+     */
+    private String userPicture;
 
     /**
      * 创建时间

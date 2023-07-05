@@ -37,6 +37,7 @@ public class UserController {
     public RestResponse<String> editPersonalMessage(@RequestBody UserInfoDTO userInfoDTO) {
          User user=UserMapstruct.INSTANCT.conver(userInfoDTO);
          boolean save=userService.editPersonalMessage(user);
+         //ToDo 需要修改冗余的其他的表
          return RestResponse.judge(save);
     }
     @ApiOperation(value = "查询公司信息")
@@ -64,7 +65,7 @@ public class UserController {
     public RestResponse<String> addTeamMembers(@RequestBody MemberDTO memberDTO) {
         User user= UserMapstruct.INSTANCT.conver(memberDTO);
         //加密
-        user.setPassword(SM3Util.pwdEncrypt(user.getPassword()));
+        user.setPassword(SM3Util.encryptPassword(user.getPassword()));
         userService.save(user);
         //赋予角色
         userService.addTeamRole(user.getPkUserId(),memberDTO.getRoleName());
