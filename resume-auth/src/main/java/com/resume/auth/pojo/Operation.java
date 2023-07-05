@@ -29,17 +29,6 @@ public class Operation implements Serializable {
     private Integer pkOperationId;
 
     /**
-     * 菜单ID
-     */
-    private Integer menuId;
-
-    /**
-     * 菜单path
-     */
-    private String menuPath;
-
-
-    /**
      * 请求方式(GET、POST、PUT、DELETE等)
      */
     private String method;

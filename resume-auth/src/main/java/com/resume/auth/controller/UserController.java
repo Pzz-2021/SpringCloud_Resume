@@ -37,7 +37,7 @@ public class UserController {
     public RestResponse<String> editPersonalMessage(@RequestBody UserInfoDTO userInfoDTO) {
          User user=UserMapstruct.INSTANCT.conver(userInfoDTO);
          boolean save=userService.editPersonalMessage(user);
-         //ToDo 需要修改冗余的其他的表
+         //TODO 需要修改冗余的其他的表
          return RestResponse.judge(save);
     }
     @ApiOperation(value = "查询公司信息")

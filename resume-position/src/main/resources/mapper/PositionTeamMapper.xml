@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.position.mapper.PositionTeamMapper">
 
+    <select id="getSelectedPositionTeam" resultType="com.resume.position.pojo.PositionTeam">
+        select position_id, user_id, role_id, role_name, user_name, user_picture
+        from position_team
+        where position_id = #{positionId}
+    </select>
+    <select id="getSelectedPositionTeamMemberId" resultType="java.lang.Long">
+        select user_id
+        from position_team
+        where position_id = #{positionId}
+    </select>
 </mapper>

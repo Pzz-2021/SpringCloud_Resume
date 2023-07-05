@@ -17,10 +17,4 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface UserMapstruct {
     UserMapstruct INSTANCE = Mappers.getMapper(UserMapstruct.class);
-
-    @Mappings({
-            @Mapping(source = "pkUserId", target = "userId"),
-            @Mapping(source = "accountPicture", target = "userPicture")
-    })
-    PositionTeam convert(MemberDTO position);
 }

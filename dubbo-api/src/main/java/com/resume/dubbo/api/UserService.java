@@ -12,7 +12,5 @@ import java.util.List;
  *@description TODO
  */
 public interface UserService {
-    List<MemberDTO>getCompanyHr(Long company);
-
-    List<MemberDTO>getCompanyInterviewer(Long company);
+    List<MemberDTO>getCompanyTeam(Long company);
 }

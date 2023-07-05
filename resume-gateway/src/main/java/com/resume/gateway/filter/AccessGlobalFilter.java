@@ -39,7 +39,7 @@ public class AccessGlobalFilter extends TokenGlobalFilter {
         if(pathMatcher.match("/auth/refresh-token",requestUrl))return chain.filter(exchange);
         //2.获取请求方式和URL并拼接
         String method = exchange.getRequest().getMethodValue();
-        String permission=method+requestUrl;
+        String permission=method+":"+requestUrl;
         //3.从缓存中获取鉴权资源，同样是由请求方式和URL并拼接
         String key=Constant.USER_KEY + exchange.getRequest().getHeaders().get("userId");
         //-1表示最后一个元素

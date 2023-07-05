@@ -20,14 +20,9 @@ import java.util.List;
 public class PositionService implements UserService {
     @Autowired
     private RoleMapper roleMapper;
-    @Override
-    public List<MemberDTO> getCompanyHr(Long company) {
-
-        return null;
-    }
 
     @Override
-    public List<MemberDTO> getCompanyInterviewer(Long company) {
-        return null;
+    public List<MemberDTO> getCompanyTeam(Long companyId) {
+        return roleMapper.selectTeamOtherMember(companyId);
     }
 }

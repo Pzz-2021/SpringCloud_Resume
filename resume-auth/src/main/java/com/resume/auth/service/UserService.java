@@ -62,13 +62,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             //将用户对应的权限传给前端，控制具体按钮是否存在
             loginDTO.setPermissionsList(userPermissions.parallelStream().collect(Collectors.toMap(Operation::getInterfaceUrl, operation -> true)));
             //将用户对应的权限缓存，给后端网关使用的:Method+InterfaceUrl
-            Set<String> operation = userPermissions.parallelStream().map((resource -> resource.getMethod() + resource.getInterfaceUrl())).collect(Collectors.toSet());
+            Set<String> operation = userPermissions.parallelStream().map((resource -> resource.getMethod() +":"+ resource.getInterfaceUrl())).collect(Collectors.toSet());
             //权限存储时间跟access_token一样长
 //            stringRedisTemplate.opsForSet().add(Constant.USER_KEY + userId, operation.toArray(new String[0]));
 //            stringRedisTemplate.expire(Constant.USER_KEY + userId, Constant.USER_TTL, TimeUnit.HOURS);
-
             redisUtil.sSetAndTime(Constant.USER_KEY + userId, Constant.USER_TTL, operation.toArray(new String[0]));
-
         }
         //菜单权限
         loginDTO.setMenusList(userMapper.getMenus(userId));

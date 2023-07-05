@@ -17,7 +17,7 @@ public class MemberDTO implements Serializable {
     /**
      * 用户ID
      */
-    private String pkUserId;
+    private Long pkUserId;
 
     /**
      * 用户邮箱
