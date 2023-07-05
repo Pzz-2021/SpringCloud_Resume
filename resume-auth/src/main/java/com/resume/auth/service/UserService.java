@@ -13,6 +13,7 @@ import com.resume.auth.pojo.User;
 import com.resume.auth.utils.RedisUtil;
 import com.resume.base.utils.Constant;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Getter
+@Slf4j
 public class UserService extends ServiceImpl<UserMapper, User> {
     @Autowired
     private UserMapper userMapper;
@@ -64,9 +66,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             //将用户对应的权限缓存，给后端网关使用的:Method+InterfaceUrl
             Set<String> operation = userPermissions.parallelStream().map((resource -> resource.getMethod() +":"+ resource.getInterfaceUrl())).collect(Collectors.toSet());
             //权限存储时间跟access_token一样长
-//            stringRedisTemplate.opsForSet().add(Constant.USER_KEY + userId, operation.toArray(new String[0]));
-//            stringRedisTemplate.expire(Constant.USER_KEY + userId, Constant.USER_TTL, TimeUnit.HOURS);
-            redisUtil.sSetAndTime(Constant.USER_KEY + userId, Constant.USER_TTL, operation.toArray(new String[0]));
+            redisUtil.sSetAndTime(Constant.USER_KEY + userId, Constant.USER_TTL, operation);
         }
         //菜单权限
         loginDTO.setMenusList(userMapper.getMenus(userId));
