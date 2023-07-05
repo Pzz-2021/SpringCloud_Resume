@@ -6,12 +6,21 @@ import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
 import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.SearchService;
+import com.resume.dubbo.api.UserService;
+import com.resume.dubbo.domian.MemberDTO;
 import com.resume.dubbo.domian.PositionDTO;
 import com.resume.position.mapper.PositionMapper;
 import com.resume.position.mapper.PositionTeamMapper;
 import com.resume.position.pojo.PositionTeam;
+import com.resume.position.utils.CacheClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static com.resume.position.utils.RedisConstants.CACHE_POSITION_TEAM_KEY;
+import static com.resume.position.utils.RedisConstants.CACHE_POSITION_TEAM_TTL;
 
 /**
  * <p>
@@ -29,6 +38,12 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
 
     @Autowired
     private SearchService searchService;
+
+    @Autowired
+    private CacheClient cacheClient;
+
+    @Autowired
+    private UserService userService;
 
 
     // 添加一个职位负责人
@@ -57,11 +72,16 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
     }
 
     // 更新es中职位的 负责人(HR or 面试官)
-    private void updateEsByPositionId(Long positionId){
+    private void updateEsByPositionId(Long positionId) {
         PositionDTO positionDTO = new PositionDTO();
         positionDTO.setPkPositionId(positionId);
         positionDTO.setPositionTeamIdList(positionMapper.selectPositionTeam(positionId));
 
         searchService.updatePositionDTOById(positionDTO);
+    }
+
+    public List<PositionTeam> selectPositionTeamHr(Long companyId) {
+
+        return null;
     }
 }

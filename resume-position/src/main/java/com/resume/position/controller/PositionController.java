@@ -3,24 +3,17 @@ package com.resume.position.controller;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
-import com.resume.base.utils.Constant;
-import com.resume.base.utils.DateUtil;
 import com.resume.base.utils.JwtUtil;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.SearchCondition;
-import com.resume.position.pojo.PositionTeam;
-import com.resume.position.service.NacosUrlService;
 import com.resume.position.service.PositionService;
-import com.resume.position.service.PositionTeamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * <p>
@@ -104,16 +97,6 @@ public class PositionController {
 //        String forObject = restTemplate.getForObject("http://search-service/search/test?name=pzz", String.class);
 
         return forObject;
-    }
-
-    @GetMapping("/test1")
-    public String test1(String serviceName) {
-
-        NacosUrlService nacosUrlService = new NacosUrlService();
-        ServiceInstance serviceInstance = nacosUrlService.getServiceInstance(serviceName);
-        System.out.println(serviceInstance);
-
-        return serviceInstance.toString();
     }
 
 

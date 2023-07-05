@@ -29,14 +29,16 @@ public class PositionTeamController {
     @Autowired
     private PositionTeamService positionTeamService;
 
-//    @ApiOperation(value = "查询职位Hr负责人")
-//    @GetMapping("/select-position-team-hr")
-//    public RestResponse<> selectPositionTeamHr(@RequestBody PositionTeam positionTeam) {
-//        boolean save = ;
-//        return RestResponse.judge(save);
-//    }
+    @ApiOperation(value = "查询职位Hr负责人")
+    @GetMapping("/select-position-team-hr")
+    public RestResponse selectPositionTeamHr(HttpServletRequest httpServletRequest) {
+        TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
+        List<PositionTeam> teamList = positionTeamService.selectPositionTeamHr(tokenInfo.getCompanyId());
 
-    @ApiOperation(value = "添加职位负责人")
+        return null;
+    }
+
+    @ApiOperation(value = "添加职位负责人", notes = "记得传头像和用户名")
     @PostMapping("/add-position-team")
     public RestResponse<String> addPositionTeam(@RequestBody PositionTeam positionTeam) {
         boolean save = positionTeamService.addPositionTeam(positionTeam);

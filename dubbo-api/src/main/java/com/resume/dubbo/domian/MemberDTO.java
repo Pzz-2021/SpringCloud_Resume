@@ -15,9 +15,15 @@ import java.io.Serializable;
 public class MemberDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
+     * 用户ID
+     */
+    private String pkUserId;
+
+    /**
      * 用户邮箱
      */
     private String userEmail;
+
     /**
      * 密码
      */

@@ -9,6 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface PositionMapper {
     PositionMapper INSTANCE = Mappers.getMapper(PositionMapper.class);
 
-
     Position convertToPosition(PositionDTO user);
 }
