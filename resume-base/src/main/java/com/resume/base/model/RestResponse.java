@@ -56,7 +56,7 @@ public class RestResponse<T> implements Serializable {
     }
 
     public static <T> RestResponse<T> error(String message, T object) {
-        RestResponse<T> response =  error();
+        RestResponse<T> response = error();
         response.code = 0;
         response.message = message;
         response.data = object;
@@ -65,5 +65,9 @@ public class RestResponse<T> implements Serializable {
 
     public static RestResponse<String> judge(boolean save) {
         return save ? success() : error();
+    }
+
+    public static <T> RestResponse<T> judge(T object) {
+        return object != null ? success(object) : error();
     }
 }

@@ -78,6 +78,14 @@ public class PositionController {
         return RestResponse.judge(save);
     }
 
+    @ApiOperation(value = "查找一个职位", notes = "传positionId")
+    @GetMapping("/get-position")
+    public RestResponse<Position> getOneById(Long positionId) {
+        Position position = positionService.getOneById(positionId);
+
+        return RestResponse.judge(position);
+    }
+
     @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
     @PostMapping("/select-position/by-page")
     public RestResponse<PageBean<Position>> selectPositionByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {

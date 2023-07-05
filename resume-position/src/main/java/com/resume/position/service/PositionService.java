@@ -139,6 +139,10 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
         return pageBean;
     }
 
+    public Position getOneById(Long positionId) {
+        return searchService.getPositionById(positionId);
+    }
+
 //    public Position getOne(Long companyId, Long positionId) {
 //        // 解决缓存穿透
 ////        Position position = cacheClient.queryWithPassThrough(CACHE_POSITION_KEY, positionId, Position.class, this::getById, CACHE_POSITION_TTL);
