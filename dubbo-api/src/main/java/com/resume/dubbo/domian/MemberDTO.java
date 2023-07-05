@@ -1,4 +1,4 @@
-package com.resume.auth.dto;
+package com.resume.dubbo.domian;
 
 import lombok.Data;
 

@@ -11,6 +11,17 @@
     <artifactId>auth</artifactId>
 
     <dependencies>
+        <!-- 依赖 Dubbo 模块 -->
+        <dependency>
+            <groupId>com.resume</groupId>
+            <artifactId>dubbo-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- Dubbo集成SpringBoot起步依赖 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>

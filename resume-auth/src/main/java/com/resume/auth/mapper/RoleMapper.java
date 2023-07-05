@@ -1,7 +1,7 @@
 package com.resume.auth.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.resume.auth.dto.MemberDTO;
+import com.resume.dubbo.domian.MemberDTO;
 import com.resume.auth.pojo.Role;
 import org.springframework.stereotype.Component;
 

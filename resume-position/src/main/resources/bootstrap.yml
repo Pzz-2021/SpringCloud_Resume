@@ -39,7 +39,7 @@ dubbo:
     base-packages: cn.resume.position.service
   #  订阅
   cloud:
-    subscribed-services: search-service
+    subscribed-services: search-service,auth-service
   #    关闭启动检查
   consumer:
     check: false

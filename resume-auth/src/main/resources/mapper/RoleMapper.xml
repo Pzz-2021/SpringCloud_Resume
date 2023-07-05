@@ -32,7 +32,7 @@
         from role
         where pk_role_id = (select role_id from user_role where user_id = #{userId})
     </select>
-    <select id="selectTeamAdmin" resultType="com.resume.auth.dto.MemberDTO">
+    <select id="selectTeamAdmin" resultType="com.resume.dubbo.domian.MemberDTO">
         select pk_user_id, user_email, user_name, account_picture,role_name
         from user
                  inner join user_role on user.pk_user_id = user_role.user_id
@@ -41,7 +41,7 @@
           and role_id = 2
           and user.is_deleted=0
     </select>
-    <select id="selectTeamOtherMember" resultType="com.resume.auth.dto.MemberDTO">
+    <select id="selectTeamOtherMember" resultType="com.resume.dubbo.domian.MemberDTO">
         select pk_user_id, user_email, user_name, account_picture,role_name
         from user
                  inner join user_role on user.pk_user_id = user_role.user_id

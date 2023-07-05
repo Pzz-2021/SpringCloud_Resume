@@ -1,7 +1,7 @@
 package com.resume.auth.mapstruct;
 
 import com.resume.auth.dto.EnrollDTO;
-import com.resume.auth.dto.MemberDTO;
+import com.resume.dubbo.domian.MemberDTO;
 import com.resume.auth.dto.UserInfoDTO;
 import com.resume.auth.pojo.User;
 import org.mapstruct.Mapper;

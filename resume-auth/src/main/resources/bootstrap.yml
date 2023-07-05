@@ -24,7 +24,17 @@ spring:
             refresh: true
   profiles:
     active: dev
-    # 将项静态目资源路径映射到系统资源路径下
+dubbo:
+  protocol:
+    name: dubbo
+    port: 20885
+  registry:
+    address: spring-cloud://localhost  #使用springcloud中注册中心的地址
+  scan:
+    base-packages: cn.resume.auth.service
+  cloud:
+    subscribed-services: ""
+
 mybatis-plus:
   configuration:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射

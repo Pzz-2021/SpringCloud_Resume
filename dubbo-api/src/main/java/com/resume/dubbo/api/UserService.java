@@ -1,5 +1,9 @@
 package com.resume.dubbo.api;
 
+import com.resume.dubbo.domian.MemberDTO;
+
+import java.util.List;
+
 /*
  *@filename: UserService
  *@author: lyh
@@ -8,5 +12,7 @@ package com.resume.dubbo.api;
  *@description TODO
  */
 public interface UserService {
+    List<MemberDTO>getCompanyHr(Long company);
 
+    List<MemberDTO>getCompanyInterviewer(Long company);
 }

@@ -1,6 +1,6 @@
 package com.resume.auth.controller;
 
-import com.resume.auth.dto.MemberDTO;
+import com.resume.dubbo.domian.MemberDTO;
 import com.resume.auth.dto.UserInfoDTO;
 import com.resume.auth.mapstruct.UserMapstruct;
 import com.resume.auth.pojo.Company;

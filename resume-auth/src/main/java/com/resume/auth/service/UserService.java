@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.auth.dto.LoginDTO;
-import com.resume.auth.dto.MemberDTO;
+import com.resume.dubbo.domian.MemberDTO;
 import com.resume.auth.mapper.RoleMapper;
 import com.resume.auth.mapper.UserMapper;
 import com.resume.auth.pojo.Company;
@@ -18,7 +18,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /*
