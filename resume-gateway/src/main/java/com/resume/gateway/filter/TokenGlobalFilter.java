@@ -29,19 +29,14 @@ import reactor.core.publisher.Mono;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Slf4j
 @Component
 public class TokenGlobalFilter implements GlobalFilter, Ordered {
-
-
     //白名单
-    protected static List<String> whitelist = null;
+    protected static Set<String> whitelist = null;
     static {
         //加载白名单
         try (
@@ -50,7 +45,7 @@ public class TokenGlobalFilter implements GlobalFilter, Ordered {
             Properties properties = new Properties();
             properties.load(resourceAsStream);
             Set<String> strings = properties.stringPropertyNames();
-            whitelist= new ArrayList<>(strings);
+            whitelist= new HashSet<>(strings);
 
         } catch (Exception e) {
             log.error("加载/security-whitelist.properties出错:{}",e.getMessage());
@@ -61,14 +56,8 @@ public class TokenGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String requestUrl = exchange.getRequest().getPath().value();
-        AntPathMatcher pathMatcher = new AntPathMatcher();
         //白名单放行
-        for (String url : whitelist) {
-            //符合白名单
-            if (pathMatcher.match(url, requestUrl)) {
-                return chain.filter(exchange);
-            }
-        }
+        if(whitelist.contains(requestUrl))return chain.filter(exchange);
         //检查token是否存在
         String token = getToken(exchange);
         if (StringUtils.isBlank(token)) {
