@@ -10,10 +10,15 @@ import com.resume.position.service.PositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -31,6 +36,18 @@ public class PositionController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @ApiOperation(value = "返回枚举类型", notes = "返回一个map中含有list")
+    @GetMapping("/get-enumerate")
+    public RestResponse<HashMap<String, ArrayList<String>>> getEnumerateByProperty() {
+        HashMap<String, ArrayList<String>> hashMap = new HashMap<>();
+
+        hashMap.put("workingYears", new ArrayList<String>(Arrays.asList("经验不限", "0-3年", "3-5年", "5-10年", "10年以上")));
+        hashMap.put("educationBackground", new ArrayList<>(Arrays.asList("不限", "大专", "本科", "硕士", "博士")));
+        hashMap.put("type", new ArrayList<>(Arrays.asList("不限", "兼职", "全职", "外包", "实习")));
+
+        return RestResponse.success(hashMap);
+    }
 
     @ApiOperation(value = "添加职位", notes = "前端将创建人的名字和头像传过来")
     @PostMapping("/add-position")
@@ -87,7 +104,6 @@ public class PositionController {
 
         return RestResponse.success(positionPageBean);
     }
-
 
 
     @GetMapping("/test")
