@@ -9,14 +9,18 @@ import com.resume.base.utils.JwtUtil;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.SearchCondition;
 import com.resume.position.pojo.PositionTeam;
+import com.resume.position.service.NacosUrlService;
 import com.resume.position.service.PositionService;
 import com.resume.position.service.PositionTeamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,6 +35,9 @@ import javax.servlet.http.HttpServletRequest;
 public class PositionController {
     @Autowired
     private PositionService positionService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @ApiOperation(value = "添加职位", notes = "前端将创建人的名字和头像传过来")
     @PostMapping("/add-position")
@@ -88,6 +95,28 @@ public class PositionController {
         return RestResponse.success(positionPageBean);
     }
 
+
+
+    @GetMapping("/test")
+    public String test() {
+//        String forObject = restTemplate.getForObject("http://127.0.0.1:5000/test?name=pzz", String.class);
+        String forObject = restTemplate.getForObject("http://flaskService/test?name=pzz", String.class);
+//        String forObject = restTemplate.getForObject("http://search-service/search/test?name=pzz", String.class);
+
+        return forObject;
+    }
+
+    @GetMapping("/test1")
+    public String test1(String serviceName) {
+
+        NacosUrlService nacosUrlService = new NacosUrlService();
+        ServiceInstance serviceInstance = nacosUrlService.getServiceInstance(serviceName);
+        System.out.println(serviceInstance);
+
+        return serviceInstance.toString();
+    }
+
+
 //    @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
 //    @GetMapping("/select-positionByPage")
 //    public RestResponse<PageBean<Position>> selectPositionByPage(HttpServletRequest httpServletRequest, @RequestParam(defaultValue = "1") int nowPage) {
@@ -95,5 +124,7 @@ public class PositionController {
 //        PageBean<Position> positionPageBean = positionService.selectPositionByPage(tokenInfo, nowPage);
 //        return RestResponse.success(positionPageBean);
 //    }
+
+
 }
 
