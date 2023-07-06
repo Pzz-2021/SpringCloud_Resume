@@ -62,7 +62,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         List<Operation> userPermissions = userMapper.getUserPermissions(userId);
         if (userPermissions != null && userPermissions.size() > 0) {
             //将用户对应的权限传给前端，控制具体按钮是否存在
-            loginDTO.setPermissionsList(userPermissions.parallelStream().collect(Collectors.toMap(Operation::getInterfaceUrl, operation -> true)));
+            loginDTO.setPermissionsList(userPermissions.parallelStream().collect(Collectors.toMap(Operation::getOperationCode, operation -> true)));
             //将用户对应的权限缓存，给后端网关使用的:Method+InterfaceUrl
             Set<String> operation = userPermissions.parallelStream().map((resource -> resource.getMethod() +":"+ resource.getInterfaceUrl())).collect(Collectors.toSet());
             //权限存储时间跟access_token一样长
@@ -89,7 +89,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return companyService.update(company, lambdaUpdateWrapper);
     }
 
-    public void addTeamRole(Long userId, String role) {
+    public void addTeamRole(Long userId,String role) {
         switch (role) {
             case Constant.COMPANY_ADMIN:
                 roleMapper.addCompanyAdmin(userId);

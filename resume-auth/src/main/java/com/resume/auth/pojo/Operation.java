@@ -34,6 +34,11 @@ public class Operation implements Serializable {
     private String method;
 
     /**
+     * 操作编码
+     */
+    private String operationCode;
+
+    /**
      * 接口url
      */
     private String interfaceUrl;

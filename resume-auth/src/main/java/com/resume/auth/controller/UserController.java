@@ -62,8 +62,11 @@ public class UserController {
     }
     @ApiOperation(value = "添加团队成员",notes = "可添加角色为：HR 和 面试官")
     @PostMapping("/add-team-members")
-    public RestResponse<String> addTeamMembers(@RequestBody MemberDTO memberDTO) {
+    public RestResponse<String> addTeamMembers(HttpServletRequest httpServletRequest,@RequestBody MemberDTO memberDTO) {
+        TokenInfo tokenInfo=JwtUtil.getTokenInfo(httpServletRequest);
         User user= UserMapstruct.INSTANCT.conver(memberDTO);
+        //所属公司
+        user.setCompanyId(tokenInfo.getCompanyId());
         //加密
         user.setPassword(SM3Util.encryptPassword(user.getPassword()));
         userService.save(user);
