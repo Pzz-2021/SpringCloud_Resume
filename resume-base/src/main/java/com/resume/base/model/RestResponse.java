@@ -37,7 +37,7 @@ public class RestResponse<T> implements Serializable {
     public static <T> RestResponse<T> error() {
         RestResponse<T> response = new RestResponse<T>();
         response.code = 0;
-        response.message = "请求失败。";
+        response.message = "请求失败";
         return response;
     }
 

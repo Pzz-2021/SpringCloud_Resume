@@ -50,7 +50,7 @@ public class AuthManagerController {
             long start = System.currentTimeMillis();
             if (!result.getPassword().equals(SM3Util.encryptPassword(user.getPassword()))) return RestResponse.error("请检查邮箱或密码");
             LoginDTO loginDTO = userService.getPermissions(result.getPkUserId());
-            loginDTO.setUserInfoDTO(UserMapstruct.INSTANCT.conver(user));
+            loginDTO.setUserInfoDTO(UserMapstruct.INSTANCT.conver(result));
             log.info("获取权限 耗时：" + (System.currentTimeMillis() - start));
             long start1 = System.currentTimeMillis();
             // 获取  Access_token 和  Refresh_token

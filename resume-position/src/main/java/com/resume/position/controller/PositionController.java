@@ -41,11 +41,9 @@ public class PositionController {
     @GetMapping("/get-enumerate")
     public RestResponse<HashMap<String, ArrayList<String>>> getEnumerateByProperty() {
         HashMap<String, ArrayList<String>> hashMap = new HashMap<>();
-
-        hashMap.put("workingYears", new ArrayList<String>(Arrays.asList("经验不限", "0-3年", "3-5年", "5-10年", "10年以上")));
+        hashMap.put("workingYears", new ArrayList<>(Arrays.asList("经验不限", "0-3年", "3-5年", "5-10年", "10年以上")));
         hashMap.put("educationBackground", new ArrayList<>(Arrays.asList("不限", "大专", "本科", "硕士", "博士")));
         hashMap.put("type", new ArrayList<>(Arrays.asList("不限", "兼职", "全职", "外包", "实习")));
-
         return RestResponse.success(hashMap);
     }
 
@@ -82,7 +80,6 @@ public class PositionController {
     @GetMapping("/get-position")
     public RestResponse<Position> getOneById(Long positionId) {
         Position position = positionService.getOneById(positionId);
-
         return RestResponse.judge(position);
     }
 
