@@ -60,6 +60,7 @@ public class PositionController {
     @ApiOperation(value = "编辑职位", notes = "传positionId")
     @PutMapping("/edit-position")
     public RestResponse<String> selectPositionByPage(@RequestBody Position position) {
+        System.out.println(position);
         boolean save = positionService.editPosition(position);
         return RestResponse.judge(save);
     }

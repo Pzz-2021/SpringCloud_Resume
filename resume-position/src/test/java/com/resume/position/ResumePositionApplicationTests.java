@@ -86,12 +86,9 @@ class ResumePositionApplicationTests {
             list.add(positionDTO);
         });
 
-       list.forEach(new Consumer<PositionDTO>() {
-           @Override
-           public void accept(PositionDTO positionDTO) {
-               System.out.println(positionDTO);
-               System.out.println();
-           }
+       list.forEach(positionDTO -> {
+           System.out.println(positionDTO);
+           System.out.println();
        });
 
         searchService.savePositionDTOs(list);
