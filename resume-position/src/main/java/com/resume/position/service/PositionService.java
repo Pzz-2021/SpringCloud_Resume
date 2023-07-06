@@ -49,11 +49,20 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
     // 添加职位
     public boolean addPosition(TokenInfo tokenInfo, Position position) {
-        position.setCreateUserId(tokenInfo.getPkUserId());
         position.setCompanyId(tokenInfo.getCompanyId());
+        position.setCreateUserId(tokenInfo.getPkUserId());
+        position.setFirstScreenerCount(0);
+        position.setInterviewCount(0);
+        position.setCommunicateOfferCount(0);
+        position.setPendEmploy(0);
+        position.setEmployedEmploy(0);
         position.setCreateTime(DateUtil.getDate2());
+        position.setUpdateTime(DateUtil.getDate2());
+        position.setState(1);
 
         boolean save = this.save(position);
+        System.out.println(position.toString());
+        System.out.println("==========================");
         // 添加成功保存至 es 并添加职位负责人
         if (save) {
             if (Constant.HR.equals(tokenInfo.getRole())) {
