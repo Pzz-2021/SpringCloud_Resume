@@ -45,10 +45,10 @@ public class AuthManagerController {
     @PostMapping("/login")
     public RestResponse<LoginDTO> login(@RequestBody User user) {
         User result = userService.login(user);
-        if (result == null) return RestResponse.error("请检查邮箱或密码");
+        if (result == null) return RestResponse.error("用户不存在");
         else {
             long start = System.currentTimeMillis();
-            if (!result.getPassword().equals(SM3Util.encryptPassword(user.getPassword()))) return RestResponse.error("请检查邮箱或密码");
+            if (!result.getPassword().equals(SM3Util.encryptPassword(user.getPassword())))return RestResponse.error("密码错误");
             LoginDTO loginDTO = userService.getPermissions(result.getPkUserId());
             loginDTO.setUserInfoDTO(UserMapstruct.INSTANCT.conver(result));
             log.info("获取权限 耗时：" + (System.currentTimeMillis() - start));

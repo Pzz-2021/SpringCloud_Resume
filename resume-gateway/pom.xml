@@ -11,6 +11,11 @@
     <artifactId>gateway</artifactId>
 
     <dependencies>
+        <!--   覆盖内部自带的负载策略，解决503     -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
         <!-- servlet Api 依赖 -->
         <dependency>
             <groupId>javax.servlet</groupId>

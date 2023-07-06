@@ -28,7 +28,7 @@ public class SM3Util {
     }
 
     public static void main(String[] args) {
-        String password = "tyy123456";
+        String password = "123456";
         String encryptedPassword = encryptPassword(password);
         System.out.println("Encrypted password: " + encryptedPassword);
     }

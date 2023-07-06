@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.auth.mapper.UserMapper">
     <select id="getUserPermissions" resultType="com.resume.auth.pojo.Operation">
-        select method, interface_url
+        select operation_code,method, interface_url
         from operation
         where pk_operation_id in
               ((select operation_id
