@@ -49,16 +49,6 @@ public class Position implements Serializable {
     private Long createUserId;
 
     /**
-     * 发布人用户名
-     */
-    private String createUserName;
-
-    /**
-     * 发布人头像
-     */
-    private String createUserPicture;
-
-    /**
      * 岗位描述
      */
     private String description;

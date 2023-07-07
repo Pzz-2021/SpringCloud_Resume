@@ -10,15 +10,12 @@ import com.resume.position.service.PositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * <p>
@@ -49,10 +46,11 @@ public class PositionController {
 
     @ApiOperation(value = "添加职位", notes = "前端将创建人的名字和头像传过来")
     @PostMapping("/add-position")
-    public RestResponse<String> addPosition(HttpServletRequest httpServletRequest, @RequestBody Position position) {
+    public RestResponse<Long> addPosition(HttpServletRequest httpServletRequest, @RequestBody Position position) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         boolean save = positionService.addPosition(tokenInfo, position);
-        return RestResponse.judge(save);
+        if(save)return RestResponse.success(position.getPkPositionId());
+        else return RestResponse.error("添加失败");
     }
 
     @ApiOperation(value = "编辑职位", notes = "传positionId")
@@ -89,11 +87,9 @@ public class PositionController {
     public RestResponse<PageBean<Position>> selectPositionByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         PageBean<Position> positionPageBean = positionService.selectPositionByEs(searchCondition, tokenInfo);
-
         System.out.println("----------------------------");
         System.out.println(positionPageBean);
         System.out.println("----------------------------");
-
         return RestResponse.success(positionPageBean);
     }
 

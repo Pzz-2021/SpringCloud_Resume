@@ -6,9 +6,6 @@
         select pk_position_id,
                position_name,
                create_user_id,
-               create_user_name,
-               create_user_picture,
-               create_user_picture,
                description,
                hc,
                working_city,
@@ -40,9 +37,6 @@
         select pk_position_id,
                position_name,
                create_user_id,
-               create_user_name,
-               create_user_picture,
-               create_user_picture,
                description,
                hc,
                working_city,
@@ -60,23 +54,20 @@
                create_time
         from position
         where state = 1
-          and pk_position_id = (select position_id from position_team where role_id=3 and user_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id = 3 and user_id = #{userId})
         limit #{offset},#{pageSize}
     </select>
     <select id="totalCountPositionByHr" resultType="java.lang.Integer">
         select count(*)
         from position
         where state = 1
-          and pk_position_id = (select position_id from position_team where role_id=3 and user_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id = 3 and user_id = #{userId})
     </select>
 
     <select id="selectPositionByInterviewer" resultType="com.resume.dubbo.domian.Position">
         select pk_position_id,
                position_name,
                create_user_id,
-               create_user_name,
-               create_user_picture,
-               create_user_picture,
                description,
                hc,
                working_city,
@@ -94,23 +85,21 @@
                create_time
         from position
         where state = 1
-          and pk_position_id = (select position_id from position_team where role_id=4 and user_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id = 4 and user_id = #{userId})
         limit #{offset},#{pageSize}
     </select>
     <select id="totalCountPositionByInterviewer" resultType="java.lang.Integer">
         select count(*)
         from position
         where state = 1
-          and pk_position_id = (select position_id from position_team where role_id=4 and user_id = #{userId})
+          and pk_position_id = (select position_id from position_team where role_id = 4 and user_id = #{userId})
     </select>
 
     <select id="selectAllPosition" resultType="com.resume.dubbo.domian.Position">
         select pk_position_id,
+               company_id,
                position_name,
                create_user_id,
-               create_user_name,
-               create_user_picture,
-               create_user_picture,
                description,
                hc,
                working_city,
@@ -131,6 +120,9 @@
         from position
     </select>
     <select id="selectPositionTeam" resultType="java.lang.Long">
-         select user_id from position_team where role_id in(3,4) and position_id=#{positionId}
+        select user_id
+        from position_team
+        where role_id in (3, 4)
+          and position_id = #{positionId}
     </select>
 </mapper>

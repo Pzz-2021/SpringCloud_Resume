@@ -53,10 +53,10 @@ public class UploadController {
     @GetMapping("/check-chunk")
     public RestResponse<String> checkChunkExist(HttpServletRequest httpServletRequest, @RequestBody FileChunkDTO chunkDTO){
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
-
         boolean result = uploadService.checkChunkExist(tokenInfo.getCompanyId(), chunkDTO.getIdentifier());
-
         // 不存在返回 false 给前端
         return RestResponse.judge(result);
     }
+
+
 }
