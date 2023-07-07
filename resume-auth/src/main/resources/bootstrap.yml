@@ -31,7 +31,7 @@ dubbo:
   registry:
     address: spring-cloud://localhost  #使用springcloud中注册中心的地址
   scan:
-    base-packages: cn.resume.auth.service
+    base-packages: com.resume.auth.service
   cloud:
     subscribed-services: ""
 

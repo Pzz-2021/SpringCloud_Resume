@@ -16,6 +16,7 @@ import org.bouncycastle.util.encoders.Hex;
 public class SM3Util {
 
     public static String encryptPassword(String password) {
+        if (password==null)throw new RuntimeException("密码为空!无法加密!");
         byte[] passwordBytes = password.getBytes();
 
         SM3Digest digest = new SM3Digest();
