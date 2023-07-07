@@ -66,5 +66,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         jsonObject.remove("resume");
 //        System.out.println(jsonObject);
         resume.setJsonContent(String.valueOf(jsonObject));
+
+        this.save(resume);
     }
 }
