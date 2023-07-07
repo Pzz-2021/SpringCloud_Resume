@@ -70,6 +70,11 @@ public class Resume implements Serializable {
     private String resumeContent;
 
     /**
+     * 简历中JSON内容
+     */
+    private String json_content;
+
+    /**
      * 简历中姓名
      */
     private String name;
