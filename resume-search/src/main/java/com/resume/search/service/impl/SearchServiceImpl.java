@@ -192,6 +192,8 @@ public class SearchServiceImpl implements SearchService {
             termQueryBuilder.must(QueryBuilders.termQuery(STATE, searchCondition.getState()));
 
         System.out.println("查询人角色：" + tokenInfo.getRole());
+        System.out.println("查询人公司ID：" + tokenInfo.getCompanyId());
+
         switch (tokenInfo.getRole()) {
             case HR:
                 termQueryBuilder.must(QueryBuilders.termQuery(HR_ID_LIST, tokenInfo.getPkUserId()));
