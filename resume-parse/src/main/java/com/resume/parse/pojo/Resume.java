@@ -72,7 +72,7 @@ public class Resume implements Serializable {
     /**
      * 简历中JSON内容
      */
-    private String json_content;
+    private String jsonContent;
 
     /**
      * 简历中姓名

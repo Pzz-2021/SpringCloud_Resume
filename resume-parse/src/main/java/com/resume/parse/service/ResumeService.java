@@ -57,14 +57,14 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
                 resume = BeanUtil.fillBeanWithMap((Map<String, Object>) value.get(0), resume, false);
 //                System.out.println("resume = " + resume);
 
-                jsonObject.remove("resume");
             } else {
                 // 其他信息
                 System.out.println(entry.getValue());
             }
         }
 
-        System.out.println(jsonObject);
-
+        jsonObject.remove("resume");
+//        System.out.println(jsonObject);
+        resume.setJsonContent(String.valueOf(jsonObject));
     }
 }
