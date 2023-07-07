@@ -64,20 +64,15 @@ public class UserController {
     @PostMapping("/add-team-members")
     public RestResponse<String> addTeamMembers(HttpServletRequest httpServletRequest,@RequestBody MemberDTO memberDTO) {
         TokenInfo tokenInfo=JwtUtil.getTokenInfo(httpServletRequest);
-        User user= UserMapstruct.INSTANCT.conver(memberDTO);
-        //所属公司
-        user.setCompanyId(tokenInfo.getCompanyId());
-        //加密
-        user.setPassword(SM3Util.encryptPassword(user.getPassword()));
-        userService.save(user);
-        //赋予角色
-        userService.addTeamRole(user.getPkUserId(),memberDTO.getRoleName());
-        return RestResponse.success();
+        boolean save=userService.addTeamMembers(memberDTO,tokenInfo.getCompanyId());
+        if(save)return RestResponse.success();
+        else return RestResponse.error("邮箱重复!请再次检查!");
     }
     @ApiOperation(value = "删除团队成员",notes = "传要删除的成员(公司管理员不能互删)：userId")
     @DeleteMapping("/delete-team-members/{userId}")
-    public RestResponse<String> deleteTeamMembers(@PathVariable("userId") Long targetUserId,HttpServletRequest httpServletRequest) {
-        userService.deleteTeamMembers(targetUserId);
-        return RestResponse.success();
+    public RestResponse<String> deleteTeamMembers(@PathVariable("userId") Long targetUserId) {
+        boolean save=userService.deleteTeamMembers(targetUserId);
+        if(save)return RestResponse.success();
+        else return RestResponse.error("权限不足!");
     }
 }

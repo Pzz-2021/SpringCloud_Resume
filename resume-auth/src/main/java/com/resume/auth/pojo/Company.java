@@ -45,11 +45,6 @@ public class Company implements Serializable {
     private String companyIntroduce;
 
     /**
-     * 创建用户ID
-     */
-    private Long createUser;
-
-    /**
      * 创建时间
      */
     private LocalDateTime createTime;

@@ -23,10 +23,18 @@
         insert into user_role(user_id, role_id)
         values (#{userId}, 4)
     </insert>
-    <update id="deleteTeamMembers">
+    <update id="deleteUser">
         update user set is_deleted=1 where pk_user_id=#{userId}
     </update>
-
+    <update id="activeUser">
+        update user set is_deleted=0 where pk_user_id=#{userId}
+    </update>
+    <update id="deleteUserPermissions">
+        update user_role set is_deleted=1 where user_id=#{userId}
+    </update>
+    <update id="activeUserPermissions">
+        update user_role set is_deleted=0 where user_id=#{userId}
+    </update>
     <select id="selectUserRole" resultType="java.lang.String">
         select role_name
         from role

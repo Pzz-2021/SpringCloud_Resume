@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.auth.dto.LoginDTO;
+import com.resume.auth.mapstruct.UserMapstruct;
+import com.resume.auth.utils.SM3Util;
 import com.resume.dubbo.domian.MemberDTO;
 import com.resume.auth.mapper.RoleMapper;
 import com.resume.auth.mapper.UserMapper;
@@ -117,8 +119,35 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         teamMembers.addAll(otherMembers);
         return teamMembers;
     }
-
-    public void deleteTeamMembers(Long userId) {
-        roleMapper.deleteTeamMembers(userId);
+    public boolean addTeamMembers(MemberDTO memberDTO,Long companyId) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserEmail, memberDTO.getUserEmail());
+        User result = getOne(queryWrapper);
+        if(result==null){
+            User user= UserMapstruct.INSTANCT.conver(memberDTO);
+            //所属公司
+            user.setCompanyId(companyId);
+            //加密
+            user.setPassword(SM3Util.encryptPassword(user.getPassword()));
+            save(user);
+            //赋予角色
+            addTeamRole(user.getPkUserId(),memberDTO.getRoleName());
+            return true;
+        }else{
+            if(result.getIsDeleted()==1){
+                roleMapper.activeUser(result.getPkUserId());
+                roleMapper.activeUserPermissions(result.getPkUserId());
+                return true;
+            }
+            else return false;
+        }
+    }
+    public boolean deleteTeamMembers(Long userId) {
+        String role=roleMapper.selectUserRole(userId);
+        //公司管理员 无权删除
+        if(Constant.COMPANY_ADMIN.equals(role))return false;
+        roleMapper.deleteUserPermissions(userId);
+        roleMapper.deleteUser(userId);
+        return true;
     }
 }

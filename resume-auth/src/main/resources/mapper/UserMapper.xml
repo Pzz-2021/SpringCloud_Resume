@@ -8,7 +8,7 @@
               ((select operation_id
                 from role_operation
                 where role_id =
-                      (select role_id from user_role where user_id = #{userId})
+                      (select role_id from user_role where user_id = #{userId} and is_deleted=0)
               ))
     </select>
     <select id="getMenus" resultType="com.resume.auth.pojo.Menu">
@@ -19,7 +19,7 @@
               ((select menu_id
                 from role_menu
                 where role_id =
-                      (select role_id from user_role where user_id = #{userId})
+                      (select role_id from user_role where user_id = #{userId} and is_deleted=0)
               ))
     </select>
 </mapper>

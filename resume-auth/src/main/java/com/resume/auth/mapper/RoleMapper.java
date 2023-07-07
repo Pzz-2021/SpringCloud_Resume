@@ -28,5 +28,8 @@ public interface RoleMapper extends BaseMapper<Role> {
       List<MemberDTO>selectTeamAdmin(Long companyId);
       List<MemberDTO>selectTeamOtherMember(Long companyId);
 
-      void deleteTeamMembers(Long userId);
+      void activeUser(Long userId);
+      void activeUserPermissions(Long userId);
+      void deleteUser(Long userId);
+      void deleteUserPermissions(Long userId);
 }
