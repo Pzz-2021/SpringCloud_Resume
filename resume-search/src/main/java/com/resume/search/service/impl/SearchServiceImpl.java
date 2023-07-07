@@ -180,8 +180,8 @@ public class SearchServiceImpl implements SearchService {
         BoolQueryBuilder termQueryBuilder = QueryBuilders.boolQuery();
         if (searchCondition.getQuery() != null && !"".equals(searchCondition.getQuery())) {
             termQueryBuilder.should(QueryBuilders.matchQuery(POSITION_NAME, searchCondition.getQuery()))
-                            .should(QueryBuilders.matchQuery(WORKING_CITY, searchCondition.getQuery()))
-                            .should(QueryBuilders.matchQuery(DESCRIPTION, searchCondition.getQuery()));
+                    .should(QueryBuilders.matchQuery(WORKING_CITY, searchCondition.getQuery()))
+                    .should(QueryBuilders.matchQuery(DESCRIPTION, searchCondition.getQuery()));
         }
 
         // 限制除了 超级管理员 其他角色都只能看到本公司的
@@ -191,6 +191,7 @@ public class SearchServiceImpl implements SearchService {
         if (searchCondition.getState() != -1)
             termQueryBuilder.must(QueryBuilders.termQuery(STATE, searchCondition.getState()));
 
+        System.out.println("查询人角色：" + tokenInfo.getRole());
         switch (tokenInfo.getRole()) {
             case HR:
                 termQueryBuilder.must(QueryBuilders.termQuery(HR_ID_LIST, tokenInfo.getPkUserId()));
@@ -211,7 +212,7 @@ public class SearchServiceImpl implements SearchService {
         // 设置高亮
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field(POSITION_NAME);
-        highlightBuilder.preTags("<span style='color:red'>");
+        highlightBuilder.preTags("<span style='color:red' class='key-word'>");
         highlightBuilder.postTags("</span>");
         searchSourceBuilder.highlighter(highlightBuilder);
 

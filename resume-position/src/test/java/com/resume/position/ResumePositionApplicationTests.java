@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SpringBootTest
 class ResumePositionApplicationTests {
@@ -76,7 +75,7 @@ class ResumePositionApplicationTests {
     }
 
     @Test
-    void test2() {
+    void synchronizationEsForAll() {
         List<Position> positions = positionService.getPositionMapper().selectAllPosition();
         List<PositionDTO> list = new ArrayList<>();
 
