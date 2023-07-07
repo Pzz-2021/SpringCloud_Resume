@@ -88,7 +88,6 @@ public class PositionController {
     @PostMapping("/select-position/by-page")
     public RestResponse<PageBean<Position>> selectPositionByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
-        tokenInfo = new TokenInfo(1L, 1L, "超级管理员");
         PageBean<Position> positionPageBean = positionService.selectPositionByEs(searchCondition, tokenInfo);
 
         System.out.println("----------------------------");
