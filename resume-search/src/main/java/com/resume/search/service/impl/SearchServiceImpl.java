@@ -10,7 +10,6 @@ import com.resume.dubbo.domian.PositionDTO;
 import com.resume.dubbo.domian.SearchCondition;
 import com.resume.search.mapstruct.PositionMapper;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.elasticsearch.ElasticsearchStatusException;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -196,11 +195,8 @@ public class SearchServiceImpl implements SearchService {
 
         switch (tokenInfo.getRole()) {
             case HR:
-                termQueryBuilder.must(QueryBuilders.termQuery(HR_ID_LIST, tokenInfo.getPkUserId()));
-                break;
-
             case INTERVIEWER:
-                termQueryBuilder.must(QueryBuilders.termQuery(INTERVIEWER_ID_LIST, tokenInfo.getPkUserId()));
+                termQueryBuilder.must(QueryBuilders.termQuery(POSITION_TEAM_ID_LIST, tokenInfo.getPkUserId()));
                 break;
 
             case COMPANY_ADMIN:
