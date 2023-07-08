@@ -23,15 +23,15 @@ public class UploadService {
     private RedisUtil redisUtil;
 
     public boolean checkChunkExist(Long companyId, String identifier) {
-        String key = RedisConstants.CACHE_ChECK_RESUME + companyId;
+        String key = RedisConstants.CACHE_ChECK_RESUME + companyId+identifier;
         // 返回为 是否存在  true-存在  false-不存在
-        return redisUtil.sHasKey(key, identifier);
+        return redisUtil.hasKey(key);
     }
 
     // 添加成功返回 true  失败返回 false
-    public boolean addChunk(Long companyId, String identifier) {
-        String key = RedisConstants.CACHE_ChECK_RESUME + companyId;
-        long count = redisUtil.sSet(key, identifier);
+    public boolean addChunk(Long companyId, String identifier,String url) {
+        String key = RedisConstants.CACHE_ChECK_RESUME + companyId+identifier;
+        long count = redisUtil.sSet(key, url);
         return count > 0;
     }
 }
