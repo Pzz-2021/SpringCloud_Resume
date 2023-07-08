@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resume.parse.dto.SchoolDTO;
 import com.resume.parse.pojo.Resume;
+import com.resume.parse.service.ResumeService;
 import com.resume.parse.utils.RedisUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,9 @@ class ResumeParseApplicationTests {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private ResumeService resumeService;
 
     @Test
     void contextLoads() {
@@ -76,7 +80,8 @@ class ResumeParseApplicationTests {
         System.out.println(forObject);
         System.out.println();
 
-        forObject = restTemplate.getForObject("http://flaskService/get-word-string?url=http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx", String.class);
+        String url = "http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx";
+        forObject = restTemplate.getForObject("http://flaskService/get-word-string?url=" + url, String.class);
         System.out.println(forObject);
 
         forObject = restTemplate.getForObject("http://flaskService/parseString?txt=" + forObject, String.class);
@@ -104,5 +109,10 @@ class ResumeParseApplicationTests {
 
         jsonObject.remove("resume");
         System.out.println(jsonObject);
+    }
+
+    @Test
+    void test2() {
+        resumeService.parseResume(1L, "http://rwardkb5p.hn-bkt.clouddn.com/20.docx");
     }
 }

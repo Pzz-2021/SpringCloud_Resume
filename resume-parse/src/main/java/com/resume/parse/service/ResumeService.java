@@ -30,17 +30,19 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
     private RestTemplate restTemplate;
 
 
+    private static final String PATH = "http://flaskService";
+
     public void parseResume(Long pkResumeId, String url) {
         Resume resume = new Resume();
         resume.setPkResumeId(pkResumeId);
 
         // 获取简历文字信息
-        String text = restTemplate.getForObject("http://flaskService/get-word-string?url=" + url, String.class);
+        String text = restTemplate.getForObject(PATH + "/get-word-string?url=" + url, String.class);
 //        System.out.println(text);
         resume.setResumeContent(text);
 
         // 将文字信息解析，得到 JSON 的String信息
-        text = restTemplate.getForObject("http://flaskService/parseString?txt=" + text, String.class);
+        text = restTemplate.getForObject(PATH + "/parseString?txt=" + text, String.class);
 //        System.out.println("\n\n" + text);
 
         // Unicode 转义的 JSON 数据 转义回来
