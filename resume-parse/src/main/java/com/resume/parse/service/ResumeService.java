@@ -20,7 +20,7 @@ import java.util.Set;
  * 服务实现类
  * </p>
  *
- * @author lyh
+ * @author pp
  * @since 2023-07-04
  */
 @Service
@@ -34,22 +34,24 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         Resume resume = new Resume();
         resume.setPkResumeId(pkResumeId);
 
-        // 文字信息
-        String text = restTemplate.getForObject("http://localhost:5000/get-word-string?url=" + url, String.class);
+        // 获取简历文字信息
+        String text = restTemplate.getForObject("http://flaskService/get-word-string?url=" + url, String.class);
 //        System.out.println(text);
         resume.setResumeContent(text);
 
         // 将文字信息解析，得到 JSON 的String信息
-        text = restTemplate.getForObject("http://localhost:5000/parseString?txt=" + text, String.class);
+        text = restTemplate.getForObject("http://flaskService/parseString?txt=" + text, String.class);
 //        System.out.println("\n\n" + text);
 
         // Unicode 转义的 JSON 数据 转义回来
         String json = StringEscapeUtils.unescapeJava(text);
 
+        // 解析为JSON数据
         JSONObject jsonObject = JSONObject.parseObject(json);
 //        System.out.println(jsonObject);
 
         Set<Map.Entry<String, Object>> entries = jsonObject.entrySet();
+
         for (Map.Entry<String, Object> entry : entries) {
             // 得到基础信息
             if (entry.getKey().equals("resume")) {
@@ -67,6 +69,9 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 //        System.out.println(jsonObject);
         resume.setJsonContent(String.valueOf(jsonObject));
 
-        this.save(resume);
+        // 设置resume状态已解析
+        resume.setIsParsed(1);
+
+        this.updateById(resume);
     }
 }

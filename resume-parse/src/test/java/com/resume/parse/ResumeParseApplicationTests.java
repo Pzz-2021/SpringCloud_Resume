@@ -72,14 +72,14 @@ class ResumeParseApplicationTests {
 
     @Test
     void test1() {
-        String forObject = restTemplate.getForObject("http://localhost:5000/test?name=pp", String.class);
+        String forObject = restTemplate.getForObject("http://flaskService/test?name=pp", String.class);
         System.out.println(forObject);
         System.out.println();
 
-        forObject = restTemplate.getForObject("http://localhost:5000/get-word-string?url=http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx", String.class);
+        forObject = restTemplate.getForObject("http://flaskService/get-word-string?url=http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx", String.class);
         System.out.println(forObject);
 
-        forObject = restTemplate.getForObject("http://localhost:5000/parseString?txt=" + forObject, String.class);
+        forObject = restTemplate.getForObject("http://flaskService/parseString?txt=" + forObject, String.class);
         System.out.println('\n');
 //        System.out.println("\n\n" + forObject);
 

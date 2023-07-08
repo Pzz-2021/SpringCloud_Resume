@@ -42,22 +42,23 @@ public class UploadController {
 
     @ApiOperation(value = "单个简历上传")
     @PostMapping("/upload-single-resume")
-    public RestResponse<String> uploadSingleResume(HttpServletRequest httpServletRequest,@RequestParam("file")MultipartFile file,@RequestParam String identifier) throws IOException {
+    public RestResponse<String> uploadSingleResume(HttpServletRequest httpServletRequest, @RequestParam("file") MultipartFile file, @RequestParam String identifier) throws IOException {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         //缓存里不存在
-        if(!uploadService.checkChunkExist(tokenInfo.getCompanyId(),identifier)) {
+        if (!uploadService.checkChunkExist(tokenInfo.getCompanyId(), identifier)) {
             //获取原始文件名
             String originalFilename = file.getOriginalFilename();
             String newFilename = UUID.randomUUID().toString() + '-' + originalFilename;
             log.info("上传文件名：" + newFilename);
             //创建新的文件名称
             String fileURL = uploadUtil.uploadByBytes(file.getBytes(), newFilename);
-            uploadService.addChunk(tokenInfo.getCompanyId(), identifier,fileURL);
+            uploadService.addChunk(tokenInfo.getCompanyId(), identifier, fileURL);
+
             return RestResponse.success(fileURL);
         }
         //缓存命中
-        else{
-            String key = RedisConstants.CACHE_ChECK_RESUME + tokenInfo.getCompanyId()+identifier;
+        else {
+            String key = RedisConstants.CACHE_ChECK_RESUME + tokenInfo.getCompanyId() + identifier;
             return RestResponse.success((String) redisUtil.get(key));
         }
     }
