@@ -1,17 +1,24 @@
 package com.resume.parse;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resume.parse.dto.SchoolDTO;
+import com.resume.parse.pojo.Resume;
 import com.resume.parse.utils.RedisUtil;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @SpringBootTest
 class ResumeParseApplicationTests {
@@ -73,7 +80,29 @@ class ResumeParseApplicationTests {
         System.out.println(forObject);
 
         forObject = restTemplate.getForObject("http://localhost:5000/parseString?txt=" + forObject, String.class);
-        System.out.println("\n\n" + forObject);
-    }
+        System.out.println('\n');
+//        System.out.println("\n\n" + forObject);
 
+        // Unicode 转义的 JSON 数据 转义回来
+        String s = StringEscapeUtils.unescapeJava(forObject);
+
+        JSONObject jsonObject = JSONObject.parseObject(s);
+//        System.out.println(jsonObject);
+
+        Set<Map.Entry<String, Object>> entries = jsonObject.entrySet();
+        for (Map.Entry<String, Object> entry : entries) {
+            if (entry.getKey().equals("resume")) {
+                JSONArray value = (JSONArray) entry.getValue();
+                Resume resume = new Resume();
+                resume.setPositionId(111L);
+                resume = BeanUtil.fillBeanWithMap((Map<String, Object>) value.get(0), resume, false);
+                System.out.println("resume = " + resume);
+            } else {
+                System.out.println(entry.getValue());
+            }
+        }
+
+        jsonObject.remove("resume");
+        System.out.println(jsonObject);
+    }
 }

@@ -77,8 +77,8 @@ class ResumePositionApplicationTests {
     @Test
     void synchronizationEsForAll() {
         List<Position> positions = positionService.getPositionMapper().selectAllPosition();
-        List<PositionDTO> list = new ArrayList<>();
 
+        List<PositionDTO> list = new ArrayList<>();
         positions.parallelStream().forEach(position -> {
             PositionDTO positionDTO = PosistionMapstruct.INSTANCT.conver(position);
             positionDTO.setPositionTeamIdList(positionService.getPositionMapper().selectPositionTeam(position.getPkPositionId()));
