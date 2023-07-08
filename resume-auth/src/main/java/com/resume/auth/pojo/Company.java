@@ -47,7 +47,7 @@ public class Company implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private String createTime;
 
     /**
      * 更改用户ID
@@ -57,7 +57,7 @@ public class Company implements Serializable {
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private String updateTime;
 
     /**
      * 审核状态：2-通过、1-审核中、0-未通过

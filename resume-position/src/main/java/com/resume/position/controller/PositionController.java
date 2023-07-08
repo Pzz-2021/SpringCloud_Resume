@@ -44,7 +44,7 @@ public class PositionController {
         return RestResponse.success(hashMap);
     }
 
-    @ApiOperation(value = "添加职位", notes = "前端将创建人的名字和头像传过来")
+    @ApiOperation(value = "添加职位")
     @PostMapping("/add-position")
     public RestResponse<Long> addPosition(HttpServletRequest httpServletRequest, @RequestBody Position position) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);

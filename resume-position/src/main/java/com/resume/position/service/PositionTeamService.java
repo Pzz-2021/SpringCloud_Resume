@@ -44,8 +44,20 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
 
     // 添加一个职位负责人
     public boolean addPositionTeam(PositionTeam positionTeam) {
-        positionTeam.setCreateTime(DateUtil.getDate2());
-        boolean save = this.save(positionTeam);
+        LambdaQueryWrapper<PositionTeam> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(PositionTeam::getPositionId, positionTeam.getPositionId()).eq(PositionTeam::getUserId,positionTeam.getUserId());
+        PositionTeam one = getOne(queryWrapper);
+        boolean save;
+        if(one==null){
+            positionTeam.setCreateTime(DateUtil.getDate2());
+            save = this.save(positionTeam);
+        }
+        else{
+            //修改状态
+            one.setIsDeleted(0);
+            one.setCreateTime(DateUtil.getDate2());
+            save = this.save(one);
+        }
         // 添加成功同步至es
         if (save)
             updateEsByPositionId(positionTeam.getPositionId());
@@ -58,7 +70,6 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
         queryWrapper.eq(PositionTeam::getPositionId, positionId)
                 .eq(PositionTeam::getUserId, userId);
         boolean b = this.remove(queryWrapper);
-
         if (b)
             updateEsByPositionId(positionId);
 

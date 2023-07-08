@@ -47,14 +47,17 @@ public class Resume implements Serializable {
     /**
      * 简历投递阶段：初筛、面试、沟通Offer、待入职、已淘汰、未投递
      */
-    private String resumeDeliveryStatus;
+    private String state;
+
+    /**
+     * 淘汰原因
+     */
+    private String phasedOutCause;
 
     /**
      * 简历文件名称
      */
     private String fileName;
-
-
     /**
      * 文件路径
      */
@@ -119,12 +122,12 @@ public class Resume implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private String createTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private String updateTime;
 
 
 }

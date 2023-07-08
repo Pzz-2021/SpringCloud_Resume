@@ -3,7 +3,10 @@ package com.resume.parse.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.resume.base.utils.DateUtil;
+import com.resume.parse.dto.PhasedOutDTO;
 import com.resume.parse.mapper.ResumeMapper;
 import com.resume.parse.pojo.Resume;
 import com.resume.parse.utils.RedisConstants;
@@ -31,6 +34,8 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
 
     private static final String PATH = "http://flaskService";
+
+    private static final String PHASEDOUT = "已淘汰";
 
     public void parseResume(Long pkResumeId, String url) {
         Resume resume = new Resume();
@@ -75,5 +80,18 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         resume.setIsParsed(1);
 
         this.updateById(resume);
+    }
+
+    public boolean changeResumeState(Long resumeId, String targetState,String phasedOutCause) {
+        LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Resume::getPkResumeId, resumeId);
+        updateWrapper.set(Resume::getState, targetState);
+        updateWrapper.set(Resume::getUpdateTime, DateUtil.getDate2());
+        if(PHASEDOUT.equals(targetState))updateWrapper.set(Resume::getPhasedOutCause,phasedOutCause);
+        return update(updateWrapper);
+    }
+
+    public boolean phasedOutResume(PhasedOutDTO phasedOutDTO) {
+        return changeResumeState(phasedOutDTO.getResumeId(), PHASEDOUT, phasedOutDTO.getPhasedOutCause());
     }
 }

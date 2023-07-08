@@ -18,4 +18,6 @@ public interface PositionTeamMapper extends BaseMapper<PositionTeam> {
     List<PositionTeam> getSelectedPositionTeam(Long positionId);
 
     List<Long>getSelectedPositionTeamMemberId(Long positionId);
+
+
 }

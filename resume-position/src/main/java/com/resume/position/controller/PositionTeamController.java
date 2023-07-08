@@ -2,6 +2,7 @@ package com.resume.position.controller;
 
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
+import com.resume.base.utils.Constant;
 import com.resume.base.utils.JwtUtil;
 import com.resume.dubbo.domian.MemberDTO;
 import com.resume.position.pojo.PositionTeam;
@@ -48,6 +49,8 @@ public class PositionTeamController {
     @ApiOperation(value = "添加职位负责人", notes = "记得传头像和用户名")
     @PostMapping("/add-position-team")
     public RestResponse<String> addPositionTeam(@RequestBody PositionTeam positionTeam) {
+        if(Constant.HR.equals(positionTeam.getRoleName()))positionTeam.setRoleId(3);
+        if(Constant.INTERVIEWER.equals(positionTeam.getRoleName()))positionTeam.setRoleId(4);
         boolean save = positionTeamService.addPositionTeam(positionTeam);
         return RestResponse.judge(save);
     }

@@ -6,10 +6,12 @@
         select position_id, user_id, role_id, role_name, user_name, user_picture
         from position_team
         where position_id = #{positionId}
+          and is_deleted = 0
     </select>
     <select id="getSelectedPositionTeamMemberId" resultType="java.lang.Long">
         select user_id
         from position_team
         where position_id = #{positionId}
+          and is_deleted = 0
     </select>
 </mapper>

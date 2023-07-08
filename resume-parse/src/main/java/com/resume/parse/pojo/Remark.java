@@ -62,7 +62,7 @@ public class Remark implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private String createTime;
 
     /**
      * 删除状态：1-已删除、0-未删除
