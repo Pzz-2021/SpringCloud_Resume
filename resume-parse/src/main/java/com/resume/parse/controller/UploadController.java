@@ -26,16 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 @Api(tags = "简历上传接口")
 @Slf4j
 public class UploadController {
-    private static final String PDFSUFFIX="pdf";
 
     @Autowired
     private UploadService uploadService;
 
-    @Autowired
-    private RedisUtil redisUtil;
-
-    @Autowired
-    private ResumeService resumeService;
 
     @ApiOperation(value = "单个简历上传")
     @PostMapping("/upload-single-resume")

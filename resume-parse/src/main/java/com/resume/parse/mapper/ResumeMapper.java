@@ -1,6 +1,7 @@
 package com.resume.parse.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.parse.pojo.Resume;
 
 

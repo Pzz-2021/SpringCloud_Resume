@@ -6,11 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.base.utils.DateUtil;
-import com.resume.parse.dto.PhasedOutDTO;
+import com.resume.dubbo.api.PositionService;
+import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.parse.mapper.ResumeMapper;
 import com.resume.parse.pojo.Resume;
-import com.resume.parse.utils.RedisConstants;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +33,8 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
     @Autowired
     private RestTemplate restTemplate;
 
+    @DubboReference
+    private PositionService positionService;
 
     private static final String PATH = "http://flaskService";
 
@@ -81,17 +84,22 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
         this.updateById(resume);
     }
-
-    public boolean changeResumeState(Long resumeId, String targetState,String phasedOutCause) {
+    public int changePositionResumeCount(ResumeStateDTO resumeStateDTO){
+        return positionService.changePositionResumeCount(resumeStateDTO);
+    }
+    public boolean changeResumeState(ResumeStateDTO resumeStateDTO) {
         LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(Resume::getPkResumeId, resumeId);
-        updateWrapper.set(Resume::getState, targetState);
+        updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
+        updateWrapper.set(Resume::getState, resumeStateDTO.getTargetState());
         updateWrapper.set(Resume::getUpdateTime, DateUtil.getDate2());
-        if(PHASEDOUT.equals(targetState))updateWrapper.set(Resume::getPhasedOutCause,phasedOutCause);
-        return update(updateWrapper);
+        if(PHASEDOUT.equals(resumeStateDTO.getTargetState())){
+            updateWrapper.set(Resume::getPhasedOutCause,resumeStateDTO.getPhasedOutCause());
+        }
+        update(updateWrapper);
+        return changePositionResumeCount(resumeStateDTO) > 0;
     }
 
-    public boolean phasedOutResume(PhasedOutDTO phasedOutDTO) {
-        return changeResumeState(phasedOutDTO.getResumeId(), PHASEDOUT, phasedOutDTO.getPhasedOutCause());
+    public boolean phasedOutResume(ResumeStateDTO resumeStateDTO) {
+        return changeResumeState(resumeStateDTO);
     }
 }

@@ -4,7 +4,7 @@ import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.DateUtil;
 import com.resume.base.utils.JwtUtil;
-import com.resume.parse.dto.PhasedOutDTO;
+import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.parse.pojo.Remark;
 import com.resume.parse.service.RemarkService;
 import com.resume.parse.service.ResumeService;
@@ -35,15 +35,15 @@ public class ResumeController {
 
     @ApiOperation(value = "修改简历状态",notes = "targetState指用户将简历移至的目标状态，可选项：初筛、面试、沟通Offer、待入职")
     @PutMapping("/change-resume-state")
-    public RestResponse<String> changeResumeState(@RequestParam Long resumeId,@RequestParam String targetState) {
-        boolean save = resumeService.changeResumeState(resumeId, targetState,null);
+    public RestResponse<String> changeResumeState(@RequestBody ResumeStateDTO resumeStateDTO) {
+        boolean save = resumeService.changeResumeState(resumeStateDTO);
         return RestResponse.judge(save);
     }
 
     @ApiOperation(value = "淘汰简历")
     @PutMapping("/phased-out-resume")
-    public RestResponse<String> phasedOutResume(@RequestBody PhasedOutDTO phasedOutDTO) {
-        boolean save = resumeService.phasedOutResume(phasedOutDTO);
+    public RestResponse<String> phasedOutResume(@RequestBody ResumeStateDTO resumeStateDTO) {
+        boolean save = resumeService.phasedOutResume(resumeStateDTO);
         return RestResponse.judge(save);
     }
 
@@ -57,6 +57,5 @@ public class ResumeController {
         boolean save = remarkService.save(remark);
         return RestResponse.judge(save);
     }
-
 
 }

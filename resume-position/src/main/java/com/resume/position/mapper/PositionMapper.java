@@ -2,6 +2,7 @@ package com.resume.position.mapper;
 
 import com.resume.dubbo.domian.Position;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.resume.dubbo.domian.ResumeStateDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public interface PositionMapper extends BaseMapper<Position> {
     List<Position> selectPositionByInterviewer(@Param("userId") Long userId, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     int totalCountPositionByInterviewer(@Param("userId") Long userId);
+
+    int changePositionResumeCount(ResumeStateDTO resumeStateDTO);
 
     //ES数据同步测试用
     List<Position> selectAllPosition();
