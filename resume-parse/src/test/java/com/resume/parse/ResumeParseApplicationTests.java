@@ -113,6 +113,6 @@ class ResumeParseApplicationTests {
 
     @Test
     void test2() {
-        resumeService.parseResume(1L, "http://rwardkb5p.hn-bkt.clouddn.com/20.docx");
+        resumeService.parseResume(1L, "http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx");
     }
 }
