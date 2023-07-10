@@ -19,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -63,6 +66,31 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         // 获取简历文字信息
         String fileExtension = URLUtil.getFileExtension(url);
         switch (fileExtension) {
+            case ".txt":
+                try {
+                    // 创建URL对象
+                    URL urlFile = new URL(url);
+
+                    // 打开URL连接
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlFile.openStream()));
+                    String line;
+                    StringBuilder content = new StringBuilder();
+
+                    // 逐行读取文件内容并追加到StringBuilder中
+                    while ((line = reader.readLine()) != null) {
+                        content.append(line);
+                        content.append(System.lineSeparator());
+                    }
+
+                    reader.close();
+
+                    // 将StringBuilder转换为String
+                    text = content.toString();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                break;
             case ".jpeg":
             case ".jpg":
             case ".png":
@@ -105,7 +133,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
             if (entry.getKey().equals("resume")) {
                 JSONArray value = (JSONArray) entry.getValue();
                 resume = BeanUtil.fillBeanWithMap((Map<String, Object>) value.get(0), resume, false);
-            // System.out.println("resume = " + resume);
+                // System.out.println("resume = " + resume);
             } else {
                 // 其他信息
                 System.out.println(entry.getValue());
@@ -123,7 +151,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         this.updateById(resume);
     }
 
-    public int changePositionResumeCount(ResumeStateDTO resumeStateDTO){
+    public int changePositionResumeCount(ResumeStateDTO resumeStateDTO) {
         return positionService.changePositionResumeCount(resumeStateDTO);
     }
 
@@ -132,8 +160,8 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
         updateWrapper.set(Resume::getState, resumeStateDTO.getTargetState());
         updateWrapper.set(Resume::getUpdateTime, DateUtil.getDate2());
-        if(PHASEDOUT.equals(resumeStateDTO.getTargetState())){
-            updateWrapper.set(Resume::getPhasedOutCause,resumeStateDTO.getPhasedOutCause());
+        if (PHASEDOUT.equals(resumeStateDTO.getTargetState())) {
+            updateWrapper.set(Resume::getPhasedOutCause, resumeStateDTO.getPhasedOutCause());
         }
         update(updateWrapper);
         return changePositionResumeCount(resumeStateDTO) > 0;
