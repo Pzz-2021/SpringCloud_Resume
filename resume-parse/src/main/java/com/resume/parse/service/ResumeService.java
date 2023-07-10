@@ -66,7 +66,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         // 获取简历文字信息
         String fileExtension = URLUtil.getFileExtension(url);
         switch (fileExtension) {
-            case ".txt":
+            case "txt":
                 try {
                     // 创建URL对象
                     URL urlFile = new URL(url);
@@ -91,16 +91,16 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
                 }
 
                 break;
-            case ".jpeg":
-            case ".jpg":
-            case ".png":
+            case "jpeg":
+            case "jpg":
+            case "png":
                 text = OCRUtil.parseImage(url);
                 break;
-            case ".pdf":
+            case "pdf":
                 text = restTemplate.getForObject(PATH + "/get-word-string?url=" + url, String.class);
                 pdfUrl = url;
                 break;
-            case ".word":
+            case "word":
                 text = restTemplate.getForObject(PATH + "/get-word-string?url=" + url, String.class);
 
                 // 上传pdf文件
