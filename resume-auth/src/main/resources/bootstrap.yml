@@ -27,7 +27,7 @@ spring:
 dubbo:
   protocol:
     name: dubbo
-    port: 20885
+    port: 20883
   registry:
     address: spring-cloud://localhost  #使用springcloud中注册中心的地址
   scan:

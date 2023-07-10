@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.position.mapper.PositionMapper">
+    <update id="changePositionResumeCount">
+        update position
+        <set>
+            <if test="targetState=='已淘汰'">
+                <if test="preState=='初筛'">
+                    first_screener_count = first_screener_count - 1,
+                </if>
+                <if test="preState == '面试'">
+                    interview_count = interview_count - 1,
+                </if>
+                <if test="preState == '沟通Offer'">
+                    communicate_offer_count = communicate_offer_count - 1,
+                </if>
+                <if test="preState == '待入职'">
+                    pend_employ = pend_employ - 1,
+                </if>
+                <if test="preState == '已入职'">
+                    employed_employ = employed_employ - 1,
+                </if>
+            </if>
+            <if test="preState=='初筛'">
+                first_screener_count = first_screener_count - 1,
+            </if>
+            <if test="targetState=='初筛'">
+                first_screener_count = first_screener_count + 1,
+            </if>
+            <if test="preState == '面试'">
+                interview_count = interview_count - 1,
+            </if>
+            <if test="targetState == '面试'">
+                interview_count = interview_count + 1,
+            </if>
+            <if test="preState == '沟通Offer'">
+                communicate_offer_count = communicate_offer_count - 1,
+            </if>
+            <if test="targetState == '沟通Offer'">
+                communicate_offer_count = communicate_offer_count + 1,
+            </if>
+            <if test="preState == '待入职'">
+                pend_employ = pend_employ - 1,
+            </if>
+            <if test="targetState == '待入职'">
+                pend_employ = pend_employ + 1,
+            </if>
+            <if test="preState == '已入职'">
+                employed_employ = employed_employ - 1,
+            </if>
+            <if test="targetState == '已入职'">
+                employed_employ = employed_employ + 1,
+            </if>
+        </set>
+        <where>
+            pk_position_id =#{positionId};
+        </where>
+    </update>
 
     <select id="selectPositionByAdmin" resultType="com.resume.dubbo.domian.Position">
         select pk_position_id,

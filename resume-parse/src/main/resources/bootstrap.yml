@@ -1,6 +1,10 @@
 spring:
   application:
     name: resume-service
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 100MB
   cloud:
     nacos:
       server-addr: 47.115.217.108:8848
@@ -27,6 +31,22 @@ spring:
             refresh: true
   profiles:
     active: dev
+dubbo:
+  protocol:
+    name: dubbo
+    port: 20882
+  registry:
+    address: spring-cloud://localhost  #使用springcloud中注册中心的地址
+  scan:
+    base-packages: com.resume.parse.service
+  #  订阅
+  cloud:
+    subscribed-services: position-service
+  #    关闭启动检查
+  consumer:
+    check: false
+    retries: 0
+
 mybatis-plus:
   configuration:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
