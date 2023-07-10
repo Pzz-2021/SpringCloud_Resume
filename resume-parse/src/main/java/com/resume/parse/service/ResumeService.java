@@ -100,7 +100,8 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
                 text = restTemplate.getForObject(PATH + "/get-word-string?url=" + url, String.class);
                 pdfUrl = url;
                 break;
-            case "word":
+            case "doc":
+            case "docx":
                 text = restTemplate.getForObject(PATH + "/get-word-string?url=" + url, String.class);
 
                 // 上传pdf文件
