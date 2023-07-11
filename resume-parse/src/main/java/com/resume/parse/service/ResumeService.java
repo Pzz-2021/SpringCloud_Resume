@@ -70,6 +70,11 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
     }
 
     public PageBean<Resume> selectResumeByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
+        if (searchCondition.getPage() == null || searchCondition.getPage() == 0)
+            searchCondition.setPage(1);
+        if (searchCondition.getPageSize() == null || searchCondition.getPageSize() == 0)
+            searchCondition.setPageSize(10);
+
         return searchService.searchResume(searchCondition, tokenInfo);
     }
 
