@@ -319,7 +319,7 @@ public class SearchServiceImpl implements SearchService {
         request.id("" + resume.getPkResumeId());// 设置文档ID
         request.timeout(TimeValue.timeValueMillis(1000));// request.timeout("1s")
         // 将我们的数据放入请求中
-        request.source(JSON.toJSONString(request), XContentType.JSON);
+        request.source(JSON.toJSONString(resume), XContentType.JSON);
         // 客户端发送请求，获取响应的结果
         IndexResponse response = null;
         try {
