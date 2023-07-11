@@ -31,6 +31,7 @@ spring:
             refresh: true
   profiles:
     active: dev
+
 dubbo:
   protocol:
     name: dubbo
@@ -41,7 +42,7 @@ dubbo:
     base-packages: com.resume.parse.service
   #  订阅
   cloud:
-    subscribed-services: position-service
+    subscribed-services: position-service, search-service
   #    关闭启动检查
   consumer:
     check: false

@@ -19,4 +19,6 @@ public class SearchCondition implements Serializable {
     // 分页
     private Integer page;
     private Integer pageSize;
+
+
 }

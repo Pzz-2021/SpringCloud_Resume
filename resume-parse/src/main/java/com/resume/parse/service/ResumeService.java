@@ -5,11 +5,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.resume.base.model.PageBean;
+import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.PositionService;
+import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.ResumeStateDTO;
+import com.resume.dubbo.domian.SearchCondition;
 import com.resume.parse.mapper.ResumeMapper;
-import com.resume.parse.pojo.Resume;
+import com.resume.dubbo.domian.Resume;
 import com.resume.parse.utils.OCRUtil;
 import com.resume.parse.utils.URLUtil;
 import com.resume.parse.utils.UploadUtil;
@@ -48,6 +52,9 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
     private UploadUtil uploadUtil;
 
     @DubboReference
+    private SearchService searchService;
+
+    @DubboReference
     private PositionService positionService;
 
     private static final String PATH = "http://flaskService";
@@ -55,6 +62,17 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
     private static final String PHASEDOUT = "已淘汰";
 
     private static final String PDF_PATH = "D:/code/pythonProject1/uie_v1/data/temp/";
+
+
+    public Resume getOneByEs(Long pkResumeId) {
+
+        return searchService.getResumeById(pkResumeId);
+    }
+
+    public PageBean<Resume> selectResumeByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
+        return searchService.searchResume(searchCondition, tokenInfo);
+    }
+
 
     public void parseResume(Long pkResumeId, String url) {
         Resume resume = new Resume();
@@ -171,4 +189,5 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
     public boolean phasedOutResume(ResumeStateDTO resumeStateDTO) {
         return changeResumeState(resumeStateDTO);
     }
+
 }

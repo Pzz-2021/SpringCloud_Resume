@@ -1,10 +1,15 @@
 package com.resume.parse.controller;
 
+import cn.hutool.jwt.JWT;
+import com.resume.base.model.PageBean;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.DateUtil;
 import com.resume.base.utils.JwtUtil;
+import com.resume.dubbo.domian.Position;
+import com.resume.dubbo.domian.Resume;
 import com.resume.dubbo.domian.ResumeStateDTO;
+import com.resume.dubbo.domian.SearchCondition;
 import com.resume.parse.pojo.Remark;
 import com.resume.parse.service.RemarkService;
 import com.resume.parse.service.ResumeService;
@@ -58,5 +63,19 @@ public class ResumeController {
         return RestResponse.judge(save);
     }
 
+    @ApiOperation(value = "查询一个简历")
+    @GetMapping("/get-one-resume")
+    public RestResponse<Resume> getOne(Long pkResumeId) {
+        Resume resume = resumeService.getOneByEs(pkResumeId);
+        return RestResponse.judge(resume);
+    }
 
+    @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
+    @PostMapping("/select-resume/by-page")
+    public RestResponse<PageBean<Resume>> selectResumeByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {
+        TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
+        PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo);
+
+        return RestResponse.success(resumePageBean);
+    }
 }

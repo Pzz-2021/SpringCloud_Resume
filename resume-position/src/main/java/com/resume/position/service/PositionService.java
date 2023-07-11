@@ -1,6 +1,5 @@
 package com.resume.position.service;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
@@ -16,12 +15,10 @@ import com.resume.position.pojo.PositionTeam;
 import com.resume.position.utils.CacheClient;
 import lombok.Getter;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>

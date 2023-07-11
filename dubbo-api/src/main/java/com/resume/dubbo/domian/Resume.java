@@ -1,4 +1,4 @@
-package com.resume.parse.pojo;
+package com.resume.dubbo.domian;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

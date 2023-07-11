@@ -1,6 +1,6 @@
 package com.resume.parse.service;
 import com.resume.base.utils.DateUtil;
-import com.resume.parse.pojo.Resume;
+import com.resume.dubbo.domian.Resume;
 import com.resume.parse.utils.RedisConstants;
 import com.resume.parse.utils.RedisUtil;
 import com.resume.parse.utils.UploadUtil;

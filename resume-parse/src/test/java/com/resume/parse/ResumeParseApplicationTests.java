@@ -4,19 +4,21 @@ import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.resume.dubbo.api.SearchService;
+import com.resume.dubbo.domian.PositionDTO;
 import com.resume.parse.dto.SchoolDTO;
-import com.resume.parse.pojo.Resume;
+import com.resume.dubbo.domian.Resume;
 import com.resume.parse.service.ResumeService;
 import com.resume.parse.utils.RedisUtil;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +33,9 @@ class ResumeParseApplicationTests {
 
     @Autowired
     private ResumeService resumeService;
+
+    @DubboReference
+    private SearchService searchService;
 
     @Test
     void contextLoads() {
@@ -114,5 +119,14 @@ class ResumeParseApplicationTests {
     @Test
     void test2() {
         resumeService.parseResume(1L, "http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx");
+    }
+
+
+
+    @Test
+    void synchronizationEsForAll() {
+        List<Resume> resumeList = resumeService.list();
+
+        searchService.saveResumes(resumeList);
     }
 }

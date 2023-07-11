@@ -1,6 +1,5 @@
 package com.resume.position;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.PositionDTO;
