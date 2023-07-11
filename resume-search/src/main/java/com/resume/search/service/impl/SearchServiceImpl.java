@@ -56,6 +56,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private RestHighLevelClient restHighLevelClient;
+
     /*
         职位
      */
@@ -389,7 +390,7 @@ public class SearchServiceImpl implements SearchService {
             termQueryBuilder.must(QueryBuilders.termQuery(COMPANY_ID, tokenInfo.getCompanyId()));
 
         // 查询未删除的简历
-        if (searchCondition.getState() != 1)
+        if (searchCondition.getState() == null || searchCondition.getState() != 1)
             termQueryBuilder.must(QueryBuilders.termQuery(IS_DELETE, 0));
 
         System.out.println("查询人角色：" + tokenInfo.getRole());
@@ -461,8 +462,6 @@ public class SearchServiceImpl implements SearchService {
         return new PageBean<>(searchCondition.getQuery(), totalCount, totalCount / searchCondition.getPageSize(),
                 searchCondition.getPage(), resultArr);
     }
-
-
 
 
     // 根据索引名称删除索引
