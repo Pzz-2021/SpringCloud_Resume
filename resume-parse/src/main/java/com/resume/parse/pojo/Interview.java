@@ -35,6 +35,11 @@ public class Interview implements Serializable {
     private Long resumeId;
 
     /**
+     * 候选人名字
+     */
+    private String resumeUserName;
+
+    /**
      * 公司ID
      */
     private Long companyId;
@@ -43,6 +48,21 @@ public class Interview implements Serializable {
      * 面试官ID（userId）
      */
     private Long interviewerId;
+
+    /**
+     * 面试官名字
+     */
+    private String interviewerName;
+
+    /**
+     * 面试的职位ID
+     */
+    private Long positionId;
+
+    /**
+     * 面试的职位名称
+     */
+    private String positionName;
 
     /**
      * 面试开始时间
@@ -72,12 +92,12 @@ public class Interview implements Serializable {
     /**
      * 创建时间
      */
-    private String createTime;
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    private String updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 删除：1-已删除、0-未删除
