@@ -167,11 +167,23 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         // 设置resume状态已解析
         resume.setIsParsed(1);
 
-        this.updateById(resume);
+        boolean b = this.updateById(resume);
+
+        // 同步 es
+        if (b) {
+            searchService.saveResume(this.getById(resume.getPkResumeId()));
+        }
     }
 
     public int changePositionResumeCount(ResumeStateDTO resumeStateDTO) {
-        return positionService.changePositionResumeCount(resumeStateDTO);
+        int count = positionService.changePositionResumeCount(resumeStateDTO);
+
+        // 同步 es
+        if (count > 0) {
+            searchService.updateResumeById(this.getById(resumeStateDTO.getResumeId()));
+        }
+
+        return count;
     }
 
     public boolean changeResumeState(ResumeStateDTO resumeStateDTO) {

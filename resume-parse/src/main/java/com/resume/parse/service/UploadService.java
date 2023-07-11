@@ -72,14 +72,14 @@ public class UploadService {
         resume.setUpdateTime(DateUtil.getDate2());
         resume.setIdentifier(identifier);
         resumeService.save(resume);
-        //简历异步解析
+        // 简历异步解析
         parseResume(resume.getPkResumeId(),resume.getUrl());
     }
 
     // 解析简历数据为结构化数据
     public void parseResume(Long pkResumeId, String url) {
 
-        // 6.3.成功，开启独立线程，实现解析
+        // 开启独立线程，实现解析
         CACHE_REBUILD_EXECUTOR.submit(() -> {
             try {
                 // 调用Python程序解析
