@@ -2,4 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.parse.mapper.InterviewMapper">
 
+    <select id="queryInterviewByCompanyId" resultType="com.resume.parse.pojo.Interview">
+        select pk_interview_id,
+               resume_id,
+               resume_user_name,
+               company_id,
+               interviewer_id,
+               interviewer_name,
+               position_id,
+               position_name,
+               start_datetime,
+               duration_time,
+               interview_type,
+               interview_location,
+               interview_progress
+        from interview
+        where company_id = #{companyId}
+    </select>
+
+    <select id="queryInterviewByUserId" resultType="com.resume.parse.pojo.Interview">
+        select pk_interview_id,
+               resume_id,
+               resume_user_name,
+               company_id,
+               interviewer_id,
+               interviewer_name,
+               position_id,
+               position_name,
+               start_datetime,
+               duration_time,
+               interview_type,
+               interview_location,
+               interview_progress
+        from interview
+        where position_id = (select position_id from position_team where user_id = #{userId})
+    </select>
+
+    <select id="queryInterviewByResume" resultType="com.resume.parse.pojo.Interview">
+        select pk_interview_id,
+               resume_id,
+               resume_user_name,
+               company_id,
+               interviewer_id,
+               interviewer_name,
+               position_id,
+               position_name,
+               start_datetime,
+               duration_time,
+               interview_type,
+               interview_location,
+               interview_progress
+        from interview
+        where resume_id = #{resumeId}
+    </select>
 </mapper>

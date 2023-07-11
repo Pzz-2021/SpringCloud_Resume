@@ -42,7 +42,7 @@ dubbo:
     base-packages: com.resume.parse.service
   #  订阅
   cloud:
-    subscribed-services: position-service, search-service
+    subscribed-services: position-service, search-service, auth-service
   #    关闭启动检查
   consumer:
     check: false

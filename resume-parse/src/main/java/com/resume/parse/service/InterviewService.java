@@ -5,6 +5,9 @@ import com.resume.parse.mapper.InterviewMapper;
 import com.resume.parse.pojo.Interview;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -15,5 +18,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class InterviewService extends ServiceImpl<InterviewMapper, Interview>  {
+     @Resource
+     private InterviewMapper interviewMapper;
 
+     public List<Interview>queryInterviewByUserId(Long userId){
+         return interviewMapper.queryInterviewByUserId(userId);
+     }
+
+     public List<Interview>queryInterviewByCompanyId(Long companyId){
+         return interviewMapper.queryInterviewByCompanyId(companyId);
+     }
+
+    public List<Interview>queryInterviewByResume(Long resumeId){
+         return interviewMapper.queryInterviewByResume(resumeId);
+    }
 }

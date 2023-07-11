@@ -102,14 +102,6 @@
             <artifactId>hutool-all</artifactId>
             <version>5.7.17</version>
         </dependency>
-
-        <!--移动云 OCR-->
-        <dependency>
-            <groupId>com.chinamobile.ecloud</groupId>
-            <artifactId>ecloud-sdk-ocr</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <!--    七牛云的相关依赖包    -->
         <dependency>
             <groupId>com.qiniu</groupId>
@@ -133,6 +125,12 @@
             <artifactId>happy-dns-java</artifactId>
             <version>0.1.6</version>
             <scope>test</scope>
+        </dependency>
+        <!--移动云 OCR-->
+        <dependency>
+            <groupId>com.chinamobile.ecloud</groupId>
+            <artifactId>ecloud-sdk-ocr</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

@@ -12,5 +12,8 @@ import java.util.List;
  *@description TODO
  */
 public interface UserService {
+
     List<MemberDTO>getCompanyTeam(Long company);
+
+
 }
