@@ -432,27 +432,27 @@ public class SearchServiceImpl implements SearchService {
         System.out.println("=======================");
 
         List<Resume> resultArr = new ArrayList<>();
-//        for (SearchHit documentFields : hits.getHits()) {
-//            // 使用新的字段值（高亮），覆盖旧的字段值
-//            Map<String, Object> sourceAsMap = documentFields.getSourceAsMap();
-//            // 高亮字段
-//            Map<String, HighlightField> highlightFields = documentFields.getHighlightFields();
-//            HighlightField name = highlightFields.get(POSITION_NAME);
-//
-//            // 替换
-//            if (name != null) {
-//                Text[] fragments = name.fragments();
-//                StringBuilder new_name = new StringBuilder();
-//                for (Text text : fragments) {
-//                    new_name.append(text);
-//                }
-//                sourceAsMap.put(POSITION_NAME, new_name.toString());
-//            }
-//
-//            // 使用工具快速将Map转化为Bean
-//            Position position = BeanUtil.fillBeanWithMap(sourceAsMap, new Position(), false);
-//            resultArr.add(position);
-//        }
+        for (SearchHit documentFields : hits.getHits()) {
+            // 使用新的字段值（高亮），覆盖旧的字段值
+            Map<String, Object> sourceAsMap = documentFields.getSourceAsMap();
+            // 高亮字段
+            Map<String, HighlightField> highlightFields = documentFields.getHighlightFields();
+            HighlightField name = highlightFields.get(POSITION_NAME);
+
+            // 替换
+            if (name != null) {
+                Text[] fragments = name.fragments();
+                StringBuilder new_name = new StringBuilder();
+                for (Text text : fragments) {
+                    new_name.append(text);
+                }
+                sourceAsMap.put(POSITION_NAME, new_name.toString());
+            }
+
+            // 使用工具快速将Map转化为Bean
+            Resume resume = BeanUtil.fillBeanWithMap(sourceAsMap, new Resume(), false);
+            resultArr.add(resume);
+        }
         // 完整分页数据
         System.out.println(resultArr);
 
