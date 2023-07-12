@@ -9,7 +9,6 @@
         <relativePath>../resume-parent</relativePath>
     </parent>
     <artifactId>auth</artifactId>
-
     <dependencies>
         <!-- 依赖 Dubbo 模块 -->
         <dependency>
@@ -18,15 +17,14 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- Dubbo集成SpringBoot起步依赖 -->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.dubbo</groupId>-->
-<!--            <artifactId>dubbo-spring-boot-starter</artifactId>-->
-<!--            <version>2.7.12</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.dubbo</groupId>-->
+        <!--            <artifactId>dubbo-spring-boot-starter</artifactId>-->
+        <!--            <version>2.7.12</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-dubbo</artifactId>
-            <version>2021.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -10,7 +10,6 @@ spring:
         namespace: resume_analysis
         group: resume-project
         # 配置
-
       config:
         namespace: resume_analysis
         group: resume-project

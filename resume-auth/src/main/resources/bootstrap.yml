@@ -34,6 +34,10 @@ dubbo:
     base-packages: com.resume.auth.service
   cloud:
     subscribed-services: ""
+  #    关闭启动检查
+  consumer:
+    check: false
+    retries: 0
 
 mybatis-plus:
   configuration:

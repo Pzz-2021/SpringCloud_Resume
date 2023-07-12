@@ -115,8 +115,8 @@ public class PositionController {
 
         return forObject;
     }
-
-
+//
+//
 //    @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
 //    @GetMapping("/select-positionByPage")
 //    public RestResponse<PageBean<Position>> selectPositionByPage(HttpServletRequest httpServletRequest, @RequestParam(defaultValue = "1") int nowPage) {

@@ -70,12 +70,11 @@ public class ResumeController {
         return RestResponse.judge(resume);
     }
 
-    @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
+    @ApiOperation(value = "分页查询简历")
     @PostMapping("/select-resume/by-page")
     public RestResponse<PageBean<Resume>> selectResumeByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo);
-
         return RestResponse.success(resumePageBean);
     }
 }
