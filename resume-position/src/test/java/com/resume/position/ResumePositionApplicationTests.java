@@ -73,6 +73,7 @@ class ResumePositionApplicationTests {
 
     }
 
+    // 全量保存
     @Test
     void synchronizationEsForAll() {
         List<Position> positions = positionService.getPositionMapper().selectAllPosition();

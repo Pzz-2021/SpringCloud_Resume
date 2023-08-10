@@ -77,4 +77,13 @@ public class ResumeController {
         PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo);
         return RestResponse.success(resumePageBean);
     }
+
+    @ApiOperation(value = "分页查询职位（测试）", notes = "不同角色查询的岗位不同")
+    @PostMapping("/select-resume/by-page-test")
+    public RestResponse<PageBean<Resume>> selectResumeByEsTest(@RequestBody SearchCondition searchCondition) {
+        TokenInfo tokenInfo = new TokenInfo(1L, 1L, "超级管理员");
+        PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo);
+
+        return RestResponse.success(resumePageBean);
+    }
 }

@@ -281,7 +281,7 @@ public class SearchServiceImpl implements SearchService {
     /*
         简历
      */
-
+// ==========================================================================================
     @Override
     public Boolean saveResumes(List<Resume> resumeList) {
         deleteIndex(RESUME_INDEX);
