@@ -74,6 +74,8 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
             searchCondition.setPage(1);
         if (searchCondition.getPageSize() == null || searchCondition.getPageSize() == 0)
             searchCondition.setPageSize(10);
+        if (searchCondition.getState() == null)
+            searchCondition.setState(0);
 
         return searchService.searchResume(searchCondition, tokenInfo);
     }
@@ -156,17 +158,16 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
             // 得到基础信息，保存数据库
             if (entry.getKey().equals("resume")) {
                 JSONArray value = (JSONArray) entry.getValue();
+                // 将基础信息转化为Bean 存入数据库
                 resume = BeanUtil.fillBeanWithMap((Map<String, Object>) value.get(0), resume, false);
-                // System.out.println("resume = " + resume);
             } else {
                 // 其他信息
                 System.out.println(entry.getValue());
             }
         }
 
-        // 把基础信息移除
+        // 把基础信息移除，并放入JsonContent至数据库中
         jsonObject.remove("resume");
-
         resume.setJsonContent(String.valueOf(jsonObject));
 
         // 设置resume状态已解析

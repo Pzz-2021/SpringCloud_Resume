@@ -123,6 +123,7 @@ class ResumeParseApplicationTests {
 
 
 
+    // 全量保存
     @Test
     void synchronizationEsForAll() {
         List<Resume> resumeList = resumeService.list();
