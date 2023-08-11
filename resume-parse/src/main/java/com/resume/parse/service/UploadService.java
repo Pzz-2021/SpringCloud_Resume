@@ -34,7 +34,7 @@ public class UploadService {
     @Autowired
     private UploadUtil uploadUtil;
 
-    // 自定义连接池
+    //线程池
     private static final ExecutorService CACHE_REBUILD_EXECUTOR = Executors.newFixedThreadPool(10);
 
 
@@ -49,7 +49,6 @@ public class UploadService {
         String key = RedisConstants.CACHE_ChECK_RESUME + companyId + ":" + identifier;
         redisUtil.set(key, url);
     }
-
     public void upload(MultipartFile file,Long companyId,String identifier) {
         //获取原始文件名
         String originalFilename = file.getOriginalFilename();

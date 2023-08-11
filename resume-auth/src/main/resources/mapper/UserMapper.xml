@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.auth.mapper.UserMapper">
     <select id="getUserPermissions" resultType="com.resume.auth.pojo.Operation">
-        select operation_code,method, interface_url
+        select operation_code, method, interface_url
         from operation
         where pk_operation_id in
               ((select operation_id
                 from role_operation
                 where role_id =
-                      (select role_id from user_role where user_id = #{userId} and is_deleted=0)
+                      (select role_id from user_role where user_id = #{userId} and is_deleted = 0)
               ))
     </select>
     <select id="getMenus" resultType="com.resume.auth.pojo.Menu">
@@ -19,7 +19,11 @@
               ((select menu_id
                 from role_menu
                 where role_id =
-                      (select role_id from user_role where user_id = #{userId} and is_deleted=0)
+                      (select role_id from user_role where user_id = #{userId} and is_deleted = 0)
               ))
+        order by sort_value
+    </select>
+    <select id="getDeletedUser" resultType="com.resume.auth.pojo.User">
+        select * from user where is_deleted=1 and user_email=#{userEmail}
     </select>
 </mapper>

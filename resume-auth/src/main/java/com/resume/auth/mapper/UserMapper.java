@@ -12,4 +12,6 @@ public interface UserMapper extends BaseMapper<User> {
      List<Operation> getUserPermissions(Long userId);
 
      List<Menu>getMenus(Long userId);
+
+     User getDeletedUser(String userEmail);
 }

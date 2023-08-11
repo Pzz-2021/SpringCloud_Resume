@@ -2,6 +2,7 @@ package com.resume.position.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.resume.position.pojo.PositionTeam;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface PositionTeamMapper extends BaseMapper<PositionTeam> {
 
     List<Long>getSelectedPositionTeamMemberId(Long positionId);
 
-
+    PositionTeam getDeletedPositionTeam(@Param("positionId") Long positionId, @Param("userId")Long userId);
 }

@@ -65,7 +65,6 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
 
     public Resume getOneByEs(Long pkResumeId) {
-
         return searchService.getResumeById(pkResumeId);
     }
 
