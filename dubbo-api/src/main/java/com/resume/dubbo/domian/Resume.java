@@ -140,8 +140,8 @@ public class Resume implements Serializable {
     private double score;
 
     @TableField(exist = false)
-    private List<String> tag_good = new ArrayList<>();
+    private List<String> tags_good = new ArrayList<>();
 
     @TableField(exist = false)
-    private List<String> tag_bad = new ArrayList<>();
+    private List<String> tags_bad = new ArrayList<>();
 }

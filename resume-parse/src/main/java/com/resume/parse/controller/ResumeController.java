@@ -1,16 +1,12 @@
 package com.resume.parse.controller;
 
-import cn.hutool.jwt.JWT;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
-import com.qiniu.util.Json;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.DateUtil;
 import com.resume.base.utils.JwtUtil;
-import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.Resume;
 import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.dubbo.domian.SearchCondition;
@@ -115,22 +111,25 @@ public class ResumeController {
                 resume.setImg("https://ats.xiaoxizn.com/assets/4c1dfa88596748bf19af303827ab0fcc.svg");
 
             SchoolDTO schoolDTO = (SchoolDTO) redisUtil.get(PATH + resume.getGraduateInstitution());
-            if (schoolDTO != null)
+            if (schoolDTO != null) {
                 if (schoolDTO.getIsHigher())
-                    resume.getTag_good().add("国内985/211");
+                    resume.getTags_good().add("国内" + String.join("/", schoolDTO.getUnivTags()));
+                if (schoolDTO.getRank() <= 10)
+                    resume.getTags_good().add("国内TOP10");
+            }
             if (content.contains("管理"))
-                resume.getTag_good().add("管理经验");
+                resume.getTags_good().add("管理经验");
             if (content.contains("英语"))
-                resume.getTag_good().add("英语能力良好");
+                resume.getTags_good().add("英语能力良好");
             if (content.contains("腾讯") || content.contains("网易") || content.contains("字节") || content.contains("阿里"))
-                resume.getTag_good().add("名企经历");
+                resume.getTags_good().add("名企经历");
 
             JSONObject jsonObject = JSONObject.parseObject(resume.getJsonContent());
             int count = jsonObject.getJSONArray("工作经历").size();
             if (resume.getWorkingYears() / count >= 2)
-                resume.getTag_good().add("稳定性高");
+                resume.getTags_good().add("稳定性高");
             else if (resume.getWorkingYears() / count == 0)
-                resume.getTag_bad().add("稳定性低");
+                resume.getTags_bad().add("稳定性低");
 
             JSONArray graduates = jsonObject.getJSONArray("教育背景");
             List<String> list = new ArrayList<>();
@@ -147,15 +146,15 @@ public class ResumeController {
                 if (graduate == null)
                     continue;
                 if (graduate.equals("大专")) {
-                    resume.getTag_bad().add("专科");
+                    resume.getTags_bad().add("专科");
 
                     if (list.contains("本科"))
-                        resume.getTag_bad().add("专升本");
+                        resume.getTags_bad().add("专升本");
                 } else if (graduate.equals("本科")) {
                     list.add("本科");
 
-                    if (resume.getTag_bad().contains("专科"))
-                        resume.getTag_bad().add("专升本");
+                    if (resume.getTags_bad().contains("专科"))
+                        resume.getTags_bad().add("专升本");
                 }
             }
         }
