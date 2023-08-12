@@ -43,21 +43,10 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
 
     // 添加一个职位负责人
     public boolean addPositionTeam(PositionTeam positionTeam) {
-        PositionTeam one = positionTeamMapper.getDeletedPositionTeam(positionTeam.getPositionId(),positionTeam.getUserId());
-        boolean save;
-        if(one==null){
-            positionTeam.setCreateTime(DateUtil.getDate2());
-            save = this.save(positionTeam);
-        }
-        else{
-            //修改状态
-            one.setIsDeleted(0);
-            one.setCreateTime(DateUtil.getDate2());
-            save = this.save(one);
-        }
+        positionTeam.setCreateTime(DateUtil.getDate2());
+        boolean save = this.save(positionTeam);
         // 添加成功同步至es
-        if (save)
-            updateEsByPositionId(positionTeam.getPositionId());
+        if (save) updateEsByPositionId(positionTeam.getPositionId());
         return save;
     }
 

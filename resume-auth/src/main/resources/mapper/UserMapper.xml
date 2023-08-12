@@ -24,6 +24,9 @@
         order by sort_value
     </select>
     <select id="getDeletedUser" resultType="com.resume.auth.pojo.User">
-        select * from user where is_deleted=1 and user_email=#{userEmail}
+        select *
+        from user
+        where is_deleted = 1
+          and user_email = #{userEmail}
     </select>
 </mapper>

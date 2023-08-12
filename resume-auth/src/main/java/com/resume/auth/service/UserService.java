@@ -120,7 +120,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return teamMembers;
     }
     public boolean addTeamMembers(MemberDTO memberDTO,Long companyId) {
-        User result = userMapper.getDeletedUser(memberDTO.getUserEmail());
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserEmail, memberDTO.getUserEmail());
+        User result = getOne(queryWrapper);
         if(result==null){
             User user= UserMapstruct.INSTANCT.conver(memberDTO);
             //所属公司
@@ -132,9 +134,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             addTeamRole(user.getPkUserId(),memberDTO.getRoleName());
             return true;
         }else{
-                roleMapper.activeUser(result.getPkUserId());
-                roleMapper.activeUserPermissions(result.getPkUserId());
-                return true;
+                return false;
         }
     }
     public boolean deleteTeamMembers(Long userId) {
