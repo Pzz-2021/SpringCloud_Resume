@@ -41,13 +41,13 @@ public interface SearchService {
     // 增量保存
     Boolean saveResume(Resume resume);
 
-    // 根据 id 更新一个职位信息
+    // 根据 id 更新一个简历信息
     Boolean updateResumeById(Resume resume);
 
-    // 根据 id 查找一个职位信息
+    // 根据 id 查找一个简历信息
     Resume getResumeById(Long id);
 
-    // 分页搜索职位信息
+    // 分页搜索简历信息
     PageBean<Resume> searchResume(SearchCondition searchCondition, TokenInfo tokenInfo);
 
 

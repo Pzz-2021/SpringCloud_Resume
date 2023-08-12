@@ -112,7 +112,8 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
         if (searchCondition.getPage() == null || searchCondition.getPage() < 1)
             searchCondition.setPage(1);
         if (searchCondition.getPageSize() == null || searchCondition.getPageSize() < 1)
-            searchCondition.setPageSize(10);
+            searchCondition.setPageSize(-1);
+
         return searchService.searchPosition(searchCondition, tokenInfo);
     }
 

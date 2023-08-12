@@ -209,19 +209,19 @@ public class SearchServiceImpl implements SearchService {
                 break;
         }
 
-        //        // 匹配查询
-        //        MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery();
         // (2)其他<可有可无>：（可以参考 SearchSourceBuilder 的字段部分）
         // 设置高亮
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field(POSITION_NAME);
-        highlightBuilder.preTags("<span style='color:red' class='key-word'>");
+        highlightBuilder.preTags("<span class='key-word'>");
         highlightBuilder.postTags("</span>");
         searchSourceBuilder.highlighter(highlightBuilder);
 
         // 分页
-        searchSourceBuilder.from((searchCondition.getPage() - 1) * searchCondition.getPageSize());
-        searchSourceBuilder.size(searchCondition.getPageSize());
+        if (searchCondition.getPageSize() != -1) {
+            searchSourceBuilder.from((searchCondition.getPage() - 1) * searchCondition.getPageSize());
+            searchSourceBuilder.size(searchCondition.getPageSize());
+        }
 
         searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         // (3)条件投入
@@ -451,6 +451,7 @@ public class SearchServiceImpl implements SearchService {
 
             // 使用工具快速将Map转化为Bean
             Resume resume = BeanUtil.fillBeanWithMap(sourceAsMap, new Resume(), false);
+            resume.setScore(documentFields.getScore());
             resultArr.add(resume);
         }
         // 完整分页数据

@@ -1,6 +1,7 @@
 package com.resume.dubbo.domian;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -130,4 +133,15 @@ public class Resume implements Serializable {
     private String updateTime;
 
 
+    @TableField(exist = false)
+    private String img;
+
+    @TableField(exist = false)
+    private double score;
+
+    @TableField(exist = false)
+    private List<String> tag_good = new ArrayList<>();
+
+    @TableField(exist = false)
+    private List<String> tag_bad = new ArrayList<>();
 }
