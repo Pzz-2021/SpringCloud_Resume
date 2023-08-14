@@ -18,8 +18,9 @@ public class Constant {
         简历
      */
     public static final String IS_DELETE = "isDeleted";
+    public static final String IS_Parsed = "isParsed";
     public static final String NAME = "name";
-    public static final String GRADUATE_INSTITUTION = "graduate_institution";
-    public static final String RESUME_CONTENT = "resume_content";
+    public static final String GRADUATE_INSTITUTION = "graduateInstitution";
+    public static final String RESUME_CONTENT = "resumeContent";
 
 }

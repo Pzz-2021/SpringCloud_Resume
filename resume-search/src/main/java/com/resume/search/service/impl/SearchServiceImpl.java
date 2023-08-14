@@ -391,6 +391,9 @@ public class SearchServiceImpl implements SearchService {
         if (searchCondition.getState() == null || searchCondition.getState() != 1)
             termQueryBuilder.must(QueryBuilders.termQuery(IS_DELETE, 0));
 
+        // 查询已经解析的数据
+        termQueryBuilder.must(QueryBuilders.termQuery(IS_Parsed, 1));
+
         System.out.println("查询人角色：" + tokenInfo.getRole());
         System.out.println("查询人公司ID：" + tokenInfo.getCompanyId());
 

@@ -3,6 +3,7 @@ package com.resume.parse;
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.PositionDTO;
@@ -120,7 +121,15 @@ class ResumeParseApplicationTests {
         resumeService.parseResume(1L, "http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx");
     }
 
+    // 全量保存
+    @Test
+    void test3() {
+        LambdaQueryWrapper<Resume> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.
+        List<Resume> resumeList = resumeService.list(queryWrapper);
 
+        searchService.saveResumes(resumeList);
+    }
 
     // 全量保存
     @Test
