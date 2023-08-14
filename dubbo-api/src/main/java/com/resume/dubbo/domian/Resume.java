@@ -144,4 +144,10 @@ public class Resume implements Serializable {
 
     @TableField(exist = false)
     private List<String> tags_bad = new ArrayList<>();
+
+    @TableField(exist = false)
+    private double[] abilitys = new double[5];
+
+    @TableField(exist = false)
+    private double[] industryBackgrounds = new double[7];
 }
