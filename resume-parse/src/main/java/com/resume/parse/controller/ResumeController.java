@@ -49,7 +49,7 @@ public class ResumeController {
     @ApiOperation(value = "移动简历", notes = "前端传要移动到的目标职位id、职位名、以及简历id")
     @PostMapping("/removeResume")
     public RestResponse<String> removeResume(@RequestBody ResumeStateDTO resumeStateDTO) {
-        boolean save=resumeService.removeResume(resumeStateDTO);
+        boolean save = resumeService.removeResume(resumeStateDTO);
         return RestResponse.judge(save);
     }
 
@@ -112,8 +112,24 @@ public class ResumeController {
         String PATH = "school:info:";
 
         for (Resume resume : resumes) {
+            // 处理能力值
+            int MaxValue = 5;
+
+            String[] strings = new String[]{"产品", "其他", "人事", "生产", "工程师", "互联网", "金融"};
+            for (int i = 0, stringsLength = strings.length; i < stringsLength; i++) {
+                int num = (resume.getIdentifier() + strings[i]).hashCode() % MaxValue;
+                resume.getIndustryBackgrounds()[i] = num >= 0 ? num : -num;
+            }
+
+            strings = new String[]{"所获荣誉", "领导力", "工作能力", "社会能力", "教育背景"};
+            for (int i = 0, stringsLength = strings.length; i < stringsLength; i++) {
+                int num = (resume.getIdentifier() + strings[i]).hashCode() % MaxValue;
+                resume.getAbilitys()[i] = num >= 0 ? num : -num;
+            }
+
+
             String content = resume.getResumeContent();
-            if(content==null)continue;
+            if (content == null) continue;
             if (content.contains("女"))
                 resume.setImg("https://ats.xiaoxizn.com/assets/17823c8dba3a87a03ff8ac2197dab9c5.svg");
             else
@@ -133,37 +149,43 @@ public class ResumeController {
             if (content.contains("腾讯") || content.contains("网易") || content.contains("字节") || content.contains("阿里"))
                 resume.getTags_good().add("名企经历");
 
+
+            // 使用 Json 内容
             JSONObject jsonObject = JSONObject.parseObject(resume.getJsonContent());
-            int count = jsonObject.getJSONArray("工作经历").size();
-            if (resume.getWorkingYears() / count >= 2)
-                resume.getTags_good().add("稳定性高");
-            else if (resume.getWorkingYears() / count == 0)
-                resume.getTags_bad().add("稳定性低");
+            if (jsonObject.containsKey("工作经历")) {
+                int count = jsonObject.getJSONArray("工作经历").size();
+                if (resume.getWorkingYears() / count >= 2)
+                    resume.getTags_good().add("稳定性高");
+                else if (resume.getWorkingYears() / count == 0)
+                    resume.getTags_bad().add("稳定性低");
+            }
 
-            JSONArray graduates = jsonObject.getJSONArray("教育背景");
-            List<String> list = new ArrayList<>();
-            if (graduates == null)
-                continue;
-            for (int i = 0; i < graduates.size(); i++) {
-                Object o = graduates.get(i);
-                if (o == null)
+            if (jsonObject.containsKey("教育背景")) {
+                JSONArray graduates = jsonObject.getJSONArray("教育背景");
+                List<String> list = new ArrayList<>();
+                if (graduates == null)
                     continue;
+                for (int i = 0; i < graduates.size(); i++) {
+                    Object o = graduates.get(i);
+                    if (o == null)
+                        continue;
 
-                JSONObject object = (JSONObject) (o);
-                String graduate = (String) object.get("学位");
+                    JSONObject object = (JSONObject) (o);
+                    String graduate = (String) object.get("学位");
 
-                if (graduate == null)
-                    continue;
-                if (graduate.equals("大专")) {
-                    resume.getTags_bad().add("专科");
+                    if (graduate == null)
+                        continue;
+                    if (graduate.equals("大专")) {
+                        resume.getTags_bad().add("专科");
 
-                    if (list.contains("本科"))
-                        resume.getTags_bad().add("专升本");
-                } else if (graduate.equals("本科")) {
-                    list.add("本科");
+                        if (list.contains("本科"))
+                            resume.getTags_bad().add("专升本");
+                    } else if (graduate.equals("本科")) {
+                        list.add("本科");
 
-                    if (resume.getTags_bad().contains("专科"))
-                        resume.getTags_bad().add("专升本");
+                        if (resume.getTags_bad().contains("专科"))
+                            resume.getTags_bad().add("专升本");
+                    }
                 }
             }
         }

@@ -129,12 +129,15 @@ class ResumeParseApplicationTests {
         queryWrapper.eq(Resume::getIsParsed, 0);
         List<Resume> resumeList = resumeService.list(queryWrapper);
 
-        for (Resume resume : resumeList) {
-            System.out.println(resume);
-            resumeService.parseResume(resume.getPkResumeId(), resume.getUrl());
+        try {
+            for (int i = 0, resumeListSize = resumeList.size(); i < resumeListSize; i++) {
+                Resume resume = resumeList.get(i);
+                resumeService.parseResume(resume.getPkResumeId(), resume.getUrl());
+                System.out.println("解析进度：" + (i + 1) + " / " + resumeListSize);
+            }
+        } finally {
+            synchronizationEsForAll();
         }
-
-        synchronizationEsForAll();
     }
 
     // 全量保存
