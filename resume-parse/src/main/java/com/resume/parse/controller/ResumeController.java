@@ -53,19 +53,22 @@ public class ResumeController {
         return RestResponse.judge(save);
     }
 
-    @ApiOperation(value = "修改简历状态", notes = "targetState指用户将简历移至的目标状态，可选项：初筛、面试、沟通Offer、待入职")
+    @ApiOperation(value = "修改简历状态", notes = "targetState指用户将简历移至的目标状态，可选项：初筛、面试、沟通Offer、待入职，" +
+            "前端传positionId、positionName、resumeId、preState先前的状态、targetState目标状态")
     @PutMapping("/change-resume-state")
     public RestResponse<String> changeResumeState(@RequestBody ResumeStateDTO resumeStateDTO) {
         boolean save = resumeService.changeResumeState(resumeStateDTO);
         return RestResponse.judge(save);
     }
 
-    @ApiOperation(value = "淘汰简历")
+    @ApiOperation(value = "淘汰简历",notes ="前端传positionId、positionName、resumeId、preState先前的状态、targetState目标状态、phasedOutCause淘汰原因" )
     @PutMapping("/phased-out-resume")
     public RestResponse<String> phasedOutResume(@RequestBody ResumeStateDTO resumeStateDTO) {
         boolean save = resumeService.phasedOutResume(resumeStateDTO);
         return RestResponse.judge(save);
     }
+
+
 
     @ApiOperation(value = "备注简历", notes = "传resumeId、userName、userPicture、content")
     @PostMapping("/remark-resume")
@@ -100,7 +103,7 @@ public class ResumeController {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo);
         resumeToVo(resumePageBean.getData().toArray(new Resume[0]));
-
+        log.info(searchCondition.getQuery());
         return RestResponse.success(resumePageBean);
     }
 
