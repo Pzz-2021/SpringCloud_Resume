@@ -176,7 +176,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
                 resume = BeanUtil.fillBeanWithMap((Map<String, Object>) value.get(0), resume, false);
             } else {
                 // 其他信息
-                System.out.println(entry.getValue());
+//                System.out.println(entry.getValue());
             }
         }
 

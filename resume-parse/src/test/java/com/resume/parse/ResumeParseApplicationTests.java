@@ -121,14 +121,23 @@ class ResumeParseApplicationTests {
         resumeService.parseResume(1L, "http://rwardkb5p.hn-bkt.clouddn.com/ce6d5859-588c-455d-bf1c-8db6f7a49cf7.docx");
     }
 
-    // 全量保存
+
+    // 全量解析保存
     @Test
-    void test3() {
+    void testAll() {
         LambdaQueryWrapper<Resume> queryWrapper = new LambdaQueryWrapper<>();
-//        queryWrapper.
+        queryWrapper.eq(Resume::getIsParsed, 0);
         List<Resume> resumeList = resumeService.list(queryWrapper);
 
-        searchService.saveResumes(resumeList);
+        try {
+            for (int i = 0, resumeListSize = resumeList.size(); i < resumeListSize; i++) {
+                Resume resume = resumeList.get(i);
+                resumeService.parseResume(resume.getPkResumeId(), resume.getUrl());
+                System.out.println("解析进度：" + (i + 1) + " / " + resumeListSize);
+            }
+        } finally {
+            synchronizationEsForAll();
+        }
     }
 
     // 全量保存
