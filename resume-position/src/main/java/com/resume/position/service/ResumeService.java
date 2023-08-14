@@ -1,6 +1,7 @@
 package com.resume.position.service;
 
 import com.resume.dubbo.api.PositionService;
+import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.PositionTeam;
 import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.position.mapper.PositionMapper;
@@ -38,5 +39,10 @@ public class ResumeService implements PositionService {
     @Override
     public List<PositionTeam> queryOptionalInterviewer(Long positionId) {
         return positionTeamService.getSelectedPositionTeam(positionId);
+    }
+
+    @Override
+    public Position getOne(Long positionId) {
+        return positionMapper.selectById(positionId);
     }
 }
