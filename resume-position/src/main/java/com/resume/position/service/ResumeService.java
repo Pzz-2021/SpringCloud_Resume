@@ -24,4 +24,10 @@ public class ResumeService implements PositionService {
     public int changePositionResumeCount(ResumeStateDTO resumeStateDTO) {
         return positionMapper.changePositionResumeCount(resumeStateDTO);
     }
+
+    @Override
+    public boolean addCandidateNum(Long positionId) {
+        int low = positionMapper.addCandidateNum(positionId);
+        return low > 0;
+    }
 }

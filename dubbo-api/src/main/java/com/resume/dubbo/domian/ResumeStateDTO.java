@@ -17,6 +17,8 @@ public class ResumeStateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long positionId;
 
+    private String positionName;
+
     private Long resumeId;
     //先前的状态
     private String preState;

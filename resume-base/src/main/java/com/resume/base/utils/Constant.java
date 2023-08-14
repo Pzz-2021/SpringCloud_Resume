@@ -42,4 +42,15 @@ public class Constant {
     public static final String USER_KEY = "resume:user:";
     public static final Long USER_TTL = 24L * 60 * 60;
 
+    /**
+     * 简历状态
+     */
+    public static final String FIRST_SCREENER="初筛";
+    public static final String INTERVIEW="面试";
+    public static final String COMMUNICATE_OFFER="沟通Offer";
+    public static final String PEND_EMPLOY="待入职";
+    public static final String EMPLOYED_EMPLOY="已入职";
+    public static final String OBSOLETE="已淘汰";
+    public static final String UNCHECKED="未选中";
+
 }

@@ -2,6 +2,7 @@ package com.resume.parse.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
@@ -44,6 +45,13 @@ public class ResumeController {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @ApiOperation(value = "修改简历状态", notes = "前端传要移动到的目标职位id、职位名、以及简历id")
+    @PostMapping("/removeResume")
+    public RestResponse<String> removeResume(@RequestBody ResumeStateDTO resumeStateDTO) {
+        boolean save=resumeService.removeResume(resumeStateDTO);
+        return RestResponse.judge(save);
+    }
 
     @ApiOperation(value = "修改简历状态", notes = "targetState指用户将简历移至的目标状态，可选项：初筛、面试、沟通Offer、待入职")
     @PutMapping("/change-resume-state")
@@ -105,6 +113,7 @@ public class ResumeController {
 
         for (Resume resume : resumes) {
             String content = resume.getResumeContent();
+            if(content==null)continue;
             if (content.contains("女"))
                 resume.setImg("https://ats.xiaoxizn.com/assets/17823c8dba3a87a03ff8ac2197dab9c5.svg");
             else

@@ -30,6 +30,8 @@ public interface PositionMapper extends BaseMapper<Position> {
 
     int changePositionResumeCount(ResumeStateDTO resumeStateDTO);
 
+    int addCandidateNum(Long positionId);
+
     //ES数据同步测试用
     List<Position> selectAllPosition();
 

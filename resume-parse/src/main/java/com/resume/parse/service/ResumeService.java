@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
+import com.resume.base.utils.Constant;
 import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.PositionService;
 import com.resume.dubbo.api.SearchService;
@@ -59,10 +60,20 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
     private static final String PATH = "http://flaskService";
 
-    private static final String PHASEDOUT = "已淘汰";
-
     private static final String PDF_PATH = "D:/code/pythonProject1/uie_v1/data/temp/";
 
+    public boolean removeResume(ResumeStateDTO resumeStateDTO){
+        //添加
+        LambdaUpdateWrapper<Resume>updateWrapper=new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Resume::getPkResumeId,resumeStateDTO.getResumeId());
+        Resume resume=new Resume();
+        resume.setPositionId(resumeStateDTO.getPositionId());
+        resume.setPositionName(resumeStateDTO.getPositionName());
+        resume.setState(Constant.FIRST_SCREENER);
+        update(resume,updateWrapper);
+        //修改职位状态统计数量
+        return positionService.addCandidateNum(resumeStateDTO.getPositionId());
+    }
 
     public Resume getOneByEs(Long pkResumeId) {
         return searchService.getResumeById(pkResumeId);
@@ -196,7 +207,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
         updateWrapper.set(Resume::getState, resumeStateDTO.getTargetState());
         updateWrapper.set(Resume::getUpdateTime, DateUtil.getDate2());
-        if (PHASEDOUT.equals(resumeStateDTO.getTargetState())) {
+        if (Constant.OBSOLETE.equals(resumeStateDTO.getTargetState())) {
             updateWrapper.set(Resume::getPhasedOutCause, resumeStateDTO.getPhasedOutCause());
         }
         update(updateWrapper);

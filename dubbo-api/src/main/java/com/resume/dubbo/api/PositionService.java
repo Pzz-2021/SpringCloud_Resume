@@ -11,4 +11,6 @@ import com.resume.dubbo.domian.ResumeStateDTO;
  */
 public interface PositionService {
     int changePositionResumeCount(ResumeStateDTO resumeStateDTO);
+
+    boolean addCandidateNum(Long positionId);
 }
