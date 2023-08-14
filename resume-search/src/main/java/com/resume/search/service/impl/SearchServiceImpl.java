@@ -276,8 +276,6 @@ public class SearchServiceImpl implements SearchService {
     }
 
 
-
-
     /*
         简历
      */
@@ -428,9 +426,10 @@ public class SearchServiceImpl implements SearchService {
 
         // 5.查看返回结果
         SearchHits hits = search.getHits();
-        System.out.println(JSON.toJSONString(hits));
-        System.out.println("=======================");
+//        System.out.println(JSON.toJSONString(hits));
+//        System.out.println("=======================");
 
+        int multipleInt = (int) (80 / hits.getHits()[0].getScore());
         List<Resume> resultArr = new ArrayList<>();
         for (SearchHit documentFields : hits.getHits()) {
             // 使用新的字段值（高亮），覆盖旧的字段值
@@ -451,7 +450,11 @@ public class SearchServiceImpl implements SearchService {
 
             // 使用工具快速将Map转化为Bean
             Resume resume = BeanUtil.fillBeanWithMap(sourceAsMap, new Resume(), false);
-            resume.setScore(documentFields.getScore());
+
+            // 转化为 Vo
+            resume.setScore(documentFields.getScore() * multipleInt);
+            resumeToVo(resume);
+
             resultArr.add(resume);
         }
         // 完整分页数据
@@ -462,6 +465,19 @@ public class SearchServiceImpl implements SearchService {
 
         return new PageBean<>(searchCondition.getQuery(), totalCount, totalCount / searchCondition.getPageSize(),
                 searchCondition.getPage(), resultArr);
+    }
+
+
+    private void resumeToVo(Resume resume) {
+        int MaxValue = 5;
+
+        String[] strings = new String[]{"产品", "其他", "人事", "生产", "工程师", "互联网", "金融"};
+        for (int i = 0, stringsLength = strings.length; i < stringsLength; i++)
+            resume.getIndustryBackgrounds()[i] = (resume.getIdentifier() + strings[i]).hashCode() % MaxValue;
+
+        strings = new String[]{"所获荣誉", "领导力", "工作能力", "社会能力", "教育背景"};
+        for (int i = 0, stringsLength = strings.length; i < stringsLength; i++)
+            resume.getAbilitys()[i] = (resume.getIdentifier() + strings[i]).hashCode() % MaxValue;
     }
 
 
