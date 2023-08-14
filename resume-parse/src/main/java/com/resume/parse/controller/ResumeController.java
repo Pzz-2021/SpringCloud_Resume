@@ -46,7 +46,7 @@ public class ResumeController {
     @Autowired
     private RedisUtil redisUtil;
 
-    @ApiOperation(value = "修改简历状态", notes = "前端传要移动到的目标职位id、职位名、以及简历id")
+    @ApiOperation(value = "移动简历", notes = "前端传要移动到的目标职位id、职位名、以及简历id")
     @PostMapping("/removeResume")
     public RestResponse<String> removeResume(@RequestBody ResumeStateDTO resumeStateDTO) {
         boolean save=resumeService.removeResume(resumeStateDTO);

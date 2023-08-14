@@ -11,7 +11,7 @@ import com.resume.dubbo.domian.SearchCondition;
 import com.resume.position.mapper.PositionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.position.mapstruct.PosistionMapstruct;
-import com.resume.position.pojo.PositionTeam;
+import com.resume.dubbo.domian.PositionTeam;
 import com.resume.position.utils.CacheClient;
 import lombok.Getter;
 import org.apache.dubbo.config.annotation.DubboReference;

@@ -1,6 +1,9 @@
 package com.resume.dubbo.api;
 
+import com.resume.dubbo.domian.PositionTeam;
 import com.resume.dubbo.domian.ResumeStateDTO;
+
+import java.util.List;
 
 /*
  *@filename: PositionService
@@ -13,4 +16,6 @@ public interface PositionService {
     int changePositionResumeCount(ResumeStateDTO resumeStateDTO);
 
     boolean addCandidateNum(Long positionId);
+
+    List<PositionTeam>queryOptionalInterviewer(Long positionId);
 }

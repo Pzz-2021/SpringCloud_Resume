@@ -1,6 +1,7 @@
 package com.resume.parse.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.resume.parse.dto.ScheduleInterviewDTO;
 import com.resume.parse.mapper.InterviewMapper;
 import com.resume.parse.pojo.Interview;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,20 @@ public class InterviewService extends ServiceImpl<InterviewMapper, Interview>  {
      @Resource
      private InterviewMapper interviewMapper;
 
-     public List<Interview>queryInterviewByUserId(Long userId){
-         return interviewMapper.queryInterviewByUserId(userId);
+     public ScheduleInterviewDTO queryInterviewByUserId(Long userId){
+         ScheduleInterviewDTO scheduleInterviewDTO=new ScheduleInterviewDTO();
+         scheduleInterviewDTO.setYesterdayInterviewList(interviewMapper.queryYesterdayInterviewByUserId(userId));
+         scheduleInterviewDTO.setTodayInterviewList(interviewMapper.queryTodayInterviewByUserId(userId));
+         scheduleInterviewDTO.setTomorrowInterviewList(interviewMapper.queryTomorrowInterviewByUserId(userId));
+         return scheduleInterviewDTO;
      }
 
-     public List<Interview>queryInterviewByCompanyId(Long companyId){
-         return interviewMapper.queryInterviewByCompanyId(companyId);
+     public ScheduleInterviewDTO queryInterviewByCompanyId(Long companyId){
+         ScheduleInterviewDTO scheduleInterviewDTO=new ScheduleInterviewDTO();
+         scheduleInterviewDTO.setYesterdayInterviewList(interviewMapper.queryYesterdayInterviewByCompanyId(companyId));
+         scheduleInterviewDTO.setTodayInterviewList(interviewMapper.queryTodayInterviewByCompanyId(companyId));
+         scheduleInterviewDTO.setTomorrowInterviewList(interviewMapper.queryTomorrowInterviewByCompanyId(companyId));
+         return scheduleInterviewDTO;
      }
 
     public List<Interview>queryInterviewByResume(Long resumeId){

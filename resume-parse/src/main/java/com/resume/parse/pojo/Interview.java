@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * <p>
@@ -65,9 +67,14 @@ public class Interview implements Serializable {
     private String positionName;
 
     /**
+     * 面试日期
+     */
+    private LocalDate startDate;
+
+    /**
      * 面试开始时间
      */
-    private LocalDateTime startDatetime;
+    private LocalTime startTime;
 
     /**
      * 持续的时间-该数值以半小时为单位

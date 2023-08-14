@@ -9,7 +9,7 @@ import com.resume.dubbo.domian.MemberDTO;
 import com.resume.dubbo.domian.PositionDTO;
 import com.resume.position.mapper.PositionMapper;
 import com.resume.position.mapper.PositionTeamMapper;
-import com.resume.position.pojo.PositionTeam;
+import com.resume.dubbo.domian.PositionTeam;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
@@ -80,6 +80,7 @@ public class PositionTeamService extends ServiceImpl<PositionTeamMapper, Positio
     }
 
     public List<PositionTeam> getSelectedPositionTeam(Long positionId) {
+        //position_id, user_id, role_id, role_name, user_name, user_picture
         List<PositionTeam> selectedPositionTeam = positionTeamMapper.getSelectedPositionTeam(positionId);
         selectedPositionTeam.sort(new Comparator<PositionTeam>() {
             @Override

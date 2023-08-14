@@ -1,7 +1,7 @@
 package com.resume.position.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.resume.position.pojo.PositionTeam;
+import com.resume.dubbo.domian.PositionTeam;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
