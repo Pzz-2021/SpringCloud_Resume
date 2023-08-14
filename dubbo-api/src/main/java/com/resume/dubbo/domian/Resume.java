@@ -48,7 +48,7 @@ public class Resume implements Serializable {
     private String positionName;
 
     /**
-     * 简历投递阶段：初筛、面试、沟通Offer、待入职、已淘汰、未投递
+     * 简历投递阶段：初筛、面试、沟通Offer、待入职、已淘汰、未选中
      */
     private String state;
 

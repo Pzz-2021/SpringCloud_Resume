@@ -71,8 +71,12 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         resume.setPositionName(resumeStateDTO.getPositionName());
         resume.setState(Constant.FIRST_SCREENER);
         update(resume,updateWrapper);
+        //修改职位统计数量
+        boolean save= positionService.addCandidateNum(resumeStateDTO.getPositionId());
+        //同步es
+        if(save)searchService.updateResumeById(this.getById(resumeStateDTO.getResumeId()));
         //修改职位状态统计数量
-        return positionService.addCandidateNum(resumeStateDTO.getPositionId());
+        return save;
     }
 
     public Resume getOneByEs(Long pkResumeId) {

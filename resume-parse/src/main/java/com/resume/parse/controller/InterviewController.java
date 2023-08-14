@@ -55,7 +55,7 @@ public class InterviewController {
           List<Interview>interviews=interviewService.queryInterviewByResume(resumeId);
           return RestResponse.success(interviews);
     }
-    @ApiOperation(value = "查看可选的面试官")
+    @ApiOperation(value = "查看可选的面试官",notes = "在该职位负责人里面选")
     @GetMapping("/query-optional-interviewer/{positionId}")
     public RestResponse<List<PositionTeam>> queryOptionalInterviewer(@PathVariable("positionId")Long positionId) {
         //position_id, user_id, role_id, role_name, user_name, user_picture

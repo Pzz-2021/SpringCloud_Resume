@@ -83,7 +83,6 @@ public class ResumeController {
     public RestResponse<Resume> getOne(Long pkResumeId) {
         Resume resume = resumeService.getOneByEs(pkResumeId);
         resumeToVo(resume);
-
         return RestResponse.judge(resume);
     }
 
