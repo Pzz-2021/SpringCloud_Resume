@@ -137,7 +137,7 @@ public class Resume implements Serializable {
     private String img;
 
     @TableField(exist = false)
-    private double score;
+    private Float score;
 
     @TableField(exist = false)
     private List<String> tags_good = new ArrayList<>();

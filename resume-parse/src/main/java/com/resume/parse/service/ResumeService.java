@@ -11,6 +11,7 @@ import com.resume.base.utils.Constant;
 import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.PositionService;
 import com.resume.dubbo.api.SearchService;
+import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.dubbo.domian.SearchCondition;
 import com.resume.parse.mapper.ResumeMapper;
@@ -63,19 +64,19 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
     private static final String PDF_PATH = "D:/code/pythonProject1/uie_v1/data/temp/";
 
-    public boolean removeResume(ResumeStateDTO resumeStateDTO){
+    public boolean removeResume(ResumeStateDTO resumeStateDTO) {
         //添加
-        LambdaUpdateWrapper<Resume>updateWrapper=new LambdaUpdateWrapper<>();
-        updateWrapper.eq(Resume::getPkResumeId,resumeStateDTO.getResumeId());
-        Resume resume=new Resume();
+        LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
+        Resume resume = new Resume();
         resume.setPositionId(resumeStateDTO.getPositionId());
         resume.setPositionName(resumeStateDTO.getPositionName());
         resume.setState(Constant.FIRST_SCREENER);
-        update(resume,updateWrapper);
+        update(resume, updateWrapper);
         //修改职位统计数量
-        boolean save= positionService.addCandidateNum(resumeStateDTO.getPositionId());
+        boolean save = positionService.addCandidateNum(resumeStateDTO.getPositionId());
         //同步es
-        if(save)searchService.updateResumeById(this.getById(resumeStateDTO.getResumeId()));
+        if (save) searchService.updateResumeById(this.getById(resumeStateDTO.getResumeId()));
         //修改职位状态统计数量
         return save;
     }
@@ -85,19 +86,29 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
     }
 
 
-    public List<Resume> getResumeByPosition(Long positionId) {
-        return searchService.getResumeByPositionId(positionId);
-    }
-
-    public PageBean<Resume> selectResumeByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
+    public PageBean<Resume> selectResumeByEs(SearchCondition searchCondition, TokenInfo tokenInfo, Long positionId) {
         if (searchCondition.getPage() == null || searchCondition.getPage() == 0)
             searchCondition.setPage(1);
         if (searchCondition.getPageSize() == null || searchCondition.getPageSize() == 0)
             searchCondition.setPageSize(10);
         if (searchCondition.getState() == null)
             searchCondition.setState(0);
+        if (positionId == null)
+            positionId = 0L;
 
-        return searchService.searchResume(searchCondition, tokenInfo);
+        if (positionId != 0) {
+            Position position = positionService.getOne(positionId);
+            searchCondition.setQuery(position.getPositionName() + " " + position.getDescription());
+        }
+
+        return searchService.searchResume(searchCondition, tokenInfo, positionId);
+    }
+
+
+    public List<Resume> getResumeByPosition(Long positionId) {
+        TokenInfo tokenInfo = new TokenInfo(1L, 1L, "超级管理员");
+        PageBean<Resume> resumePageBean = selectResumeByEs(new SearchCondition(), tokenInfo, positionId);
+        return resumePageBean.getData();
     }
 
 

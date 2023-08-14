@@ -47,9 +47,6 @@ public interface SearchService {
     // 根据 id 查找一个简历信息
     Resume getResumeById(Long id);
 
-    // 分页搜索简历信息
-    PageBean<Resume> searchResume(SearchCondition searchCondition, TokenInfo tokenInfo);
-
-    // 根据职位查找简历
-    List<Resume> getResumeByPositionId(Long positionId);
+    // 分页搜索简历信息，职位 id 不为 null 则按照职位id查询
+    PageBean<Resume> searchResume(SearchCondition searchCondition, TokenInfo tokenInfo, Long positionId);
 }

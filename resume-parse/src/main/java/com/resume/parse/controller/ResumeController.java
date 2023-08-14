@@ -86,7 +86,7 @@ public class ResumeController {
         return RestResponse.judge(resume);
     }
 
-    @ApiOperation(value = "查询一个职位的简历")
+    @ApiOperation(value = "根据职位 id 查询简历信息")
     @GetMapping("/get-resume-by-position")
     public RestResponse<List<Resume>> getResumeByPosition(Long positionId) {
         List<Resume> resumeList = resumeService.getResumeByPosition(positionId);
@@ -96,19 +96,21 @@ public class ResumeController {
 
     @ApiOperation(value = "分页查询简历")
     @PostMapping("/select-resume/by-page")
-    public RestResponse<PageBean<Resume>> selectResumeByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {
+    public RestResponse<PageBean<Resume>> selectResumeByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition, Long positionId) {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
-        PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo);
+        PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo, positionId);
         resumeToVo(resumePageBean.getData().toArray(new Resume[0]));
 
+        log.info(searchCondition.getQuery());
         return RestResponse.success(resumePageBean);
     }
 
     @ApiOperation(value = "分页查询简历（测试）")
     @PostMapping("/select-resume/by-page-test")
-    public RestResponse<PageBean<Resume>> selectResumeByEsTest(@RequestBody SearchCondition searchCondition) {
+    public RestResponse<PageBean<Resume>> selectResumeByEsTest(@RequestBody SearchCondition searchCondition, Long positionId) {
+        System.out.println(positionId);
         TokenInfo tokenInfo = new TokenInfo(1L, 1L, "超级管理员");
-        PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo);
+        PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo, positionId);
         resumeToVo(resumePageBean.getData().toArray(new Resume[0]));
 
         return RestResponse.success(resumePageBean);

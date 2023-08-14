@@ -365,9 +365,10 @@ public class SearchServiceImpl implements SearchService {
         return null;
     }
 
+    private static float multipleInt;
 
     @Override
-    public PageBean<Resume> searchResume(SearchCondition searchCondition, TokenInfo tokenInfo) {
+    public PageBean<Resume> searchResume(SearchCondition searchCondition, TokenInfo tokenInfo, Long positionId) {
         // 1.创建查询请求对象
         SearchRequest searchRequest = new SearchRequest(RESUME_INDEX);
         // 2.构建搜索条件
@@ -408,9 +409,15 @@ public class SearchServiceImpl implements SearchService {
 //        highlightBuilder.postTags("</span>");
 //        searchSourceBuilder.highlighter(highlightBuilder);
 
-        // 分页
-        searchSourceBuilder.from((searchCondition.getPage() - 1) * searchCondition.getPageSize());
-        searchSourceBuilder.size(searchCondition.getPageSize());
+
+        // 如果职位 id 不为 null 则根据id查询
+        if (positionId != 0) {
+            termQueryBuilder.must(QueryBuilders.termQuery(POSITION_ID, positionId));
+        }else {
+            // 分页
+            searchSourceBuilder.from((searchCondition.getPage() - 1) * searchCondition.getPageSize());
+            searchSourceBuilder.size(searchCondition.getPageSize());
+        }
 
         searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         // (3)条件投入
@@ -432,7 +439,8 @@ public class SearchServiceImpl implements SearchService {
 //        System.out.println(JSON.toJSONString(hits));
 //        System.out.println("=======================");
 
-        int multipleInt = (int) (80 / hits.getHits()[0].getScore());
+        if (multipleInt == 0)
+            multipleInt = 80 / hits.getHits()[0].getScore();
         List<Resume> resultArr = new ArrayList<>();
         for (SearchHit documentFields : hits.getHits()) {
             // 使用新的字段值（高亮），覆盖旧的字段值
@@ -465,76 +473,10 @@ public class SearchServiceImpl implements SearchService {
         // hits.getTotalHits().value  得到符合条件的总数
         int totalCount = Math.toIntExact(hits.getTotalHits().value);
 
-        return new PageBean<>(searchCondition.getQuery(), totalCount, totalCount / searchCondition.getPageSize(),
+        return new PageBean<>(searchCondition.getQuery(), totalCount, totalCount / searchCondition.getPageSize() + (totalCount % searchCondition.getPageSize() != 0 ? 1 : 0),
                 searchCondition.getPage(), resultArr);
     }
 
-    @Override
-    public List<Resume> getResumeByPositionId(Long positionId) {
-        // 1.创建查询请求对象
-        SearchRequest searchRequest = new SearchRequest(RESUME_INDEX);
-        // 2.构建搜索条件
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        // (1)查询条件 使用QueryBuilders工具类创建
-        // 多条件查询
-        // 搜索限定 公司、设置关键词
-        BoolQueryBuilder termQueryBuilder = QueryBuilders.boolQuery();
-
-        // 根据 positionId 查询
-        termQueryBuilder.must(QueryBuilders.termQuery(POSITION_ID, positionId));
-
-        // 查询已经解析的数据
-        termQueryBuilder.must(QueryBuilders.termQuery(IS_Parsed, 1));
-
-        searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
-        // (3)条件投入
-        searchSourceBuilder.query(termQueryBuilder);
-
-        // 3.添加条件到请求
-        searchRequest.source(searchSourceBuilder);
-        // 4.客户端查询请求
-        SearchResponse search;
-        try {
-            search = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        // 5.查看返回结果
-        SearchHits hits = search.getHits();
-
-        int multipleInt = (int) (80 / hits.getHits()[0].getScore());
-        List<Resume> resultArr = new ArrayList<>();
-        for (SearchHit documentFields : hits.getHits()) {
-            // 使用新的字段值（高亮），覆盖旧的字段值
-            Map<String, Object> sourceAsMap = documentFields.getSourceAsMap();
-            // 高亮字段
-            Map<String, HighlightField> highlightFields = documentFields.getHighlightFields();
-            HighlightField name = highlightFields.get(POSITION_NAME);
-
-            // 替换
-            if (name != null) {
-                Text[] fragments = name.fragments();
-                StringBuilder new_name = new StringBuilder();
-                for (Text text : fragments) {
-                    new_name.append(text);
-                }
-                sourceAsMap.put(POSITION_NAME, new_name.toString());
-            }
-
-            // 使用工具快速将Map转化为Bean
-            Resume resume = BeanUtil.fillBeanWithMap(sourceAsMap, new Resume(), false);
-
-            // 转化为 Vo
-            resume.setScore(documentFields.getScore() * multipleInt);
-
-            resultArr.add(resume);
-        }
-
-        // 完整分页数据
-        return resultArr;
-    }
 
 
     // 根据索引名称删除索引
