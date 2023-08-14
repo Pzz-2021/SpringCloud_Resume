@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author lyh
@@ -16,10 +16,18 @@ import java.util.List;
  */
 public interface InterviewMapper extends BaseMapper<Interview> {
 
-     List<Interview>queryInterviewByUserId(@Param("userId") Long userId);
+    List<Interview> queryYesterdayInterviewByUserId(@Param("userId") Long userId);
 
-     List<Interview>queryInterviewByCompanyId(@Param("companyId")Long companyId);
+    List<Interview> queryTodayInterviewByUserId(@Param("userId") Long userId);
 
-     List<Interview>queryInterviewByResume(@Param("resumeId")Long resumeId);
+    List<Interview> queryTomorrowInterviewByUserId(@Param("userId") Long userId);
+
+    List<Interview> queryYesterdayInterviewByCompanyId(@Param("companyId") Long companyId);
+
+    List<Interview> queryTodayInterviewByCompanyId(@Param("companyId") Long companyId);
+
+    List<Interview> queryTomorrowInterviewByCompanyId(@Param("companyId") Long companyId);
+
+    List<Interview> queryInterviewByResume(@Param("resumeId") Long resumeId);
 
 }

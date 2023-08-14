@@ -1,10 +1,6 @@
 package com.resume.position.mapstruct;
 
-import com.resume.dubbo.domian.MemberDTO;
-import com.resume.position.pojo.PositionTeam;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 /*

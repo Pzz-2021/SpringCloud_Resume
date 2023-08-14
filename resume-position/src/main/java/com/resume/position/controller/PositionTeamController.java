@@ -5,7 +5,7 @@ import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
 import com.resume.base.utils.JwtUtil;
 import com.resume.dubbo.domian.MemberDTO;
-import com.resume.position.pojo.PositionTeam;
+import com.resume.dubbo.domian.PositionTeam;
 import com.resume.position.service.PositionTeamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.position.mapper.PositionTeamMapper">
 
-    <select id="getSelectedPositionTeam" resultType="com.resume.position.pojo.PositionTeam">
+    <select id="getSelectedPositionTeam" resultType="com.resume.dubbo.domian.PositionTeam">
         select position_id, user_id, role_id, role_name, user_name, user_picture
         from position_team
         where position_id = #{positionId}
@@ -14,7 +14,7 @@
         where position_id = #{positionId}
           and is_deleted = 0
     </select>
-    <select id="getDeletedPositionTeam" resultType="com.resume.position.pojo.PositionTeam">
+    <select id="getDeletedPositionTeam" resultType="com.resume.dubbo.domian.PositionTeam">
         select *
         from position_team
         where is_deleted = 1

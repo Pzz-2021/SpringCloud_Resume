@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.parse.mapper.InterviewMapper">
 
-    <select id="queryInterviewByCompanyId" resultType="com.resume.parse.pojo.Interview">
+    <select id="queryYesterdayInterviewByCompanyId" resultType="com.resume.parse.pojo.Interview">
         select pk_interview_id,
                resume_id,
                resume_user_name,
@@ -11,16 +11,18 @@
                interviewer_name,
                position_id,
                position_name,
-               start_datetime,
+               start_date,
+               start_time,
                duration_time,
                interview_type,
                interview_location,
                interview_progress
         from interview
         where company_id = #{companyId}
+          and TO_DAYS(NOW()) - TO_DAYS(start_date) >= 1
     </select>
 
-    <select id="queryInterviewByUserId" resultType="com.resume.parse.pojo.Interview">
+    <select id="queryTodayInterviewByCompanyId" resultType="com.resume.parse.pojo.Interview">
         select pk_interview_id,
                resume_id,
                resume_user_name,
@@ -29,15 +31,35 @@
                interviewer_name,
                position_id,
                position_name,
-               start_datetime,
+               start_date,
+               start_time,
                duration_time,
                interview_type,
                interview_location,
                interview_progress
         from interview
-        where position_id = (select position_id from position_team where user_id = #{userId})
+        where company_id = #{companyId}
+          and TO_DAYS(NOW()) = TO_DAYS(start_date)
     </select>
-
+    <select id="queryTomorrowInterviewByCompanyId" resultType="com.resume.parse.pojo.Interview">
+        select pk_interview_id,
+               resume_id,
+               resume_user_name,
+               company_id,
+               interviewer_id,
+               interviewer_name,
+               position_id,
+               position_name,
+               start_date,
+               start_time,
+               duration_time,
+               interview_type,
+               interview_location,
+               interview_progress
+        from interview
+        where company_id = #{companyId}
+          and TO_DAYS(start_date) - TO_DAYS(NOW()) >= 1
+    </select>
     <select id="queryInterviewByResume" resultType="com.resume.parse.pojo.Interview">
         select pk_interview_id,
                resume_id,
@@ -47,12 +69,70 @@
                interviewer_name,
                position_id,
                position_name,
-               start_datetime,
+               start_date,
+               start_time,
                duration_time,
                interview_type,
                interview_location,
                interview_progress
         from interview
         where resume_id = #{resumeId}
+    </select>
+    <select id="queryYesterdayInterviewByUserId" resultType="com.resume.parse.pojo.Interview">
+        select pk_interview_id,
+               resume_id,
+               resume_user_name,
+               company_id,
+               interviewer_id,
+               interviewer_name,
+               position_id,
+               position_name,
+               start_date,
+               start_time,
+               duration_time,
+               interview_type,
+               interview_location,
+               interview_progress
+        from interview
+        where position_id = (select position_id from position_team where user_id = #{userId})
+        and TO_DAYS(NOW()) - TO_DAYS(start_date) >= 1
+    </select>
+    <select id="queryTodayInterviewByUserId" resultType="com.resume.parse.pojo.Interview">
+        select pk_interview_id,
+               resume_id,
+               resume_user_name,
+               company_id,
+               interviewer_id,
+               interviewer_name,
+               position_id,
+               position_name,
+               start_date,
+               start_time,
+               duration_time,
+               interview_type,
+               interview_location,
+               interview_progress
+        from interview
+        where company_id = #{companyId}
+          and TO_DAYS(NOW()) = TO_DAYS(start_date)
+    </select>
+    <select id="queryTomorrowInterviewByUserId" resultType="com.resume.parse.pojo.Interview">
+        select pk_interview_id,
+               resume_id,
+               resume_user_name,
+               company_id,
+               interviewer_id,
+               interviewer_name,
+               position_id,
+               position_name,
+               start_date,
+               start_time,
+               duration_time,
+               interview_type,
+               interview_location,
+               interview_progress
+        from interview
+        where company_id = #{companyId}
+          and TO_DAYS(start_date) - TO_DAYS(NOW()) >= 1
     </select>
 </mapper>
