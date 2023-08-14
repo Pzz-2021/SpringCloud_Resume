@@ -2,4 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.parse.mapper.RemarkMapper">
 
+    <select id="getResumeRemark" resultType="com.resume.parse.pojo.Remark">
+        select pk_remark_id,
+               company_id,
+               resume_id,
+               user_id,
+               user_name,
+               user_picture,
+               content,
+               create_time
+        from remark
+        where resume_id = #{resumeId}
+        order by create_time desc
+    </select>
 </mapper>

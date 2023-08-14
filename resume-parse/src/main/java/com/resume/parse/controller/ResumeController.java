@@ -68,8 +68,6 @@ public class ResumeController {
         return RestResponse.judge(save);
     }
 
-
-
     @ApiOperation(value = "备注简历", notes = "传resumeId、userName、userPicture、content")
     @PostMapping("/remark-resume")
     public RestResponse<String> remarkResume(HttpServletRequest httpServletRequest, @RequestBody Remark remark) {
@@ -79,6 +77,13 @@ public class ResumeController {
         remark.setCreateTime(DateUtil.getDate2());
         boolean save = remarkService.save(remark);
         return RestResponse.judge(save);
+    }
+
+    @ApiOperation(value = "查询简历备注", notes = "传resumeId")
+    @GetMapping("/get-resume-remark/{resumeId}")
+    public RestResponse<List<Remark>> getResumeRemark(@PathVariable("resumeId")Long resumeId) {
+        List<Remark> resumeRemark = remarkService.getRemarkMapper().getResumeRemark(resumeId);
+        return RestResponse.success(resumeRemark);
     }
 
     @ApiOperation(value = "查询一个简历")
@@ -103,10 +108,6 @@ public class ResumeController {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         PageBean<Resume> resumePageBean = resumeService.selectResumeByEs(searchCondition, tokenInfo, positionId);
         resumeToVo(resumePageBean.getData().toArray(new Resume[0]));
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
         log.info(searchCondition.getQuery());
         return RestResponse.success(resumePageBean);
     }
