@@ -50,5 +50,6 @@ public interface SearchService {
     // 分页搜索简历信息
     PageBean<Resume> searchResume(SearchCondition searchCondition, TokenInfo tokenInfo);
 
-
+    // 根据职位查找简历
+    List<Resume> getResumeByPositionId(Long positionId);
 }

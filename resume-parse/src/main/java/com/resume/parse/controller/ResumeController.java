@@ -86,6 +86,14 @@ public class ResumeController {
         return RestResponse.judge(resume);
     }
 
+    @ApiOperation(value = "查询一个职位的简历")
+    @GetMapping("/get-resume-by-position")
+    public RestResponse<List<Resume>> getResumeByPosition(Long positionId) {
+        List<Resume> resumeList = resumeService.getResumeByPosition(positionId);
+        resumeToVo(resumeList.toArray(new Resume[0]));
+        return RestResponse.success(resumeList);
+    }
+
     @ApiOperation(value = "分页查询简历")
     @PostMapping("/select-resume/by-page")
     public RestResponse<PageBean<Resume>> selectResumeByEs(HttpServletRequest httpServletRequest, @RequestBody SearchCondition searchCondition) {
@@ -105,6 +113,7 @@ public class ResumeController {
 
         return RestResponse.success(resumePageBean);
     }
+
 
 
     private void resumeToVo(Resume... resumes) {

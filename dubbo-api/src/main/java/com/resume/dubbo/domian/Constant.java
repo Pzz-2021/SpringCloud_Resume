@@ -6,6 +6,7 @@ public class Constant {
     /*
         职位
      */
+    public static final String POSITION_ID = "positionId";
     public static final String POSITION_TEAM_ID_LIST = "positionTeamIdList";
 
     public static final String DESCRIPTION = "description";

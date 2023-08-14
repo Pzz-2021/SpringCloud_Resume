@@ -31,6 +31,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -81,6 +82,11 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
     public Resume getOneByEs(Long pkResumeId) {
         return searchService.getResumeById(pkResumeId);
+    }
+
+
+    public List<Resume> getResumeByPosition(Long positionId) {
+        return searchService.getResumeByPositionId(positionId);
     }
 
     public PageBean<Resume> selectResumeByEs(SearchCondition searchCondition, TokenInfo tokenInfo) {
