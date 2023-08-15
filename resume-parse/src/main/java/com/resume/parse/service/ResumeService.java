@@ -3,6 +3,7 @@ package com.resume.parse.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.base.model.PageBean;
@@ -12,8 +13,10 @@ import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.PositionService;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.*;
+import com.resume.parse.dto.ScheduleInterviewDTO;
 import com.resume.parse.mapper.ResumeMapper;
 import com.resume.parse.mapstruct.PosistionMapstruct;
+import com.resume.parse.pojo.Interview;
 import com.resume.parse.utils.OCRUtil;
 import com.resume.parse.utils.URLUtil;
 import com.resume.parse.utils.UploadUtil;
@@ -30,10 +33,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -57,6 +62,10 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
     @DubboReference
     private PositionService positionService;
+
+    @Autowired
+    private InterviewService interviewService;
+
 
     private static final String PATH = "http://flaskService";
 
@@ -244,4 +253,16 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         return changeResumeState(resumeStateDTO);
     }
 
+    public HomeVo getHome(Long companyId) {
+        HomeVo homeVo = positionService.getHome(companyId);
+
+        LocalDate mondayOfWeek = DateUtil.getMondayOfWeek(LocalDate.now());
+        List<Resume> resumeList = this.list(new LambdaQueryWrapper<Resume>().eq(Resume::getCompanyId, companyId).between(Resume::getCreateTime, mondayOfWeek.toString(), mondayOfWeek.plusDays(7).toString()));
+        homeVo.setNewResumeCount(resumeList.size());
+
+        List<Interview> interviewList = interviewService.list(new LambdaQueryWrapper<Interview>().eq(Interview::getCompanyId, companyId).between(Interview::getStartDate, mondayOfWeek.toString(), mondayOfWeek.plusDays(7).toString()));
+        homeVo.setInterviewCount(interviewList.size());
+
+        return homeVo;
+    }
 }

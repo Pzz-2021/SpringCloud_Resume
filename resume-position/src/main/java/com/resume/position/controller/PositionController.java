@@ -6,6 +6,7 @@ import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.JwtUtil;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.SearchCondition;
+import com.resume.dubbo.domian.HomeVo;
 import com.resume.position.service.PositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,15 +34,6 @@ public class PositionController {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    @ApiOperation(value = "获取首页数据")
-    @GetMapping("/get-home-page")
-    public RestResponse<String> getHomePage(HttpServletRequest httpServletRequest) {
-        TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
-        Long companyId = tokenInfo.getCompanyId();
-
-        return RestResponse.success();
-    }
 
 
     @ApiOperation(value = "返回枚举类型", notes = "返回一个map中含有list")
@@ -91,6 +83,7 @@ public class PositionController {
         Position position = positionService.getOneById(positionId);
         return RestResponse.judge(position);
     }
+
 
     @ApiOperation(value = "分页查询职位", notes = "不同角色查询的岗位不同")
     @PostMapping("/select-position/by-page")

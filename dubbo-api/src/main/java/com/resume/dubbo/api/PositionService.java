@@ -1,5 +1,6 @@
 package com.resume.dubbo.api;
 
+import com.resume.dubbo.domian.HomeVo;
 import com.resume.dubbo.domian.Position;
 import com.resume.dubbo.domian.PositionTeam;
 import com.resume.dubbo.domian.ResumeStateDTO;
@@ -21,4 +22,6 @@ public interface PositionService {
     List<PositionTeam>queryOptionalInterviewer(Long positionId);
 
     Position getOne(Long positionId);
+
+    HomeVo getHome(Long companyId);
 }

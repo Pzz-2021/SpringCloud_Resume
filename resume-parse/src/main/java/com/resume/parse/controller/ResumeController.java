@@ -8,6 +8,7 @@ import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.DateUtil;
 import com.resume.base.utils.JwtUtil;
+import com.resume.dubbo.domian.HomeVo;
 import com.resume.dubbo.domian.Resume;
 import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.dubbo.domian.SearchCondition;
@@ -47,6 +48,15 @@ public class ResumeController {
     @Autowired
     private RedisUtil redisUtil;
 
+    @ApiOperation(value = "首页-招聘进展")
+    @GetMapping("/get-home")
+    public RestResponse<HomeVo> getHome(HttpServletRequest httpServletRequest) {
+        Long companyId = JwtUtil.getTokenInfo(httpServletRequest).getCompanyId();
+        HomeVo homeVo = resumeService.getHome(companyId);
+
+        return RestResponse.success(homeVo);
+    }
+
     @ApiOperation(value = "移动简历", notes = "前端传要移动到的目标职位id、职位名、以及简历id")
     @PostMapping("/removeResume")
     public RestResponse<String> removeResume(@RequestBody ResumeStateDTO resumeStateDTO) {
@@ -62,7 +72,7 @@ public class ResumeController {
         return RestResponse.judge(save);
     }
 
-    @ApiOperation(value = "淘汰简历",notes ="前端传positionId、positionName、resumeId、preState先前的状态、targetState目标状态、phasedOutCause淘汰原因" )
+    @ApiOperation(value = "淘汰简历", notes = "前端传positionId、positionName、resumeId、preState先前的状态、targetState目标状态、phasedOutCause淘汰原因")
     @PutMapping("/phased-out-resume")
     public RestResponse<String> phasedOutResume(@RequestBody ResumeStateDTO resumeStateDTO) {
         boolean save = resumeService.phasedOutResume(resumeStateDTO);
@@ -82,7 +92,7 @@ public class ResumeController {
 
     @ApiOperation(value = "查询简历备注", notes = "传resumeId")
     @GetMapping("/get-resume-remark/{resumeId}")
-    public RestResponse<List<Remark>> getResumeRemark(@PathVariable("resumeId")Long resumeId) {
+    public RestResponse<List<Remark>> getResumeRemark(@PathVariable("resumeId") Long resumeId) {
         List<Remark> resumeRemark = remarkService.getRemarkMapper().getResumeRemark(resumeId);
         return RestResponse.success(resumeRemark);
     }
@@ -123,7 +133,6 @@ public class ResumeController {
 
         return RestResponse.success(resumePageBean);
     }
-
 
 
     private void resumeToVo(Resume... resumes) {

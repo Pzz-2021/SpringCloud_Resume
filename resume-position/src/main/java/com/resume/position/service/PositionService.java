@@ -1,24 +1,25 @@
 package com.resume.position.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
 import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.SearchService;
-import com.resume.dubbo.domian.Position;
-import com.resume.dubbo.domian.PositionDTO;
-import com.resume.dubbo.domian.SearchCondition;
+import com.resume.dubbo.domian.*;
+import com.resume.dubbo.domian.HomeVo;
 import com.resume.position.mapper.PositionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.resume.position.mapstruct.PosistionMapstruct;
-import com.resume.dubbo.domian.PositionTeam;
 import com.resume.position.utils.CacheClient;
 import lombok.Getter;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -29,8 +30,8 @@ import javax.annotation.Resource;
  * @since 2023-06-18
  */
 @Getter
-@Service
-public class PositionService extends ServiceImpl<PositionMapper, Position> {
+@DubboService
+public class PositionService extends ServiceImpl<PositionMapper, Position> implements com.resume.dubbo.api.PositionService {
 
     @Autowired
     private CacheClient cacheClient;
@@ -43,6 +44,24 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
     @Autowired
     private PositionTeamService positionTeamService;
+
+
+    @Override
+    public HomeVo getHome(Long companyId) {
+        HomeVo homeVo = new HomeVo();
+
+        // 职位数据
+        List<Position> list = this.list(new LambdaQueryWrapper<Position>().eq(Position::getCompanyId, companyId));
+        list.forEach(position -> {
+            if (position.getState() == 1)
+                homeVo.setPositioningCount(homeVo.getPositioningCount() + 1);
+            homeVo.setPreEmployCount(homeVo.getPreEmployCount() + position.getPendEmploy());
+            homeVo.setAfterEmployCount(homeVo.getAfterEmployCount() + position.getEmployedEmploy());
+            homeVo.setTargetCount(homeVo.getTargetCount() + position.getHc());
+        });
+
+        return homeVo;
+    }
 
     // 添加职位
     public boolean addPosition(TokenInfo tokenInfo, Position position) {
@@ -147,6 +166,28 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> {
 
     public Position getOneById(Long positionId) {
         return searchService.getPositionById(positionId);
+    }
+
+
+    @Override
+    public int changePositionResumeCount(ResumeStateDTO resumeStateDTO) {
+        return positionMapper.changePositionResumeCount(resumeStateDTO);
+    }
+
+    @Override
+    public int addCandidateNum(Long positionId) {
+        positionMapper.addCandidateNum(positionId);
+        return positionMapper.getCandidateNum(positionId);
+    }
+
+    @Override
+    public List<PositionTeam> queryOptionalInterviewer(Long positionId) {
+        return positionTeamService.getSelectedPositionTeam(positionId);
+    }
+
+    @Override
+    public Position getOne(Long positionId) {
+        return positionMapper.selectById(positionId);
     }
 
 //    public Position getOne(Long companyId, Long positionId) {
