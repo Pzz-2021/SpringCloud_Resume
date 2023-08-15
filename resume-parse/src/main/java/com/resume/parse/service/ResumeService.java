@@ -76,6 +76,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
         Resume resume = new Resume();
+        resume.setPkResumeId(resumeStateDTO.getResumeId());
         resume.setPositionId(resumeStateDTO.getPositionId());
         resume.setPositionName(resumeStateDTO.getPositionName());
         resume.setState(Constant.FIRST_SCREENER);

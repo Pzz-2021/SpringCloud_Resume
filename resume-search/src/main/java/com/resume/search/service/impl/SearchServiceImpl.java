@@ -344,6 +344,7 @@ public class SearchServiceImpl implements SearchService {
 //            System.out.println("更新状态：" + response.status());// OK
             return true;
         } catch (IOException e) {
+            System.out.println(resume.getPkResumeId());
             e.printStackTrace();
             return false;
         }
