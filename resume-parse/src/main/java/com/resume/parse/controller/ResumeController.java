@@ -218,7 +218,7 @@ public class ResumeController {
 
             // 处理相关度得分上限 100
             float maxScore = 95;
-            if (resume.getScore() > maxScore)
+            if (resume.getScore() != null && resume.getScore() > maxScore)
                 resume.setScore(maxScore + new Random().nextInt(5));
         }
     }
