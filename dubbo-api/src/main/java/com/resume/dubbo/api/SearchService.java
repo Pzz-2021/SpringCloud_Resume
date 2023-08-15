@@ -22,7 +22,7 @@ public interface SearchService {
     // 根据 id 删除一个职位信息
     Boolean deletePositionDTOById(Long id);
 
-    // 根据 id 更新一个职位信息
+    // 根据 id 更新一个职位信息，需要含有职位信息和对应的负责人信息
     Boolean updatePositionDTOById(PositionDTO positionDTO);
 
     // 根据 id 查找一个职位信息

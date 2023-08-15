@@ -365,7 +365,7 @@ public class SearchServiceImpl implements SearchService {
         return null;
     }
 
-    private static float multipleInt;
+    private static float multipleInt = 0;
 
     @Override
     public PageBean<Resume> searchResume(SearchCondition searchCondition, TokenInfo tokenInfo, Long positionId) {
