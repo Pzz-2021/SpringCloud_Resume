@@ -11,11 +11,9 @@ import com.resume.base.utils.Constant;
 import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.PositionService;
 import com.resume.dubbo.api.SearchService;
-import com.resume.dubbo.domian.Position;
-import com.resume.dubbo.domian.ResumeStateDTO;
-import com.resume.dubbo.domian.SearchCondition;
+import com.resume.dubbo.domian.*;
 import com.resume.parse.mapper.ResumeMapper;
-import com.resume.dubbo.domian.Resume;
+import com.resume.parse.mapstruct.PosistionMapstruct;
 import com.resume.parse.utils.OCRUtil;
 import com.resume.parse.utils.URLUtil;
 import com.resume.parse.utils.UploadUtil;
@@ -64,8 +62,8 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
     private static final String PDF_PATH = "D:/code/pythonProject1/uie_v1/data/temp/";
 
-    public boolean removeResume(ResumeStateDTO resumeStateDTO) {
-        //添加
+    public void removeResume(ResumeStateDTO resumeStateDTO) {
+        //修改
         LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
         Resume resume = new Resume();
@@ -74,11 +72,14 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         resume.setState(Constant.FIRST_SCREENER);
         update(resume, updateWrapper);
         //修改职位统计数量
-        boolean save = positionService.addCandidateNum(resumeStateDTO.getPositionId());
-        //同步es
-        if (save) searchService.updateResumeById(this.getById(resumeStateDTO.getResumeId()));
-        //修改职位状态统计数量
-        return save;
+        int newCandidateNum = positionService.addCandidateNum(resumeStateDTO.getPositionId());
+        //同步es简历
+        searchService.updateResumeById(resume);
+        PositionDTO positionDTO=new PositionDTO();
+        positionDTO.setPkPositionId(resumeStateDTO.getPositionId());
+        positionDTO.setFirstScreenerCount(newCandidateNum);
+        //同步es职位
+        searchService.updatePositionDTOById(positionDTO);
     }
 
     public Resume getOneByEs(Long pkResumeId) {
@@ -212,14 +213,18 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         }
     }
 
+
     public int changePositionResumeCount(ResumeStateDTO resumeStateDTO) {
         int count = positionService.changePositionResumeCount(resumeStateDTO);
-
         // 同步 es
         if (count > 0) {
+            //更新简历
             searchService.updateResumeById(this.getById(resumeStateDTO.getResumeId()));
+            //更新职位
+            Position position=positionService.getOne(resumeStateDTO.getPositionId());
+            PositionDTO positionDTO= PosistionMapstruct.INSTANCT.conver(position);
+            searchService.updatePositionDTOById(positionDTO);
         }
-
         return count;
     }
 

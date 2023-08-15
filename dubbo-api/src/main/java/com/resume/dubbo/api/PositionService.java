@@ -16,7 +16,7 @@ import java.util.List;
 public interface PositionService {
     int changePositionResumeCount(ResumeStateDTO resumeStateDTO);
 
-    boolean addCandidateNum(Long positionId);
+    int addCandidateNum(Long positionId);
 
     List<PositionTeam>queryOptionalInterviewer(Long positionId);
 

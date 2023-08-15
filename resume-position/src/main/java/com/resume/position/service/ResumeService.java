@@ -31,9 +31,9 @@ public class ResumeService implements PositionService {
     }
 
     @Override
-    public boolean addCandidateNum(Long positionId) {
-        int low = positionMapper.addCandidateNum(positionId);
-        return low > 0;
+    public int addCandidateNum(Long positionId) {
+        positionMapper.addCandidateNum(positionId);
+        return positionMapper.getCandidateNum(positionId);
     }
 
     @Override

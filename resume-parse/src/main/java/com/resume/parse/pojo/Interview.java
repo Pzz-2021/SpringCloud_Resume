@@ -74,7 +74,7 @@ public class Interview implements Serializable {
     /**
      * 面试开始时间
      */
-    private LocalTime startTime;
+    private String startTime;
 
     /**
      * 持续的时间-该数值以半小时为单位

@@ -34,6 +34,16 @@ public class PositionController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @ApiOperation(value = "获取首页数据")
+    @GetMapping("/get-home-page")
+    public RestResponse<String> getHomePage(HttpServletRequest httpServletRequest) {
+        TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
+        Long companyId = tokenInfo.getCompanyId();
+
+        return RestResponse.success();
+    }
+
+
     @ApiOperation(value = "返回枚举类型", notes = "返回一个map中含有list")
     @GetMapping("/get-enumerate")
     public RestResponse<HashMap<String, ArrayList<String>>> getEnumerateByProperty() {
@@ -112,7 +122,6 @@ public class PositionController {
 //        String forObject = restTemplate.getForObject("http://127.0.0.1:5000/test?name=pzz", String.class);
         String forObject = restTemplate.getForObject("http://flaskService/test?name=pzz", String.class);
 //        String forObject = restTemplate.getForObject("http://search-service/search/test?name=pzz", String.class);
-
         return forObject;
     }
 //

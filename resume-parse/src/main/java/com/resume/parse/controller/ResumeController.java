@@ -50,8 +50,8 @@ public class ResumeController {
     @ApiOperation(value = "移动简历", notes = "前端传要移动到的目标职位id、职位名、以及简历id")
     @PostMapping("/removeResume")
     public RestResponse<String> removeResume(@RequestBody ResumeStateDTO resumeStateDTO) {
-        boolean save = resumeService.removeResume(resumeStateDTO);
-        return RestResponse.judge(save);
+        resumeService.removeResume(resumeStateDTO);
+        return RestResponse.judge("移动成功");
     }
 
     @ApiOperation(value = "修改简历状态", notes = "targetState指用户将简历移至的目标状态，可选项：初筛、面试、沟通Offer、待入职，" +
