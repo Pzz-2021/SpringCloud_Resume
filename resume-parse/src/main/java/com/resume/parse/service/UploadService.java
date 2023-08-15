@@ -68,8 +68,8 @@ public class UploadService {
         resume.setCompanyId(companyId);
         resume.setFileName(originalFilename);
         resume.setUrl(fileURL);
-        resume.setCreateTime(DateUtil.getDate2());
-        resume.setUpdateTime(DateUtil.getDate2());
+//        resume.setCreateTime(DateUtil.getDate2());
+//        resume.setUpdateTime(DateUtil.getDate2());
         resume.setIdentifier(identifier);
         resumeService.save(resume);
         // 简历异步解析

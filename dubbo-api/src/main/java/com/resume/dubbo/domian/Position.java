@@ -1,8 +1,6 @@
 package com.resume.dubbo.domian;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -121,11 +120,13 @@ public class Position implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT) //创建时自动填充
     private String createTime;
 
     /**
      * 更新时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)//创建与修改时自动填充
     private String updateTime;
 
     /**

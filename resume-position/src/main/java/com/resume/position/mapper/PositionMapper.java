@@ -3,6 +3,9 @@ package com.resume.position.mapper;
 import com.resume.dubbo.domian.Position;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.resume.dubbo.domian.ResumeStateDTO;
+import com.resume.position.dto.CVTrendDTO;
+import com.resume.position.dto.InterviewTrendDTO;
+import com.resume.position.dto.OfferTrendDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,6 +36,12 @@ public interface PositionMapper extends BaseMapper<Position> {
     void addCandidateNum(Long positionId);
 
     int getCandidateNum(Long positionId);
+
+    CVTrendDTO getCVTrend(@Param("companyId")String companyId);
+
+    InterviewTrendDTO getInterviewTrend(@Param("companyId")String companyId);
+
+    OfferTrendDTO getOfferTrend(@Param("companyId")String companyId);
 
     //ES数据同步测试用
     List<Position> selectAllPosition();

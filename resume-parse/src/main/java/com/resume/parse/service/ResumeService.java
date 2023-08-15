@@ -223,7 +223,6 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         }
     }
 
-
     public int changePositionResumeCount(ResumeStateDTO resumeStateDTO) {
         int count = positionService.changePositionResumeCount(resumeStateDTO);
         // 同步 es
@@ -232,7 +231,29 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
             searchService.updateResumeById(this.getById(resumeStateDTO.getResumeId()));
             //更新职位
             Position position=positionService.getOne(resumeStateDTO.getPositionId());
-            PositionDTO positionDTO= PosistionMapstruct.INSTANCT.conver(position);
+//            PositionDTO positionDTO= PosistionMapstruct.INSTANCT.conver(position);
+            PositionDTO positionDTO=new PositionDTO();
+            positionDTO.setPkPositionId( position.getPkPositionId() );
+            positionDTO.setCompanyId( position.getCompanyId() );
+            positionDTO.setPositionName( position.getPositionName() );
+            positionDTO.setCreateUserId( position.getCreateUserId() );
+            positionDTO.setDescription( position.getDescription() );
+            positionDTO.setHc( position.getHc() );
+            positionDTO.setWorkingCity( position.getWorkingCity() );
+            positionDTO.setWorkingYears( position.getWorkingYears() );
+            positionDTO.setEducationBackground( position.getEducationBackground() );
+            positionDTO.setType( position.getType() );
+            positionDTO.setSalaryMin( position.getSalaryMin() );
+            positionDTO.setSalaryMax( position.getSalaryMax() );
+            positionDTO.setSalaryMonth( position.getSalaryMonth() );
+            positionDTO.setFirstScreenerCount( position.getFirstScreenerCount() );
+            positionDTO.setInterviewCount( position.getInterviewCount() );
+            positionDTO.setCommunicateOfferCount( position.getCommunicateOfferCount() );
+            positionDTO.setPendEmploy( position.getPendEmploy() );
+            positionDTO.setEmployedEmploy( position.getEmployedEmploy() );
+            positionDTO.setCreateTime( position.getCreateTime() );
+            positionDTO.setUpdateTime( position.getUpdateTime() );
+            positionDTO.setState( position.getState() );
             searchService.updatePositionDTOById(positionDTO);
         }
         return count;
@@ -242,7 +263,6 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
         updateWrapper.set(Resume::getState, resumeStateDTO.getTargetState());
-        updateWrapper.set(Resume::getUpdateTime, DateUtil.getDate2());
         if (Constant.OBSOLETE.equals(resumeStateDTO.getTargetState())) {
             updateWrapper.set(Resume::getPhasedOutCause, resumeStateDTO.getPhasedOutCause());
         }

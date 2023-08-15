@@ -72,8 +72,8 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> imple
         position.setCommunicateOfferCount(0);
         position.setPendEmploy(0);
         position.setEmployedEmploy(0);
-        position.setCreateTime(DateUtil.getDate2());
-        position.setUpdateTime(DateUtil.getDate2());
+//        position.setCreateTime(DateUtil.getDate2());
+//        position.setUpdateTime(DateUtil.getDate2());
         position.setState(1);
 
         boolean save = this.save(position);

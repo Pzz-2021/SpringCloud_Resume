@@ -53,11 +53,10 @@ public class ResumeController {
     public RestResponse<HomeVo> getHome(HttpServletRequest httpServletRequest) {
         Long companyId = JwtUtil.getTokenInfo(httpServletRequest).getCompanyId();
         HomeVo homeVo = resumeService.getHome(companyId);
-
         return RestResponse.success(homeVo);
     }
 
-    @ApiOperation(value = "移动简历", notes = "前端传要移动到的目标职位id、职位名、以及简历id")
+    @ApiOperation(value = "移动简历", notes = "前端传要移动到的目标职位positionId、职位名positionName、以及简历resumeId")
     @PostMapping("/removeResume")
     public RestResponse<String> removeResume(@RequestBody ResumeStateDTO resumeStateDTO) {
         resumeService.removeResume(resumeStateDTO);
@@ -153,7 +152,6 @@ public class ResumeController {
                 int num = (resume.getIdentifier() + strings[i]).hashCode() % MaxValue;
                 resume.getAbilitys()[i] = num >= 0 ? num : -num;
             }
-
 
             String content = resume.getResumeContent();
             if (content == null) continue;

@@ -190,4 +190,13 @@
         from position
         where pk_position_id = #{positionId}
     </select>
+    <select id="getCVTrend" resultType="com.resume.position.dto.CVTrendDTO">
+
+    </select>
+    <select id="getInterviewTrend" resultType="com.resume.position.dto.InterviewTrendDTO">
+
+    </select>
+    <select id="getOfferTrend" resultType="com.resume.position.dto.OfferTrendDTO">
+
+    </select>
 </mapper>

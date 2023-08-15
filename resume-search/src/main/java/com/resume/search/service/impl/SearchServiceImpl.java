@@ -139,7 +139,7 @@ public class SearchServiceImpl implements SearchService {
             UpdateResponse response = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
 //            System.out.println("更新状态：" + response.status());// OK
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
