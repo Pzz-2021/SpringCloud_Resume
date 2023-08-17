@@ -24,9 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /*
  *@filename: ResumeController
@@ -215,9 +213,11 @@ public class ResumeController {
             }
 
             // 处理相关度得分上限 100
-            float maxScore = 95;
+            float maxScore = 80;
             if (resume.getScore() != null && resume.getScore() > maxScore)
-                resume.setScore(maxScore + new Random().nextInt(5));
+                resume.setScore(maxScore + new Random().nextInt(20));
         }
+
+        Arrays.sort(resumes, (o1, o2) -> (int) (o2.getScore() - o1.getScore()));
     }
 }

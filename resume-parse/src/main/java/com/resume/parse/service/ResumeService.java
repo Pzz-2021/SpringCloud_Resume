@@ -74,7 +74,7 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         int newCandidateNum;
         if(removeResumeDTO.getPreState().equals(Constant.UNCHECKED)){
             //修改职位统计数量
-            newCandidateNum = positionService.addCandidateNum(removeResumeDTO.getPrePositionId());
+            newCandidateNum = positionService.addCandidateNum(removeResumeDTO.getTargetPositionId());
         }else{
             //减少
             positionService.decreaseCandidateNum(removeResumeDTO);

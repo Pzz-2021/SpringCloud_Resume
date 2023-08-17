@@ -213,7 +213,7 @@ public class SearchServiceImpl implements SearchService {
         // 设置高亮
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field(POSITION_NAME);
-        highlightBuilder.preTags("<span class='key-word'>");
+        highlightBuilder.preTags("<span class='key-word' style='color: red'>");
         highlightBuilder.postTags("</span>");
         searchSourceBuilder.highlighter(highlightBuilder);
 
@@ -344,7 +344,6 @@ public class SearchServiceImpl implements SearchService {
 //            System.out.println("更新状态：" + response.status());// OK
             return true;
         } catch (IOException e) {
-            System.out.println(resume.getPkResumeId());
             e.printStackTrace();
             return false;
         }

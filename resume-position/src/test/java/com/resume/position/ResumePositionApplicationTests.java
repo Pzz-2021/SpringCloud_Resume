@@ -90,6 +90,8 @@ class ResumePositionApplicationTests {
            System.out.println();
        });
 
+        System.out.println(list.size());
+
         searchService.savePositionDTOs(list);
     }
 }

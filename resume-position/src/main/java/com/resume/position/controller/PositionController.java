@@ -91,7 +91,7 @@ public class PositionController {
         TokenInfo tokenInfo = JwtUtil.getTokenInfo(httpServletRequest);
         PageBean<Position> positionPageBean = positionService.selectPositionByEs(searchCondition, tokenInfo);
         System.out.println("----------------------------");
-        System.out.println(positionPageBean);
+//        System.out.println(positionPageBean);
         System.out.println("----------------------------");
         return RestResponse.success(positionPageBean);
     }
