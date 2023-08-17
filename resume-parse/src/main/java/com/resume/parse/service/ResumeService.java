@@ -105,14 +105,12 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
             //增加
             newCandidateNum = positionService.addCandidateNum(removeResumeDTO.getTargetPositionId());
         }
-        //同步es职位
+        //es同步目标职位统计
         PositionDTO positionDTO=new PositionDTO();
         positionDTO.setPkPositionId(removeResumeDTO.getTargetPositionId());
         positionDTO.setFirstScreenerCount(newCandidateNum);
         searchService.updatePositionDTOById(positionDTO);
-        //同步es简历
-        searchService.updateResumeById(resume);
-        //修改 简历所属职位
+        //修改 简历
         LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Resume::getPkResumeId, removeResumeDTO.getResumeId());
         resume.setPkResumeId(removeResumeDTO.getResumeId());
@@ -120,6 +118,8 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         resume.setPositionName(removeResumeDTO.getTargetPositionName());
         resume.setState(Constant.FIRST_SCREENER);
         update(resume, updateWrapper);
+        //同步es  简历
+        searchService.updateResumeById(resume);
 
     }
 
