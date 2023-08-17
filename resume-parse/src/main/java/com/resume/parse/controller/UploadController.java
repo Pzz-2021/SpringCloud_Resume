@@ -42,7 +42,7 @@ public class UploadController {
         }
         //缓存命中
         else {
-            return RestResponse.error("上传失败");
+            return RestResponse.success("上传成功");
         }
     }
 }
