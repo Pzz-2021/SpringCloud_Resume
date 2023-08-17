@@ -13,9 +13,8 @@ import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.PositionService;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.*;
-import com.resume.parse.dto.ScheduleInterviewDTO;
+import com.resume.dubbo.domian.RemoveResumeDTO;
 import com.resume.parse.mapper.ResumeMapper;
-import com.resume.parse.mapstruct.PosistionMapstruct;
 import com.resume.parse.pojo.Interview;
 import com.resume.parse.utils.OCRUtil;
 import com.resume.parse.utils.URLUtil;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 /**
  * <p>
@@ -71,25 +69,58 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
 
     private static final String PDF_PATH = "D:/code/pythonProject1/uie_v1/data/temp/";
 
-    public void removeResume(ResumeStateDTO resumeStateDTO) {
-        //修改
-        LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(Resume::getPkResumeId, resumeStateDTO.getResumeId());
+    public void removeResume(RemoveResumeDTO removeResumeDTO) {
         Resume resume = new Resume();
-        resume.setPkResumeId(resumeStateDTO.getResumeId());
-        resume.setPositionId(resumeStateDTO.getPositionId());
-        resume.setPositionName(resumeStateDTO.getPositionName());
-        resume.setState(Constant.FIRST_SCREENER);
-        update(resume, updateWrapper);
-        //修改职位统计数量
-        int newCandidateNum = positionService.addCandidateNum(resumeStateDTO.getPositionId());
+        int newCandidateNum;
+        if(removeResumeDTO.getPreState().equals(Constant.UNCHECKED)){
+            //修改职位统计数量
+            newCandidateNum = positionService.addCandidateNum(removeResumeDTO.getPrePositionId());
+        }else{
+            //减少
+            positionService.decreaseCandidateNum(removeResumeDTO);
+            PositionDTO positionDTO=new PositionDTO();
+            Position position=positionService.getOne(removeResumeDTO.getPrePositionId());
+            positionDTO.setPkPositionId( position.getPkPositionId() );
+            positionDTO.setCompanyId( position.getCompanyId() );
+            positionDTO.setPositionName( position.getPositionName() );
+            positionDTO.setCreateUserId( position.getCreateUserId() );
+            positionDTO.setDescription( position.getDescription() );
+            positionDTO.setHc( position.getHc() );
+            positionDTO.setWorkingCity( position.getWorkingCity() );
+            positionDTO.setWorkingYears( position.getWorkingYears() );
+            positionDTO.setEducationBackground( position.getEducationBackground() );
+            positionDTO.setType( position.getType() );
+            positionDTO.setSalaryMin( position.getSalaryMin() );
+            positionDTO.setSalaryMax( position.getSalaryMax() );
+            positionDTO.setSalaryMonth( position.getSalaryMonth() );
+            positionDTO.setFirstScreenerCount( position.getFirstScreenerCount() );
+            positionDTO.setInterviewCount( position.getInterviewCount() );
+            positionDTO.setCommunicateOfferCount( position.getCommunicateOfferCount() );
+            positionDTO.setPendEmploy( position.getPendEmploy() );
+            positionDTO.setEmployedEmploy( position.getEmployedEmploy() );
+            positionDTO.setCreateTime( position.getCreateTime() );
+            positionDTO.setUpdateTime( position.getUpdateTime() );
+            positionDTO.setState( position.getState() );
+            searchService.updatePositionDTOById(positionDTO);
+            //增加
+            newCandidateNum = positionService.addCandidateNum(removeResumeDTO.getTargetPositionId());
+        }
+        //同步es职位
+        PositionDTO positionDTO=new PositionDTO();
+        positionDTO.setPkPositionId(removeResumeDTO.getTargetPositionId());
+        positionDTO.setFirstScreenerCount(newCandidateNum);
+        searchService.updatePositionDTOById(positionDTO);
         //同步es简历
         searchService.updateResumeById(resume);
-        PositionDTO positionDTO=new PositionDTO();
-        positionDTO.setPkPositionId(resumeStateDTO.getPositionId());
-        positionDTO.setFirstScreenerCount(newCandidateNum);
-        //同步es职位
-        searchService.updatePositionDTOById(positionDTO);
+        //修改 简历所属职位
+        LambdaUpdateWrapper<Resume> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Resume::getPkResumeId, removeResumeDTO.getResumeId());
+        resume.setPkResumeId(removeResumeDTO.getResumeId());
+        resume.setPositionId(removeResumeDTO.getTargetPositionId());
+        resume.setPositionName(removeResumeDTO.getTargetPositionName());
+        resume.setState(Constant.FIRST_SCREENER);
+        update(resume, updateWrapper);
+
     }
 
     public Resume getOneByEs(Long pkResumeId) {

@@ -35,6 +35,8 @@ public interface PositionMapper extends BaseMapper<Position> {
 
     void addCandidateNum(Long positionId);
 
+    void decreaseCandidateNum(@Param("positionId")Long positionId,@Param("preState")String preState);
+
     int getCandidateNum(Long positionId);
 
     CVTrendDTO getCVTrend(@Param("companyId")String companyId);

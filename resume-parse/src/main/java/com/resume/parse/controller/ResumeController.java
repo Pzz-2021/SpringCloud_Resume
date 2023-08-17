@@ -2,7 +2,6 @@ package com.resume.parse.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.RestResponse;
 import com.resume.base.model.TokenInfo;
@@ -12,6 +11,7 @@ import com.resume.dubbo.domian.HomeVo;
 import com.resume.dubbo.domian.Resume;
 import com.resume.dubbo.domian.ResumeStateDTO;
 import com.resume.dubbo.domian.SearchCondition;
+import com.resume.dubbo.domian.RemoveResumeDTO;
 import com.resume.parse.dto.SchoolDTO;
 import com.resume.parse.pojo.Remark;
 import com.resume.parse.service.RemarkService;
@@ -58,8 +58,8 @@ public class ResumeController {
 
     @ApiOperation(value = "移动简历", notes = "前端传要移动到的目标职位positionId、职位名positionName、以及简历resumeId")
     @PostMapping("/removeResume")
-    public RestResponse<String> removeResume(@RequestBody ResumeStateDTO resumeStateDTO) {
-        resumeService.removeResume(resumeStateDTO);
+    public RestResponse<String> removeResume(@RequestBody RemoveResumeDTO removeResumeDTO) {
+        resumeService.removeResume(removeResumeDTO);
         return RestResponse.judge("移动成功");
     }
 

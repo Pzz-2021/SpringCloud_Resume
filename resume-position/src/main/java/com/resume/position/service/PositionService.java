@@ -181,6 +181,12 @@ public class PositionService extends ServiceImpl<PositionMapper, Position> imple
     }
 
     @Override
+    public void decreaseCandidateNum(RemoveResumeDTO removeResumeDTO) {
+        positionMapper.decreaseCandidateNum(removeResumeDTO.getPrePositionId(),removeResumeDTO.getPreState());
+    }
+
+
+    @Override
     public List<PositionTeam> queryOptionalInterviewer(Long positionId) {
         return positionTeamService.getSelectedPositionTeam(positionId);
     }
