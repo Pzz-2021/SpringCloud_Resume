@@ -10,6 +10,7 @@ import com.resume.dubbo.domian.PositionDTO;
 import com.resume.parse.dto.SchoolDTO;
 import com.resume.dubbo.domian.Resume;
 import com.resume.parse.service.ResumeService;
+import com.resume.parse.utils.RedisConstants;
 import com.resume.parse.utils.RedisUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 @SpringBootTest
 class ResumeParseApplicationTests {
@@ -145,6 +147,9 @@ class ResumeParseApplicationTests {
     void synchronizationEsForAll() {
         List<Resume> resumeList = resumeService.list();
 
+        resumeList.forEach(resume -> redisUtil.set(RedisConstants.CACHE_ChECK_RESUME + "3:" + resume.getIdentifier(), ""));
+
         searchService.saveResumes(resumeList);
     }
+
 }

@@ -94,7 +94,7 @@
                interview_location,
                interview_progress
         from interview
-        where position_id = (select position_id from position_team where user_id = #{userId})
+        where position_id in (select position_id from position_team where user_id = #{userId})
         and TO_DAYS(NOW()) - TO_DAYS(start_date) >= 1
     </select>
     <select id="queryTodayInterviewByUserId" resultType="com.resume.parse.pojo.Interview">
@@ -113,7 +113,7 @@
                interview_location,
                interview_progress
         from interview
-        where company_id = #{companyId}
+        where position_id in (select position_id from position_team where user_id = #{userId})
           and TO_DAYS(NOW()) = TO_DAYS(start_date)
     </select>
     <select id="queryTomorrowInterviewByUserId" resultType="com.resume.parse.pojo.Interview">
@@ -132,7 +132,7 @@
                interview_location,
                interview_progress
         from interview
-        where company_id = #{companyId}
-          and TO_DAYS(start_date) - TO_DAYS(NOW()) >= 1
+        where position_id in (select position_id from position_team where user_id = #{userId})
+          and TO_DAYS(start_date)  - TO_DAYS(NOW()) >= 1
     </select>
 </mapper>
