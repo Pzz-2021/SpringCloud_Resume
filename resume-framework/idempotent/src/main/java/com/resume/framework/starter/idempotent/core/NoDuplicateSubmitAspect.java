@@ -7,6 +7,7 @@ import com.resume.base.utils.JwtUtil;
 import com.resume.framework.starter.idempotent.annotation.NoDuplicateSubmit;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
@@ -28,6 +29,10 @@ public final class NoDuplicateSubmitAspect {
 
     private final RedissonClient redissonClient;
 
+    /**
+     * 增强方法标记 {@link NoDuplicateSubmit} 的方法
+     */
+    @Around("@annotation(com.resume.framework.starter.idempotent.annotation.NoDuplicateSubmit)")
     public Object noDuplicateSubmit(ProceedingJoinPoint joinPoint) throws Throwable {
         NoDuplicateSubmit noDuplicateSubmit = getNoDuplicateSubmitAnnotation(joinPoint);
         // 获取分布式锁标识
