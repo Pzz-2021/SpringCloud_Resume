@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mzt.logapi.starter.annotation.LogRecord;
 import com.resume.base.model.PageBean;
 import com.resume.base.model.TokenInfo;
 import com.resume.base.utils.Constant;
@@ -13,7 +14,7 @@ import com.resume.base.utils.DateUtil;
 import com.resume.dubbo.api.PositionService;
 import com.resume.dubbo.api.SearchService;
 import com.resume.dubbo.domian.*;
-import com.resume.dubbo.domian.RemoveResumeDTO;
+import com.resume.framework.starter.idempotent.annotation.NoDuplicateSubmit;
 import com.resume.parse.mapper.ResumeMapper;
 import com.resume.parse.pojo.Interview;
 import com.resume.parse.utils.OCRUtil;
@@ -153,7 +154,13 @@ public class ResumeService extends ServiceImpl<ResumeMapper, Resume> {
         return resumePageBean.getData();
     }
 
-
+    @LogRecord(
+            success = "解析简历：{{#pkResumeId}}，对应url：{{#url}}",
+            type = "ParseResume",
+            bizNo = "{{#pkResumeId}}",
+            extra = "{{#pkResumeId + ',' + #url}}"
+    )
+    @NoDuplicateSubmit
     public void parseResume(Long pkResumeId, String url) {
         Resume resume = new Resume();
         resume.setPkResumeId(pkResumeId);

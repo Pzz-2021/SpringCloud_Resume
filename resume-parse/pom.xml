@@ -144,6 +144,12 @@
             <artifactId>ecloud-sdk-ocr</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.mouzt</groupId>
+            <artifactId>bizlog-sdk</artifactId>
+            <version>3.0.6</version>
+        </dependency>
     </dependencies>
 
     <!-- boot打包插件，不能直接用maven的package，不然找不到main可执行文件   -->

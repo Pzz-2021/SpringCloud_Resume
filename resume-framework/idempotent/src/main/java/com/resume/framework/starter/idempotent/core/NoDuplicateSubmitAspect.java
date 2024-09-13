@@ -2,8 +2,6 @@ package com.resume.framework.starter.idempotent.core;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.alibaba.fastjson2.JSON;
-import com.resume.base.model.TokenInfo;
-import com.resume.base.utils.JwtUtil;
 import com.resume.framework.starter.idempotent.annotation.NoDuplicateSubmit;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
